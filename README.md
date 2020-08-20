@@ -1,10 +1,6 @@
-# OpenSAFELY Research Template
+# Covid vs noncovid deaths research
 
-This is a template repository for making new OpenSAFELY resarch projects.  Eventually it'll become a framework. To get started, create a new repo using this repo as a template, delete this front matter, and edit the text that follows.
-
-# _title goes here_
-
-This is the code and configuration for our paper, _name goes here_
+This study will compare factors associated with covid death and non-covid death. It is a work in progress.
 
 * The paper is [here]()
 * Raw model outputs, including charts, crosstabs, etc, are in `released_analysis_results/`
