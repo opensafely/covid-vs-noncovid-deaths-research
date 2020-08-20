@@ -2,13 +2,6 @@
 
 This study will compare factors associated with covid death and non-covid death. It is a work in progress.
 
-* The paper is [here]()
-* Raw model outputs, including charts, crosstabs, etc, are in `released_analysis_results/`
-* If you are interested in how we defined our variables, take a look at the [study definition](analysis/study_definition.py); this is written in `python`, but non-programmers should be able to understand what is going on there
-* If you are interested in how we defined our code lists, look in the [codelists folder](./codelists/).
-* Developers and epidemiologists interested in the code should review
-[DEVELOPERS.md](./docs/DEVELOPERS.md).
-
 # About the OpenSAFELY framework
 
 The OpenSAFELY framework is a new secure analytics platform for
