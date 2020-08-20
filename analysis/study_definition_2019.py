@@ -22,7 +22,7 @@ study = StudyDefinition(
     },
     # This line defines the study population
     population=patients.registered_with_one_practice_between(
-        "2019-02-01", "2020-02-01"
+        "2018-02-01", "2019-02-01"
     ),
     # Outcomes
     died_date_cpns=patients.with_death_recorded_in_cpns(
@@ -50,7 +50,7 @@ study = StudyDefinition(
     died_date_1ocare=patients.with_death_recorded_in_primary_care(
         returning="date_of_death",
         date_format="YYYY-MM-DD",
-        return_expectations={"date": {"earliest": "2020-02-02"}},
+        return_expectations={"date": {"earliest": "2019-02-02"}},
     ),
     
     # The rest of the lines define the covariates with associated GitHub issues
