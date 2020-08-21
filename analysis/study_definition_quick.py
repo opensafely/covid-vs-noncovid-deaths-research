@@ -22,7 +22,7 @@ study = StudyDefinition(
     },
     # This line defines the study population
     population=patients.registered_with_one_practice_between(
-        "2018-02-01", "2019-02-01"
+        "2019-02-01", "2020-02-01"
     ),
     # Outcomes
     died_ons_covid_flag_any=patients.with_these_codes_on_death_certificate(
