@@ -43,7 +43,7 @@ foreach year of numlist 2019 2020{
 				baselogistic, age("age1 age2 age3")  addvariable("i.`addvariable'") 
 				if _rc==0{
 				estimates
-				estimates save ./output/models/an_noncovid_`year'_agesex_`addvariable'
+				estimates save ./output/models/an_noncovid_`year'_agesex_`addvariable', replace
 				}
 			else di "MODEL DID NOT FIT (adding `addvariable')"
 	 }
@@ -51,12 +51,12 @@ foreach year of numlist 2019 2020{
 	 cap logistic _d age1 age2 age3 i.male
 				if _rc==0{
 				estimates
-				estimates save ./output/models/an_noncovid_`year'_agesex_SEX
+				estimates save ./output/models/an_noncovid_`year'_agesex_SEX, replace
 			}
 	 cap logistic _d i.agegroup i.male
 				if _rc==0{
 				estimates
-				estimates save ./output/models/an_noncovid_`year'_agesex_AGEGROUP
+				estimates save ./output/models/an_noncovid_`year'_agesex_AGEGROUP, replace
 			}
 	 
 }

@@ -43,7 +43,7 @@ foreach failindicator of numlist 1 2 {
 			baselogistic, age("age1 age2 age3")  addvariable("i.`addvariable'") 
 			if _rc==0{
 			estimates
-			estimates save ./output/models/an_covidvsnoncovid_agesex_fail`failindicator'_`addvariable'
+			estimates save ./output/models/an_covidvsnoncovid_agesex_fail`failindicator'_`addvariable', replace
 			}
 		else di "MODEL DID NOT FIT (adding `addvariable')"
 	 }
@@ -51,12 +51,12 @@ foreach failindicator of numlist 1 2 {
 	 cap logistic _d age1 age2 age3 i.male
 			if _rc==0{
 			estimates
-			estimates save ./output/models/an_covidvsnoncovid_agesex_fail`failindicator'_SEX
+			estimates save ./output/models/an_covidvsnoncovid_agesex_fail`failindicator'_SEX, replace
 			}
 	 cap logistic _d i.agegroup i.male
 			if _rc==0{
 			estimates
-			estimates save ./output/models/an_covidvsnoncovid_agesex_fail`failindicator'_AGEGROUP
+			estimates save ./output/models/an_covidvsnoncovid_agesex_fail`failindicator'_AGEGROUP, replace
 			}
 	 
 }
