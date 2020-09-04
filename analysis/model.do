@@ -9,6 +9,8 @@ import delimited `c(pwd)'/output/input_2019.csv
 *import delimited `c(pwd)'/output/covid_vs_noncovid.csv
 *import delimited `c(pwd)'/output/covid_vs_noncovid_2019.csv
 
+cd analysis
+
 do cr_create_analysis_dataset
 do cr_create_analysis_dataset_2019
 
