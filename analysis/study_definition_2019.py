@@ -50,7 +50,7 @@ study = StudyDefinition(
     died_date_1ocare=patients.with_death_recorded_in_primary_care(
         returning="date_of_death",
         date_format="YYYY-MM-DD",
-        return_expectations={"date": {"earliest": "2019-02-02"}},
+        return_expectations={"date": {"earliest": "2019-02-01"}},
     ),
     
     # The rest of the lines define the covariates with associated GitHub issues
