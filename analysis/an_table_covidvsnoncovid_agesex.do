@@ -17,10 +17,11 @@ local endwith "_tab"
 	*put the varname and condition to left so that alignment can be checked vs shell
 	file write tablecontents ("`variable'") _tab ("`i'") _tab
 	
-	foreach failn of numlist 1 2 {
+	foreach failn of numlist 1 2 3 {
 	
 		if `failn'==1 local outcome "COV"
 		else if `failn'==2 local outcome "NONCOV"
+		else if `failn'==3 local outcome "NONCOV_2019"
 		
 		local noestimatesflag 0 /*reset*/
 
@@ -35,15 +36,27 @@ local endwith "_tab"
 		*FOR AGEGROUP - need to use the separate univariate/multivariate model fitted with age group rather than spline
 		*FOR ETHNICITY - use the separate complete case multivariate model
 		*FOR REST - use the "main" multivariate model
-		if "`variable'"=="agegroup" {
-				cap estimates use ./output/models/an_covidvsnoncovid_agesex_fail`failn'_AGEGROUP
+		if `failn'==3{
+				if "`variable'"=="agegroup" {
+				cap estimates use ./output/models/an_noncovid_2019_agesex_AGEGROUP
 				if _rc!=0 local noestimatesflag 1
-				}	
-		else {
-				cap estimates use ./output/models/an_covidvsnoncovid_agesex_fail`failn'_`variable'
+				}
+				else {
+				cap estimates use ./output/models/an_noncovid_2019_agesex_`variable'
 				if _rc!=0 local noestimatesflag 1
 				}
 		
+		}
+		else{
+				if "`variable'"=="agegroup" {
+				cap estimates use ./output/models/an_covidvsnoncovid_agesex_fail`failn'_AGEGROUP
+				if _rc!=0 local noestimatesflag 1
+				}	
+				else {
+				cap estimates use ./output/models/an_covidvsnoncovid_agesex_fail`failn'_`variable'
+				if _rc!=0 local noestimatesflag 1
+				}
+		}
 		***********************
 		*2) WRITE THE HRs TO THE OUTPUT FILE
 		
@@ -85,7 +98,7 @@ file open tablecontents using ./output/an_table_covidvsnoncovid_agesex.txt, t w 
 
 tempfile HRestimates
 cap postutil clear
-postfile HRestimates str6 outcome str27 variable level hr lci uci pval using `HRestimates'
+postfile HRestimates str11 outcome str27 variable level hr lci uci pval using `HRestimates'
 
 *Age group
 outputHRsforvar, variable("agegroup") min(1) max(2) 
@@ -279,16 +292,24 @@ sort obsorder
 
 gen displayhrci = "<<< HR = " + string(hr, "%3.2f") + " (" + string(lci, "%3.2f") + "-" + string(uci, "%3.2f") + ")" if lci<0.15
 
+qui summ obsorder if outcome=="NONCOV_2019" & variable=="imd" & level ==5
+local endofdemog = r(mean)
+foreach graphtype of any demogs comorbs{
+if "`graphtype'"=="demogs" local if "if _n<=`endofdemog'"
+if "`graphtype'"=="comorbs" local if "if _n>`endofdemog'"
 scatter graphorder hr if lci>=.15 & outcome=="COV", mcol(red)	msize(small)		///										///
 	|| rcap lci uci graphorder if lci>=.15 & outcome=="COV", hor mcol(red)	lcol(red)			///
 	|| scatter graphorder hr if lci>=.15 & outcome=="NONCOV", mcol(black)	msize(small)		///										///
 	|| rcap lci uci graphorder if lci>=.15 & outcome=="NONCOV", hor mcol(black)	lcol(black)			///
+	|| scatter graphorder hr if lci>=.15 & outcome=="NONCOV_2019", mcol(blue)	msize(small)		///										///
+	|| rcap lci uci graphorder if lci>=.15 & outcome=="NONCOV_2019", hor mcol(blue)	lcol(black)			///
 	|| scatter graphorder lowerlimit, m(i) mlab(displayhrci) mlabcol(black) mlabsize(tiny) ///
 	|| scatter graphorder varx if outcome=="COV", m(i) mlab(Name) mlabsize(tiny) mlabcol(black) 	///
 	|| scatter graphorder levelx if outcome=="COV", m(i) mlab(leveldesc) mlabsize(tiny) mlabcol(gs8) 	///
 		xline(1,lp(dash)) 															///
-		xscale(log) xlab(0.25 0.5 1 2 5 10) xtitle("Odds Ratio & 95% CI") ylab(none) ytitle("")						/// 
-		yscale(r(100)) ysize(12)   legend(order(1 3) label(1 "COVID deaths") label(3 "Non-COVID deaths"))
-		
-
+		xscale(log) xlab(0.25 0.5 1 2 5 10 20) xtitle("Odds Ratio & 95% CI") ylab(none) ytitle("")						/// 
+		 ysize(12)   legend(order(1 3 5) label(1 "COVID deaths") label(3 "Non-COVID deaths")  label(5 "Deaths 2019")) ///
+		|| `if' , name(`graphtype', replace)
+}
+graph combine demogs comorbs, rows(1) ysize(6) iscale(*.7)
 graph export ./output/an_table_covidvsnoncovid_agesex.svg, as(svg) replace
