@@ -4,3 +4,9 @@ model.log
 __pycache__
 .python-version
 output/*
+analysis/*
+!*.do
+!*.ado
+!*.hlp
+!*.py
+!*.sthlp
