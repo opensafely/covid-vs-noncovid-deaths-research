@@ -24,6 +24,6 @@ replace nameshort="stroke_dem" if variable=="stroke_dementia"
 
 gen variable_level = nameshort + string(level)
 
-graph bar pnoncovdeath pcovdeath , stack over(variable_level, label(angle(45))) legend(label(1 "Pr(non-cov death)") label(2 "Pr(covid death)")) 
+graph bar pnoncovdeath pcovdeath , stack over(variable_level, label(angle(90) labsize(tiny))) legend(label(1 "Pr(non-cov death)") label(2 "Pr(covid death)")) by(agegroup, yrescale)
 
 graph export ./output/an_processout_mlogit_absolutes.svg, as(svg)
