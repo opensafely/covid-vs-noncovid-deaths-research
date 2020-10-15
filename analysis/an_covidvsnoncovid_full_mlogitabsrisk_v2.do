@@ -10,7 +10,7 @@ replace mloutcome = 0 if _d==0
 
 cap prog drop getprediction
 prog define getprediction, rclass
-local predictionat "male=0 obese4cat=1 smoke_nomiss=1 ethnicity=1 imd=1 htdiag_or_highbp=0 			chronic_respiratory_disease=0 asthmacat=1 chronic_cardiac_disease=1 diabcat=1 cancer_exhaem_cat=1 			cancer_haem_cat=1 chronic_liver_disease=0 stroke_dementia=0	other_neuro=1 reduced_kidney_function_cat=1	organ_transplant=0 spleen=0	ra_sle_psoriasis=0 other_immunosuppression=0"
+local predictionat "male=0 obese4cat=1 smoke_nomiss=1 ethnicity=1 imd=1 htdiag_or_highbp=0 			chronic_respiratory_disease=0 asthmacat=1 chronic_cardiac_disease=0 diabcat=1 cancer_exhaem_cat=1 			cancer_haem_cat=1 chronic_liver_disease=0 stroke_dementia=0	other_neuro=0 reduced_kidney_function_cat=1	organ_transplant=0 spleen=0	ra_sle_psoriasis=0 other_immunosuppression=0"
 if "`1'"!="" {
 	local eqposm1 = strpos("`1'","=")-1
 	local var = substr("`1'",1,`eqposm1')
