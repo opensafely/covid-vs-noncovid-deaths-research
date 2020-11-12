@@ -46,6 +46,11 @@ study = StudyDefinition(
         include_day=True,
         return_expectations={"date": {"earliest": "2020-03-01"}},
     ),
+
+    died_cause_ons=patients.died_from_any_cause(
+        returning="underlying_cause_of_death",
+        return_expectations={"category": {"ratios": {"I21":0.5, "C34":0.5}},},
+    ),
     
     died_date_1ocare=patients.with_death_recorded_in_primary_care(
         returning="date_of_death",
