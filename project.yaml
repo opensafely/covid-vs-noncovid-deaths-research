@@ -4,11 +4,17 @@ expectations:
   population_size: 10000
 
 actions:
-  generate_cohorts:
+  generate_cohort:
     run: cohortextractor:latest generate_cohort --study-definition study_definition
     outputs:
       highly_sensitive:
         cohort: output/input.csv
+
+  generate_cohort2019:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_2019
+    outputs:
+      highly_sensitive:
+        cohort: output/input_2019.csv
 
   run_model:
     run: stata-mp:latest analysis/model.do
