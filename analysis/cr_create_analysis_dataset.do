@@ -26,10 +26,10 @@
 
 * Open a log file
 cap log close
-log using ./output/cr_analysis_dataset, replace t
+log using ./analysis/output/cr_create_analysis_dataset, replace t
 
 clear
-import delimited ../output/input.csv
+import delimited ./output/input.csv
 
 di "STARTING COUNT FROM IMPORT:"
 cou
@@ -595,7 +595,6 @@ drop hba1c_pct hba1c_percentage hba1c_mmol_per_mol
 *  Outcomes and survival time  *
 ********************************
 
-
 /*  Cohort entry and censor dates  */
 
 * Date of cohort entry, 1 Feb 2020
@@ -603,17 +602,30 @@ gen enter_date = date("01/02/2020", "DMY")
 format %d enter_date
 
 /*   Outcomes   */
+* Binary indicators for CPNS, primary care death outcome
+gen cpnsdeath 		= (died_date_cpns		< .)
+gen primarycaredeath = (died_date_1ocare < .)
+
 * Date of Covid death in ONS
 gen died_date_onscovid = died_date_ons if died_ons_covid_flag_any==1
 
-* Binary indicators for outcomes
-gen cpnsdeath 		= (died_date_cpns		< .)
-gen onsdeath 		= 2*(died_date_ons < .)
-replace onsdeath 	= 1 if died_ons_covid_flag_any==1
-label define onsdeathlab 1 covid 2 noncovid
+*Classify ONS deaths
+datacheck died_cause_ons!="" if died_date_ons<., nol
+datacheck died_date_ons<. if died_cause_ons!="", nol
+
+gen _causechapter = substr(died_cause,1,1)
+gen _causenumber = real(substr(died_cause,2,2))
+gen onsdeath = 1 if _causechapter=="U" & _causenumber==07
+replace onsdeath = 2 if _causechapter=="C" & !(_causenumber>=81 & _causenumber<=96)
+replace onsdeath = 3 if _causechapter=="C" & (_causenumber>=81 & _causenumber<=96)
+replace onsdeath = 4 if (_causechapter=="F" & (_causenumber==0|_causenumber==1|_causenumber==3))|(_causechapter=="G" & (_causenumber==30))
+replace onsdeath = 5 if _causechapter=="I"
+replace onsdeath = 6 if _causechapter=="J" & (_causenumber>=9 & _causenumber<=22)
+replace onsdeath = 7 if _causechapter=="J" & (_causenumber>=23)
+replace onsdeath = 8 if _causechapter!="" & onsdeath==.
+label define onsdeathlab 1 covid 2 cancer_exhaem 3 cancer_haem 4 dem_alz 5 cvd 6 resp_lrti 7 resp_noninfect 8 other
 label values onsdeath onsdeathlab 
 
-gen primarycaredeath = (died_date_1ocare < .)
 
 /*  Create survival times  */
 * For looping later, name must be stime_binary_outcome_name
@@ -625,7 +637,6 @@ gen stime_primarycaredeath 		= min($primarycaredeathcensor, died_date_1ocare)
 
 * If outcome was after censoring occurred, set to zero
 replace cpnsdeath 		= 0 if (died_date_cpns > $cpnsdeathcensor) 
-*replace onscoviddeath 	= 0 if (died_date_onscovid	> $onsdeathcensor) 
 replace onsdeath 		= 0 if (died_date_ons > $onsdeathcensor) 
 replace primarycaredeath = 0 if (died_date_1ocare > $primarycaredeathcensor)
 
@@ -732,8 +743,6 @@ label var  stime_cpnsdeath 				"Survival time (date); outcome CPNS covid death"
 label var  stime_onsdeath 				"Survival time (date); outcome ONS covid death"
 
 
-
-
 ***************
 *  Tidy data  *
 ***************
@@ -741,7 +750,7 @@ label var  stime_onsdeath 				"Survival time (date); outcome ONS covid death"
 * REDUCE DATASET SIZE TO VARIABLES NEEDED
 keep patient_id imd stp region enter_date  									///
 	cpnsdeath died_date_cpns  stime_cpnsdeath								///
-	onsdeath died_date_ons died_date_onscovid 								///
+	onsdeath died_date_ons died_date_onscovid died_cause_ons				///
 	stime_onsdeath															///
 	primarycaredeath died_date_1ocare stime_primarycaredeath				///
 	age agegroup age70 age1 age2 age3 male bmi smoke   						///
@@ -760,8 +769,8 @@ keep patient_id imd stp region enter_date  									///
 ***************
 
 sort patient_id
-label data "covid vs noncovid ()2020)"
-save "cr_create_analysis_dataset.dta", replace
+label data "covid vs noncovid 2020"
+save ./analysis/output/cr_create_analysis_dataset.dta, replace
 
 log close
 

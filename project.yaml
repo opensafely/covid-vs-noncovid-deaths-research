@@ -4,7 +4,7 @@ expectations:
   population_size: 10000
 
 actions:
-  generate_cohort:
+  generate_cohorts:
     run: cohortextractor:latest generate_cohort --study-definition study_definition
     outputs:
       highly_sensitive:
@@ -16,6 +16,33 @@ actions:
       highly_sensitive:
         cohort: output/input_2019.csv
 
+  crmain:
+    run: stata-mp:latest analysis/cr_create_analysis_dataset.do
+    needs: [generate_cohorts]
+    outputs:
+      highly_sensitive:
+        data: analysis/cr_create_analysis_dataset.dta
+      moderately_sensitive:
+        log: analysis/output/cr_create_analysis_dataset.log
+  
+  cr2019:
+    run: stata-mp:latest analysis/cr_create_analysis_dataset_2019.do
+    needs: [generate_cohort2019]
+    outputs:
+      highly_sensitive:
+        data: analysis/cr_create_analysis_dataset_2019.dta
+      moderately_sensitive:
+        log: analysis/output/cr_create_analysis_dataset_2019.log
+  
+  an_covid_vs_othercauses_abs_AGESEX:
+    run: stata-mp:latest analysis/an_covid_vs_othercauses_abs_AGESEX.do
+    needs: [crmain]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_covid_vs_othercauses_abs_AGESEX.log
+        barchart: analysis/output/an_covid_vs_othercauses_abs_AGESEX_GRAPH.svg
+        estimates: analysis/output/an_covid_vs_othercauses_abs_AGESEX_ESTIMATES.dta
+  
   run_model:
     run: stata-mp:latest analysis/model.do
     needs: [generate_cohorts]

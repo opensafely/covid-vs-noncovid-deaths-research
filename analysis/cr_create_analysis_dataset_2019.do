@@ -26,10 +26,10 @@
 
 * Open a log file
 cap log close
-log using ./output/cr_analysis_dataset, replace t
+log using ./analysis/output/cr_create_analysis_dataset_2019, replace t
 
 clear
-import delimited ../output/input.csv
+import delimited ./output/input.csv
 
 di "STARTING COUNT FROM IMPORT:"
 cou
@@ -762,7 +762,7 @@ keep patient_id imd stp region enter_date  									///
 
 sort patient_id
 label data "covid vs non covid 2019"
-save "cr_create_analysis_dataset_2019.dta", replace
+save ./analysis/output/cr_create_analysis_dataset_2019.dta, replace
 
 log close
 
