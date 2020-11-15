@@ -49,7 +49,7 @@ study = StudyDefinition(
 
     died_cause_ons=patients.died_from_any_cause(
         returning="underlying_cause_of_death",
-        return_expectations={"category": {"ratios": {"I21":0.5, "C34":0.5}},},
+        return_expectations={"category": {"ratios": {"U071":0.2, "I21":0.2, "C34":0.15, "C83":0.05 , "J09":0.05 , "J45":0.1 ,"G30":0.2, "A01":0.05}},},
     ),
     
     died_date_1ocare=patients.with_death_recorded_in_primary_care(

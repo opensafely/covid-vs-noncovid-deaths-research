@@ -22,3 +22,5 @@ do an_noncovid_full /*primary care deaths*/
 
 do an_covidvsnoncovid_full_mlogitabsrisk.do
 do an_processout_mlogit_absolutes.do
+
+do an_covid_vs_othercauses_abs_AGESEX
