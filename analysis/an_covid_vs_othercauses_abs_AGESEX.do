@@ -9,9 +9,8 @@ prog define getprediction, rclass
 cap frame drop topredict
 frame put in 1, into(topredict)
 frame change topredict
-foreach change of any `predictionat'{
-replace `change'
-}
+replace `1'
+replace `2'
 predict pr0 pr1 pr2 pr3 pr4 pr5 pr6 pr7 pr8, pr
 return scalar pr0=pr0
 return scalar pr1=pr1
