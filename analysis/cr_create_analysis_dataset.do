@@ -770,7 +770,7 @@ keep patient_id imd stp region enter_date  									///
 
 sort patient_id
 label data "covid vs noncovid 2020"
-save ./analysis/output/cr_create_analysis_dataset.dta, replace
+save ./analysis/cr_create_analysis_dataset.dta, replace
 
 log close
 
