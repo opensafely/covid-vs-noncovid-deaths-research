@@ -11,11 +11,15 @@ log using ./output/an_covidvsnoncovid_agesex, replace t
 	end			
 	
 	
-foreach failindicator of numlist 1 2 {
-
-	use cr_create_analysis_dataset, clear
-	stset stime_onsdeath, fail(onsdeath==`failindicator') id(patient_id) enter(enter_date) origin(enter_date)
-
+	use  ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, clear
+	
+	gen coviddeath = onsdeath==1 if  _d==1
+	replace coviddeath= 0 if _d==0
+	gen noncoviddeath = onsdeath>1 if _d==1
+	replace noncoviddeath= 0 if _d==0
+	
+	foreach run of any covid noncovid {
+	
 	foreach addvariable of any asthmacat	///
 		cancer_exhaem_cat					///
 		cancer_haem_cat						///
@@ -40,23 +44,23 @@ foreach failindicator of numlist 1 2 {
 		smoke_nomiss 						///
 		spleen 								///
 		stroke_dementia {
-			baselogistic, age("age1 age2 age3")  addvariable("i.`addvariable'") 
+			cap logistic `run'death age1 age2 age3 male i.`addvariable'
 			if _rc==0{
 			estimates
-			estimates save ./output/models/an_covidvsnoncovid_agesex_fail`failindicator'_`addvariable', replace
+			estimates save ./analysis/output/models/an_covidvsnoncovid_agesex_`run'_`addvariable', replace
 			}
 		else di "MODEL DID NOT FIT (adding `addvariable')"
 	 }
 
-	 cap logistic _d age1 age2 age3 i.male
+	 cap logistic `run'death age1 age2 age3 i.male
 			if _rc==0{
 			estimates
-			estimates save ./output/models/an_covidvsnoncovid_agesex_fail`failindicator'_SEX, replace
+			estimates save ./analysis/output/models/an_covidvsnoncovid_agesex_`run'_MALE, replace
 			}
-	 cap logistic _d i.agegroup i.male
+	 cap logistic `run'death i.agegroup i.male
 			if _rc==0{
 			estimates
-			estimates save ./output/models/an_covidvsnoncovid_agesex_fail`failindicator'_AGEGROUP, replace
+			estimates save ./analysis/output/models/an_covidvsnoncovid_agesex_`run'_AGEGROUP, replace
 			}
 	 
 }

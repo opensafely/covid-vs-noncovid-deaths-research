@@ -11,18 +11,23 @@ import delimited `c(pwd)'/output/input_2019.csv
 
 *cd analysis
 
+*DATA MANAGEMENT
 do ./analysis/cr_create_analysis_dataset
 do ./analysis/cr_create_analysis_dataset_2019
 
-/*
-do an_covidvsnoncovid_agesex
-do an_covidvsnoncovid_full
+*TABLE 1 DESCRIPTIVES
+do ./analysis/an_tablecontent_PublicationDescriptivesTable
 
-do an_noncovid_agesex /*primary care deaths*/
-do an_noncovid_full /*primary care deaths*/
+*ABSOLUTE RISKS BY CAUSE OF DEATH (FIG 2)
+do ./analysis/an_covid_vs_othercauses_abs_AGE
 
-do an_covidvsnoncovid_full_mlogitabsrisk.do
-do an_processout_mlogit_absolutes.do
-*/
+*SEPARATE AGE SEX-ADJUSTED "FACTORS ASSOC" LOGISTIC MODELS FOR COVID AND NON COVID DEATH
+do ./analysis/an_covidvsnoncovid_agesex
 
-do ./analysis/an_covid_vs_othercauses_abs_AGESEX
+*FOREST PLOT (PROCESSING OF ABOVE RR ESTIMATES) (FIG 3)
+do ./analysis/an_processout_agesex_covvsnon_forestplots
+
+*ETHNICITY EFFECTS ON DIFFERENT CAUSE-SPECIFIC MORTALITY OUTCOMES (FIG 4)
+do ./analysis/an_ethnicitybycod
+
+
