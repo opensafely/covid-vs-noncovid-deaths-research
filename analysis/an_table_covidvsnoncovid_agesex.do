@@ -19,10 +19,12 @@ local endwith "_tab"
 	
 	foreach failn of numlist 1 2 3 {
 	
-		if `failn'==1 local outcome "COV"
-		else if `failn'==2 local outcome "NONCOV"
-		else if `failn'==3 local outcome "NONCOV_2019"
 		
+		local non
+		if `failn'==1 local non ""
+		else if `failn'==2 local non "NON"
+		local outcome "`non'COV"
+		if `failn'==3 local outcome "NONCOV_2019"
 		local noestimatesflag 0 /*reset*/
 
 *CHANGE THE OUTCOME BELOW TO LAST IF BRINGING IN MORE COLS
@@ -37,25 +39,12 @@ local endwith "_tab"
 		*FOR ETHNICITY - use the separate complete case multivariate model
 		*FOR REST - use the "main" multivariate model
 		if `failn'==3{
-				if "`variable'"=="agegroup" {
-				cap estimates use ./output/models/an_noncovid_2019_agesex_AGEGROUP
-				if _rc!=0 local noestimatesflag 1
-				}
-				else {
-				cap estimates use ./output/models/an_noncovid_2019_agesex_`variable'
-				if _rc!=0 local noestimatesflag 1
-				}
-		
+				cap estimates use ./analysis/output/models/an_noncovid_2019_agesex_`variable'
+				if _rc!=0 local noestimatesflag 1	
 		}
 		else{
-				if "`variable'"=="agegroup" {
-				cap estimates use ./output/models/an_covidvsnoncovid_agesex_fail`failn'_AGEGROUP
-				if _rc!=0 local noestimatesflag 1
-				}	
-				else {
-				cap estimates use ./output/models/an_covidvsnoncovid_agesex_fail`failn'_`variable'
-				if _rc!=0 local noestimatesflag 1
-				}
+				cap estimates use ./analysis/output/models/an_covidvsnoncovid_agesex_`non'covid_`variable'
+				if _rc!=0 local noestimatesflag 1				
 		}
 		***********************
 		*2) WRITE THE HRs TO THE OUTPUT FILE
@@ -94,7 +83,7 @@ end
 *MAIN CODE TO PRODUCE TABLE CONTENTS
 
 cap file close tablecontents
-file open tablecontents using ./output/an_table_covidvsnoncovid_agesex.txt, t w replace 
+file open tablecontents using ./analysis/output/an_table_covidvsnoncovid_agesex.txt, t w replace 
 
 tempfile HRestimates
 cap postutil clear
@@ -312,4 +301,4 @@ scatter graphorder hr if lci>=.15 & outcome=="COV", mcol(red)	msize(small)		///	
 		|| `if' , name(`graphtype', replace)
 }
 graph combine demogs comorbs, rows(1) ysize(6) iscale(*.7)
-graph export ./output/an_table_covidvsnoncovid_agesex.svg, as(svg) replace
+graph export ./analysis/output/an_table_covidvsnoncovid_agesex.svg, as(svg) replace

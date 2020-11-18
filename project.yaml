@@ -15,6 +15,12 @@ actions:
     outputs:
       highly_sensitive:
         cohort: output/input_2019.csv
+        
+  generate_flowchartdata:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_flow_chart
+    outputs:
+      highly_sensitive:
+        cohort: output/input_flow_chart.csv
 
   crmain:
     run: stata-mp:latest analysis/cr_create_analysis_dataset.do
@@ -22,6 +28,7 @@ actions:
     outputs:
       highly_sensitive:
         data: analysis/cr_create_analysis_dataset.dta
+        stsetdata: analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta
       moderately_sensitive:
         log: analysis/output/cr_create_analysis_dataset.log
   
@@ -34,15 +41,46 @@ actions:
       moderately_sensitive:
         log: analysis/output/cr_create_analysis_dataset_2019.log
   
-  an_covid_vs_othercauses_abs_AGESEX:
-    run: stata-mp:latest analysis/an_covid_vs_othercauses_abs_AGESEX.do
+  descriptive_table1:
+    run: stata-mp:latest analysis/an_tablecontent_PublicationDescriptivesTable.do
     needs: [crmain]
     outputs:
       moderately_sensitive:
-        log: analysis/output/an_covid_vs_othercauses_abs_AGESEX.log
-        barchart: analysis/output/an_covid_vs_othercauses_abs_AGESEX_GRAPH.svg
-        estimates: analysis/output/an_covid_vs_othercauses_abs_AGESEX_ESTIMATES.dta
+        log: analysis/output/an_tablecontent_PublicationDescriptivesTable.txt
   
+  absoluterisksbycause:
+    run: stata-mp:latest analysis/an_covid_vs_othercauses_abs_AGE.do
+    needs: [crmain]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_covid_vs_othercauses_abs_AGE.log
+        graph: analysis/output/an_covid_vs_othercauses_abs_AGE_GRAPH.svg
+        estimates: analysis/output/an_covid_vs_othercauses_abs_AGE_ESTIMATES.dta
+
+  covnoncov_logisticmodels:
+    run: stata-mp:latest analysis/an_covidvsnoncovid_agesex.do
+    needs: [crmain]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_covidvsnoncovid_agesex.log
+        models: analysis/output/models/an_covidvsnoncovid_agesex_*.ster
+  
+  covnoncov_forestplot:
+    run: stata-mp:latest analysis/an_processout_agesex_covvsnon_forestplots.do
+    needs: [covnoncov_logisticmodels]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_processout_agesex_covvsnon_forestplots_TABLE.txt
+        graph: analysis/output/an_processout_agesex_covvsnon_forestplots_GRAPH.svg
+ 
+  ethnicity_model:
+    run: stata-mp:latest analysis/an_ethnicitybycod.do
+    needs: [crmain]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_ethnicitybycod.log
+        graph: analysis/output/an_ethnicitybycod.svg
+   
   run_model:
     run: stata-mp:latest analysis/model.do
     needs: [generate_cohorts]

@@ -11,6 +11,7 @@ frame put in 1, into(topredict)
 frame change topredict
 replace `1'
 replace `2'
+
 predict pr0 pr1 pr2 pr3 pr4 pr5 pr6 pr7 pr8, pr
 return scalar pr0=pr0
 return scalar pr1=pr1
@@ -26,9 +27,7 @@ end
 
 ****
 
-use ./analysis/cr_create_analysis_dataset, clear
-
-stset stime_onsdeath, fail(onsdeath) id(patient_id) enter(enter_date) origin(enter_date)
+use ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, clear
 
 gen mloutcome = onsdeath if _d==1
 replace mloutcome = 0 if _d==0
@@ -53,4 +52,8 @@ frame change absolutes
 save ./analysis/output/an_covid_vs_othercauses_abs_AGESEX_ESTIMATES, replace
 
 graph bar (mean) pcovdeath pcancer_exh pcancer_haem pdem_alz pcvd presp_lrt presp_non pother, by(male age, cols(3) rescale) ylab(, angle(0))
+
+graph bar (mean) pcovdeath pcancer_exh pcancer_haem pdem_alz pcvd presp_lrt presp_non pother, by(male , cols(1) rescale) ylab(, angle(0)) over(age) yscale(log range(0.002 .01)) exclude0
+
+
 graph export ./analysis/output/an_covid_vs_othercauses_abs_AGESEX_GRAPH.svg, as(svg) replace

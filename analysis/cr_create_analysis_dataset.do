@@ -616,14 +616,14 @@ datacheck died_date_ons<. if died_cause_ons!="", nol
 gen _causechapter = substr(died_cause,1,1)
 gen _causenumber = real(substr(died_cause,2,2))
 gen onsdeath = 1 if _causechapter=="U" & _causenumber==07
-replace onsdeath = 2 if _causechapter=="C" & !(_causenumber>=81 & _causenumber<=96)
-replace onsdeath = 3 if _causechapter=="C" & (_causenumber>=81 & _causenumber<=96)
+replace onsdeath = 2 if _causechapter=="C" /*& !(_causenumber>=81 & _causenumber<=96)
+replace onsdeath = 3 if _causechapter=="C" & (_causenumber>=81 & _causenumber<=96)*/
+replace onsdeath = 3 if _causechapter=="I"
 replace onsdeath = 4 if (_causechapter=="F" & (_causenumber==0|_causenumber==1|_causenumber==3))|(_causechapter=="G" & (_causenumber==30))
-replace onsdeath = 5 if _causechapter=="I"
-replace onsdeath = 6 if _causechapter=="J" & (_causenumber>=9 & _causenumber<=22)
-replace onsdeath = 7 if _causechapter=="J" & (_causenumber>=23)
-replace onsdeath = 8 if _causechapter!="" & onsdeath==.
-label define onsdeathlab 1 covid 2 cancer_exhaem 3 cancer_haem 4 dem_alz 5 cvd 6 resp_lrti 7 resp_noninfect 8 other
+replace onsdeath = 5 if _causechapter=="J" /*& (_causenumber>=9 & _causenumber<=22)
+replace onsdeath = 7 if _causechapter=="J" & (_causenumber>=23)*/
+replace onsdeath = 6 if _causechapter!="" & onsdeath==.
+label define onsdeathlab 1 covid 2 cancer 3 cvd 4 dem_alz 5 respiratory 6 other
 label values onsdeath onsdeathlab 
 
 
@@ -771,6 +771,9 @@ keep patient_id imd stp region enter_date  									///
 sort patient_id
 label data "covid vs noncovid 2020"
 save ./analysis/cr_create_analysis_dataset.dta, replace
+
+stset stime_onsdeath, fail(onsdeath) id(patient_id) enter(enter_date) origin(enter_date)
+save ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, replace
 
 log close
 
