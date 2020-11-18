@@ -79,7 +79,7 @@ actions:
     outputs:
       moderately_sensitive:
         log: analysis/output/an_ethnicitybycod.log
-        graph: analysis/output/analysis/output/an_ethnicitybycod.svg
+        graph: analysis/output/an_ethnicitybycod.svg
    
   run_model:
     run: stata-mp:latest analysis/model.do

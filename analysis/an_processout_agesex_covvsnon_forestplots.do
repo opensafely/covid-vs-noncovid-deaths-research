@@ -62,8 +62,8 @@ local endwith "_tab"
 				local lb = r(lb)
 				local ub = r(ub)
 				cap gen `variable'=.
-				testparm i.`variable'
-				post HRestimates ("`outcome'") ("`variable'") (`i') (`hr') (`lb') (`ub') (r(p))
+				cap testparm i.`variable'
+				if _rc==0 post HRestimates ("`outcome'") ("`variable'") (`i') (`hr') (`lb') (`ub') (r(p))
 				drop `variable'
 				}	
 		} /*failn 1 2 */
@@ -83,7 +83,7 @@ end
 *MAIN CODE TO PRODUCE TABLE CONTENTS
 
 cap file close tablecontents
-file open tablecontents using ./analysis/output/an_processout_agesex_covvsnon_forestplots_combined_TABLE.txt, t w replace 
+file open tablecontents using ./analysis/output/an_processout_agesex_covvsnon_forestplots_TABLE.txt, t w replace 
 
 tempfile HRestimates
 cap postutil clear
