@@ -63,7 +63,7 @@ actions:
     outputs:
       moderately_sensitive:
         log: analysis/output/an_covidvsnoncovid_agesex.log
-        models: analysis/output/an_covidvsnoncovid_agesex_*.ster
+        models: analysis/output/models/an_covidvsnoncovid_agesex_*.ster
   
   covnoncov_forestplot:
     run: stata-mp:latest analysis/an_processout_agesex_covvsnon_forestplots.do

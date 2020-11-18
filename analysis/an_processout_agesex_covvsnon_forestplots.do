@@ -316,6 +316,6 @@ scatter graphorder hr if lci>=.15 & outcome=="COV", mcol(black)	msize(small)		//
 
 
 graph combine demogs comorbs, rows(1) ysize(6) iscale(*.7)
-grc1leg demogs comorbs, rows(1)  iscale(*.7) name(comb)
+grc1leg demogs comorbs, rows(1)  iscale(*.7) name(comb, replace)
 graph combine comb , ysize(6) 
 graph export ./analysis/output/an_processout_agesex_covvsnon_forestplots_GRAPH.svg, as(svg) replace
