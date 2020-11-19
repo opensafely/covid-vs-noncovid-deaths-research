@@ -1,0 +1,63 @@
+cons	==1	17443471 (100.0)
+
+agegroup	==1	5961210 (34.2)
+agegroup	==2	2874936 (16.5)
+agegroup	==3	3081931 (17.7)
+agegroup	==4	2418824 (13.9)
+agegroup	==5	1961997 (11.2)
+agegroup	==6	1144573 (6.6)
+
+male	==0	8732217 (50.1)
+male	==1	8711254 (49.9)
+
+obese4cat	==1	13617673 (78.1)
+obese4cat	==2	2414590 (13.8)
+obese4cat	==3	937553 (5.4)
+obese4cat	==4	473655 (2.7)
+
+smoke_nomiss	==1	8733172 (50.1)
+smoke_nomiss	==2	5742525 (32.9)
+smoke_nomiss	==3	2967774 (17.0)
+
+ethnicity	==1	11102834 (63.7)
+ethnicity	==2	171732 (1.0)
+ethnicity	==3	1026814 (5.9)
+ethnicity	==4	342183 (2.0)
+ethnicity	==5	323272 (1.9)
+ethnicity	>=.	4476636 (25.7)
+
+imd	==1	3564963 (20.4)
+imd	==2	3501371 (20.1)
+imd	==3	3513174 (20.1)
+imd	==4	3489682 (20.0)
+imd	==5	3374281 (19.3)
+
+
+htdiag_or_highbp	==1	5986301 (34.3)
+chronic_respiratory_disease	==1	711426 (4.1)
+asthmacat	==2	2479358 (14.2)
+asthmacat	==3	295970 (1.7)
+chronic_cardiac_disease	==1	1180033 (6.8)
+diabcat	==2	1052435 (6.0)
+diabcat	==3	491638 (2.8)
+diabcat	==4	196642 (1.1)
+
+cancer_exhaem_cat	==2	81293 (0.5)
+cancer_exhaem_cat	==3	237249 (1.4)
+cancer_exhaem_cat	==4	547407 (3.1)
+
+cancer_haem_cat	==2	8878 (0.1)
+cancer_haem_cat	==3	28133 (0.2)
+cancer_haem_cat	==4	63974 (0.4)
+
+reduced_kidney_function_cat	==2	1018647 (5.8)
+reduced_kidney_function_cat	==3	78974 (0.5)
+chronic_liver_disease	==1	100906 (0.6)
+stroke_dementia	==1	395437 (2.3)
+other_neuro	==1	172019 (1.0)
+organ_transplant	==1	20193 (0.1)
+spleen	==1	28057 (0.2)
+ra_sle_psoriasis	==1	885031 (5.1)
+other_immunosuppression	==1	45297 (0.3)
+
+*missing BMI included in 'not obese' (n = 3724793 (21.4%); missing smoking included in 'never smoker' (n = 731734 (4.2%))
