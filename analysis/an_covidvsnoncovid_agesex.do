@@ -1,5 +1,5 @@
 cap log close
-log using ./output/an_covidvsnoncovid_agesex, replace t
+log using ./analysis/output/an_covidvsnoncovid_agesex, replace t
 
 	cap prog drop baselogistic 
 	prog define baselogistic
@@ -17,6 +17,9 @@ log using ./output/an_covidvsnoncovid_agesex, replace t
 	replace coviddeath= 0 if _d==0
 	gen noncoviddeath = onsdeath>1 if _d==1
 	replace noncoviddeath= 0 if _d==0
+	
+	tab coviddeath
+	tab noncoviddeath
 	
 	foreach run of any covid noncovid {
 	
@@ -64,3 +67,5 @@ log using ./output/an_covidvsnoncovid_agesex, replace t
 			}
 	 
 }
+
+log close
