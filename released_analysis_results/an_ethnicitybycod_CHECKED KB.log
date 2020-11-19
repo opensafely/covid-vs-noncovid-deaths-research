@@ -1,0 +1,289 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /workspace/analysis/output/an_ethnicitybycod.log
+  log type:  text
+ opened on:  19 Nov 2020, 01:54:13
+
+. 
+. frames reset
+
+. use ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, clear
+(covid vs noncovid 2020)
+
+. 
+. gen mloutcome = onsdeath if _d==1
+(17,304,670 missing values generated)
+
+. replace mloutcome = 0 if _d==0
+(17,299,811 real changes made)
+
+. 
+. mlogit mloutcome i.ethnicity i.agegroup i.male, rrr
+
+Iteration 0:   log likelihood = -752207.14  
+Iteration 1:   log likelihood = -664506.27  
+Iteration 2:   log likelihood = -631183.31  
+Iteration 3:   log likelihood = -622324.67  
+Iteration 4:   log likelihood = -621311.63  
+Iteration 5:   log likelihood = -621209.35  
+Iteration 6:   log likelihood = -621194.32  
+Iteration 7:   log likelihood =  -621191.8  
+Iteration 8:   log likelihood = -621191.27  
+Iteration 9:   log likelihood = -621191.15  
+Iteration 10:  log likelihood = -621191.12  
+Iteration 11:  log likelihood = -621191.12  
+Iteration 12:  log likelihood = -621191.12  
+Iteration 13:  log likelihood = -621191.12  
+Iteration 14:  log likelihood = -621191.12  
+Iteration 15:  log likelihood = -621191.12  
+
+Multinomial logistic regression                 Number of obs     = 12,963,332
+                                                LR chi2(58)       =  262032.04
+                                                Prob > chi2       =     0.0000
+Log likelihood = -621191.12                     Pseudo R2         =     0.1742
+
+------------------------------------------------------------------------------
+   mloutcome |        RRR   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+0            |  (base outcome)
+-------------+----------------------------------------------------------------
+1            |
+   ethnicity |
+      Mixed  |   1.680515   .1983993     4.40   0.000      1.33337    2.118039
+Asian or ..  |   2.195248   .0798872    21.61   0.000     2.044126    2.357544
+      Black  |   2.159678    .129463    12.84   0.000     1.920274    2.428928
+      Other  |   1.511265   .1325922     4.71   0.000     1.272505    1.794823
+             |
+    agegroup |
+     40-<50  |   5.106088   .7860297    10.59   0.000     3.776196    6.904338
+     50-<60  |   17.91339   2.480656    20.84   0.000     13.65535    23.49917
+     60-<70  |   51.08344   6.883338    29.19   0.000     39.22684    66.52378
+     70-<80  |   157.2562   20.90662    38.04   0.000     121.1835    204.0665
+        80+  |   798.5526   105.4945    50.59   0.000     616.3874    1034.555
+             |
+      1.male |    1.54748   .0292876    23.07   0.000     1.491129    1.605961
+       _cons |   8.85e-06   1.17e-06   -88.00   0.000     6.83e-06    .0000115
+-------------+----------------------------------------------------------------
+2            |
+   ethnicity |
+      Mixed  |    .697067   .0726177    -3.46   0.001     .5683288     .854967
+Asian or ..  |   .5583097   .0230693   -14.11   0.000     .5148771     .605406
+      Black  |    .831656   .0476579    -3.22   0.001     .7433028    .9305115
+      Other  |   .6681348    .050419    -5.34   0.000     .5762759     .774636
+             |
+    agegroup |
+     40-<50  |   5.624152   .4219798    23.02   0.000     4.855025    6.515123
+     50-<60  |   16.47395   1.126755    40.96   0.000     14.40718    18.83722
+     60-<70  |   45.37326   3.021797    57.28   0.000      39.8209    51.69979
+     70-<80  |   102.1406   6.733869    70.17   0.000     89.75955    116.2293
+        80+  |   226.9396   14.94573    82.37   0.000     199.4583    258.2073
+             |
+      1.male |   1.389854   .0172048    26.59   0.000     1.356539    1.423987
+       _cons |   .0000506   3.31e-06  -151.04   0.000     .0000445    .0000575
+-------------+----------------------------------------------------------------
+3            |
+   ethnicity |
+      Mixed  |   1.156689   .1107367     1.52   0.128     .9587955    1.395427
+Asian or ..  |   1.024987   .0363341     0.70   0.486      .956191    1.098733
+      Black  |   .9065649   .0564783    -1.57   0.115     .8023609    1.024302
+      Other  |    .636914   .0578138    -4.97   0.000     .5331087    .7609319
+             |
+    agegroup |
+     40-<50  |   6.453472   .6484973    18.56   0.000     5.299779    7.858308
+     50-<60  |   17.34229     1.6124    30.69   0.000     14.45326    20.80879
+     60-<70  |   44.95732   4.078354    41.95   0.000      37.6342    53.70542
+     70-<80  |   119.6068     10.714    53.41   0.000     100.3478     142.562
+        80+  |   580.0197   51.60273    71.52   0.000     487.2072    690.5128
+             |
+      1.male |   1.496793   .0202925    29.75   0.000     1.457544    1.537099
+       _cons |   .0000245   2.18e-06  -119.38   0.000     .0000206    .0000291
+-------------+----------------------------------------------------------------
+4            |
+   ethnicity |
+      Mixed  |   .5620965    .123159    -2.63   0.009     .3658534    .8636041
+Asian or ..  |   .5495483   .0401395    -8.20   0.000     .4762482    .6341302
+      Black  |   1.013304   .0892565     0.15   0.881     .8526325    1.204252
+      Other  |    .678126   .0946188    -2.78   0.005     .5158725    .8914119
+             |
+    agegroup |
+     40-<50  |    4124761   4.34e+09     0.01   0.988            0           .
+     50-<60  |   4.07e+07   4.28e+10     0.02   0.987            0           .
+     60-<70  |   4.05e+08   4.26e+11     0.02   0.985            0           .
+     70-<80  |   4.22e+09   4.43e+12     0.02   0.983            0           .
+        80+  |   5.51e+10   5.80e+13     0.02   0.981            0           .
+             |
+      1.male |   .7234867   .0144877   -16.16   0.000     .6956414    .7524467
+       _cons |   2.68e-13   2.82e-10    -0.03   0.978            0           .
+-------------+----------------------------------------------------------------
+5            |
+   ethnicity |
+      Mixed  |    .733807   .1344601    -1.69   0.091      .512402     1.05088
+Asian or ..  |   .8467917   .0494494    -2.85   0.004     .7552134    .9494748
+      Black  |   .5767819   .0679044    -4.67   0.000     .4579308    .7264796
+      Other  |   .6006128   .0853254    -3.59   0.000     .4546421      .79345
+             |
+    agegroup |
+     40-<50  |   11.09579   2.682982     9.95   0.000     6.907745    17.82298
+     50-<60  |   33.26615   7.637029    15.27   0.000     21.21236    52.16941
+     60-<70  |   114.6479   25.89134    21.00   0.000     73.64384    178.4827
+     70-<80  |    377.005   84.64028    26.42   0.000     242.7987    585.3934
+        80+  |   1658.559    371.626    33.09   0.000      1069.07    2573.096
+             |
+      1.male |   1.409607   .0282025    17.16   0.000     1.355401    1.465981
+       _cons |   4.14e-06   9.27e-07   -55.33   0.000     2.67e-06    6.42e-06
+-------------+----------------------------------------------------------------
+6            |
+   ethnicity |
+      Mixed  |   .6914928   .0882663    -2.89   0.004     .5384373    .8880556
+Asian or ..  |    .818583   .0347151    -4.72   0.000     .7532936    .8895311
+      Black  |   .7908788   .0562377    -3.30   0.001     .6879912    .9091531
+      Other  |   .6436624   .0607297    -4.67   0.000     .5349918    .7744068
+             |
+    agegroup |
+     40-<50  |   2.656265   .1607594    16.14   0.000     2.359152    2.990796
+     50-<60  |   4.713873   .2567484    28.47   0.000     4.236585    5.244932
+     60-<70  |    8.63704   .4500563    41.38   0.000     7.798495    9.565752
+     70-<80  |    20.4704   1.014253    60.93   0.000     18.57597    22.55802
+        80+  |   119.0864   5.666894   100.45   0.000     108.4817    130.7277
+             |
+      1.male |   1.142721   .0173933     8.77   0.000     1.109134    1.177325
+       _cons |   .0001077   5.10e-06  -193.16   0.000     .0000982    .0001182
+------------------------------------------------------------------------------
+Note: _cons estimates baseline relative risk for each outcome.
+
+. 
+. cap frame drop estimates
+
+. frame create estimates outcome ethnicity rrr lci uci
+
+. 
+. foreach outcome of numlist 1/6{
+  2.         foreach ethnicity of numlist 2/5 {
+  3.                 cap lincom [`outcome'] `ethnicity'.ethnicity, rrr
+  4.                 if _rc==0 frame post estimates (`outcome') (`ethnicity') (
+> r(estimate)) (r(lb)) (r(ub))
+  5. }
+  6. }
+
+. 
+. frame change estimates
+
+. 
+. sort ethnicity outcome
+
+. 
+. label define ethnicity  1 "White"                                       ///
+>                                                 2 "Mixed vs White"           
+>                            ///
+>                                                 3 "Asian or Asian British vs 
+> White"     ///
+>                                                 4 "Black vs White"           
+>                            ///
+>                                                 5 "Other vs White"           
+>                            
+
+.                                                 
+. label values ethnicity ethnicity
+
+. 
+. label define outcomes 1 COVID 2 CANCER 3 CVD 4 DEM_ALZ 5 RESPIR 6 OTHER 
+
+. label values outcome outcomes
+
+. 
+. gen outcometext = "COVID-19" if outcome==1
+(20 missing values generated)
+
+. replace outcometext = "Cancer" if outcome==2
+(4 real changes made)
+
+. replace outcometext = "CVD" if outcome==3
+(4 real changes made)
+
+. replace outcometext = "Dementia/Alzheim" if outcome==4
+variable outcometext was str8 now str16
+(4 real changes made)
+
+. replace outcometext = "Respiratory" if outcome==5
+(4 real changes made)
+
+. replace outcometext = "Other" if outcome==6
+(4 real changes made)
+
+. 
+. gen esthr = string(rrr, "%4.2f") + " (" + string(lci, "%4.2f") + "-" + string
+> (uci, "%4.2f") + ")"
+
+. 
+. gen graphorder = 7-outcome
+
+. 
+. gen labelat = .
+(24 missing values generated)
+
+. replace labelat = 0.06
+(24 real changes made)
+
+. gen outcomeheadat = .
+(24 missing values generated)
+
+. replace outcomeheadat = 0.05
+(24 real changes made)
+
+. gen estimatesat = 3.5
+
+. 
+. expand 2 if outcome==1, gen(expanded)
+(4 observations created)
+
+. replace graphorder=7 if expanded==1
+(4 real changes made)
+
+. gen outcomehead="Cause of death category" if expanded==1
+(24 missing values generated)
+
+. for var rrr lci uci : replace X=. if expanded==1
+
+->  replace rrr=. if expanded==1
+(4 real changes made, 4 to missing)
+
+->  replace lci=. if expanded==1
+(4 real changes made, 4 to missing)
+
+->  replace uci=. if expanded==1
+(4 real changes made, 4 to missing)
+
+. replace outcometext="" if expanded==1
+(4 real changes made)
+
+. replace esthr="" if expanded==1
+(4 real changes made)
+
+. 
+. scatter graphorder rrr if outcome==1, mcol(black) ///
+>         || rcap lci uci graphorder if outcome==1, hor lcol(black) ///
+>         || scatter graphorder rrr if outcome>1 , mcol(gs10) ///
+>         || rcap lci uci graphorder if outcome>1, hor lcol(gs10) ///
+>         || scatter graphorder labelat, m(i) mlab(outcometext) mlabcol(black) 
+> mlabsize(small) ///
+>         || scatter graphorder outcomeheadat if graphorder==7, m(i) mlab(outco
+> mehead) mlabcol(black) ///
+>         || scatter graphorder estimatesat , m(i) mlab(esthr) mlabcol(black) m
+> labsize(vsmall) ///
+>         ||, yscale(off r(0 7) lcol(white)) ytitle("") ylab(none) legend(off) 
+> xscale(log r(13)) xlab(.5 1 2 4) xtitle(Relative risk of cause-specific death
+>  and 95% CI) xline(1, lp(dash)) ///
+>         by(ethnicity, legend(off) ) 
+
+.         
+. graph export ./analysis/output/an_ethnicitybycod.svg, as(svg) replace
+(note: file ./analysis/output/an_ethnicitybycod.svg not found)
+(file ./analysis/output/an_ethnicitybycod.svg written in SVG format)
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /workspace/analysis/output/an_ethnicitybycod.log
+  log type:  text
+ closed on:  19 Nov 2020, 02:01:34
+-------------------------------------------------------------------------------
