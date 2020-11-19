@@ -1,19 +1,22 @@
 cap log close
-log using ./output/an_covidvsnoncovid_full, replace t
+log using ./analysis/output/an_covidvsnoncovid_full, replace t
 
-use cr_create_analysis_dataset, clear
-
-stset stime_onsdeath, fail(onsdeath==1) id(patient_id) enter(enter_date) origin(enter_date)
-
+use  ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, clear
+	
+gen coviddeath = onsdeath==1 if  _d==1
+replace coviddeath= 0 if _d==0
+gen noncoviddeath = onsdeath>1 if _d==1
+replace noncoviddeath= 0 if _d==0
+	
 **MULTIVARIATE
 cap prog drop baselogistic 
 prog define baselogistic
-	syntax , age(string) bp(string) [ethnicity(real 0) if(string)] 
+	syntax , outcome(string) age(string) bp(string) [ethnicity(real 0) if(string)] 
 
 	if `ethnicity'==1 local ethnicity "i.ethnicity"
 	else local ethnicity
 
-cap logistic _d `age' 			///
+cap logistic `outcome' `age' 			///
 			i.male 							///
 			i.obese4cat						///
 			i.smoke_nomiss					///
@@ -37,60 +40,51 @@ cap logistic _d `age' 			///
 			
 end			
 
-baselogistic, age("age1 age2 age3")  bp("i.htdiag_or_highbp") ethnicity(0)
+baselogistic, outcome(coviddeath) age("age1 age2 age3")  bp("i.htdiag_or_highbp") ethnicity(0)
 if _rc==0{
 estimates
-estimates save ./output/models/an_covidvsnoncovid_full_fail1_agespline_bmicat_noeth, replace
-*estat concordance /*c-statistic*/
+estimates save ./analysis/output/models/an_covidvsnoncovid_full_covid_agespline_bmicat_noeth, replace
 }
 else di "WARNING AGE SPLINE MODEL DID NOT FIT (OUTCOME `outcome')"
  
 *Age group model (not adj ethnicity)
-baselogistic, age("ib3.agegroup") bp("i.htdiag_or_highbp") ethnicity(0)
+baselogistic, outcome(coviddeath) age("ib3.agegroup") bp("i.htdiag_or_highbp") ethnicity(0)
 if _rc==0{
 estimates
-estimates save ./output/models/an_covidvsnoncovid_full_fail1_agegroup_bmicat_noeth, replace
-*estat concordance /*c-statistic*/
+estimates save ./analysis/output/models/an_covidvsnoncovid_full_covid_agegroup_bmicat_noeth, replace
 }
 else di "WARNING GROUP MODEL DID NOT FIT (OUTCOME `outcome')"
 
 *Complete case ethnicity model
-baselogistic, age("age1 age2 age3") bp("i.htdiag_or_highbp") ethnicity(1)
+baselogistic, outcome(coviddeath) age("age1 age2 age3") bp("i.htdiag_or_highbp") ethnicity(1)
 if _rc==0{
 estimates
-estimates save ./output/models/an_covidvsnoncovid_full_fail1_agespline_bmicat_CCeth, replace
-*estat concordance /*c-statistic*/
+estimates save ./analysis/output/models/an_covidvsnoncovid_full_covid_agespline_bmicat_CCeth, replace
  }
  else di "WARNING CC ETHNICITY MODEL WITH AGESPLINE DID NOT FIT (OUTCOME `outcome')"
  
  ***
 
-stset stime_onsdeath, fail(onsdeath==2) id(patient_id) enter(enter_date) origin(enter_date)
-
-
-baselogistic, age("age1 age2 age3")  bp("i.htdiag_or_highbp") ethnicity(0)
+baselogistic, outcome(noncoviddeath) age("age1 age2 age3")  bp("i.htdiag_or_highbp") ethnicity(0)
 if _rc==0{
 estimates
-estimates save ./output/models/an_covidvsnoncovid_full_fail2_agespline_bmicat_noeth, replace
-*estat concordance /*c-statistic*/
+estimates save ./analysis/output/models/an_covidvsnoncovid_full_noncovid_agespline_bmicat_noeth, replace
 }
 else di "WARNING AGE SPLINE MODEL DID NOT FIT (OUTCOME `outcome')"
  
 *Age group model (not adj ethnicity)
-baselogistic, age("ib3.agegroup") bp("i.htdiag_or_highbp") ethnicity(0)
+baselogistic, outcome(noncoviddeath) age("ib3.agegroup") bp("i.htdiag_or_highbp") ethnicity(0)
 if _rc==0{
 estimates
-estimates save ./output/models/an_covidvsnoncovid_full_fail2_agegroup_bmicat_noeth, replace
-*estat concordance /*c-statistic*/
+estimates save ./analysis/output/models/an_covidvsnoncovid_full_noncovid_agegroup_bmicat_noeth, replace
 }
 else di "WARNING GROUP MODEL DID NOT FIT (OUTCOME `outcome')"
 
 *Complete case ethnicity model
-baselogistic, age("age1 age2 age3") bp("i.htdiag_or_highbp") ethnicity(1)
+baselogistic, outcome(noncoviddeath) age("age1 age2 age3") bp("i.htdiag_or_highbp") ethnicity(1)
 if _rc==0{
 estimates
-estimates save ./output/models/an_covidvsnoncovid_full_fail2_agespline_bmicat_CCeth, replace
-*estat concordance /*c-statistic*/
+estimates save ./analysis/output/models/an_covidvsnoncovid_full_noncovid_agespline_bmicat_CCeth, replace
  }
  else di "WARNING CC ETHNICITY MODEL WITH AGESPLINE DID NOT FIT (OUTCOME `outcome')"
  
