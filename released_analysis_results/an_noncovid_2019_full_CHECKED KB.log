@@ -1,0 +1,347 @@
+-------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  E:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_noncovid_2019
+> _full.log
+  log type:  text
+ opened on:  20 Nov 2020, 08:55:14
+
+. 
+. use ./analysis/cr_create_analysis_dataset_2019, clear
+(covid vs non covid 2019)
+
+. stset stime_primarycaredeath, fail(primarycaredeath) id(patient_id) enter(enter_date) ori
+> gin(enter_date)
+
+                id:  patient_id
+     failure event:  primarycaredeath != 0 & primarycaredeath < .
+obs. time interval:  (stime_primarycaredeath[_n-1], stime_primarycaredeath]
+ enter on or after:  time enter_date
+ exit on or before:  failure
+    t for analysis:  (time-origin)
+            origin:  time enter_date
+
+------------------------------------------------------------------------------
+   17425931  total observations
+      6,270  observations end on or before enter()
+------------------------------------------------------------------------------
+   17419661  observations remaining, representing
+   17419661  subjects
+    118,702  failures in single-failure-per-subject data
+ 4.5307e+09  total analysis time at risk and under observation
+                                                at risk from t =         0
+                                     earliest observed entry t =         0
+                                          last observed exit t =       261
+
+.         
+. **MULTIVARIATE
+. cap prog drop baselogistic 
+
+. prog define baselogistic
+  1.         syntax , age(string) bp(string) [ethnicity(real 0) if(string)] 
+  2. 
+.         if `ethnicity'==1 local ethnicity "i.ethnicity"
+  3.         else local ethnicity
+  4. 
+. cap logistic _d `age'                   ///
+>                         i.male                                                  ///
+>                         i.obese4cat                                             ///
+>                         i.smoke_nomiss                                  ///
+>                         `ethnicity'                                             ///
+>                         i.imd                                                   ///
+>                         `bp'                                                    ///
+>                         i.chronic_respiratory_disease   ///
+>                         i.asthmacat                                             ///
+>                         i.chronic_cardiac_disease               ///
+>                         i.diabcat                                               ///
+>                         i.cancer_exhaem_cat                             ///
+>                         i.cancer_haem_cat                               ///
+>                         i.chronic_liver_disease                 ///
+>                         i.stroke_dementia                               ///
+>                         i.other_neuro                                   ///
+>                         i.reduced_kidney_function_cat   ///
+>                         i.organ_transplant                              ///
+>                         i.spleen                                                ///
+>                         i.ra_sle_psoriasis                      ///
+>                         i.other_immunosuppression
+  5.                         
+. end                     
+
+. 
+. baselogistic, age("age1 age2 age3")  bp("i.htdiag_or_highbp") ethnicity(0)
+
+. if _rc==0{
+. estimates
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     = 17,419,661
+                                                LR chi2(36)       =  429403.72
+                                                Prob > chi2       =     0.0000
+Log likelihood = -495768.04                     Pseudo R2         =     0.3022
+
+------------------------------------------------------------------------------------------
+                      _d | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                    age1 |   1.101826   .0037309    28.64   0.000     1.094537    1.109162
+                    age2 |   .8932405   .0072213   -13.97   0.000     .8791985    .9075067
+                    age3 |   1.422674   .0271626    18.46   0.000      1.37042     1.47692
+                  1.male |     1.0999    .007058    14.84   0.000     1.086154    1.113821
+                         |
+               obese4cat |
+      Obese I (30-34.9)  |   .7937225   .0075654   -24.24   0.000     .7790322    .8086897
+     Obese II (35-39.9)  |   .9455743   .0141111    -3.75   0.000     .9183176    .9736399
+        Obese III (40+)  |   1.285649   .0265381    12.17   0.000     1.234674     1.33873
+                         |
+            smoke_nomiss |
+                 Former  |   1.143104   .0081638    18.73   0.000     1.127214    1.159217
+                Current  |   1.974806   .0208125    64.57   0.000     1.934432    2.016022
+                         |
+                     imd |
+                      2  |    1.08033   .0105999     7.87   0.000     1.059753    1.101307
+                      3  |   1.156787   .0112905    14.92   0.000     1.134869    1.179129
+                      4  |   1.271402   .0125446    24.34   0.000     1.247051    1.296228
+        5 most deprived  |   1.412963   .0142271    34.33   0.000     1.385352    1.441125
+                         |
+      1.htdiag_or_highbp |   .9045843    .006547   -13.86   0.000     .8918431    .9175076
+1.chronic_respiratory_~e |   1.994186   .0157325    87.49   0.000     1.963588     2.02526
+                         |
+               asthmacat |
+            Yes, no OCS  |   .9631296   .0096192    -3.76   0.000     .9444596    .9821686
+           Yes with OCS  |   .6807569    .015383   -17.02   0.000     .6512648    .7115846
+                         |
+1.chronic_cardiac_dise~e |   1.557489   .0108653    63.51   0.000     1.536339    1.578931
+                         |
+                 diabcat |
+    Controlled diabetes  |   .6825542    .006792   -38.38   0.000     .6693712    .6959968
+  Uncontrolled diabetes  |   .9625423   .0132019    -2.78   0.005     .9370116    .9887685
+Diabetes, no hba1c me..  |   5.357775   .0582175   154.48   0.000     5.244877    5.473103
+                         |
+       cancer_exhaem_cat |
+              Last year  |    7.98983   .1058589   156.85   0.000     7.785021    8.200027
+          2-5 years ago  |   6.247958   .0594519   192.56   0.000     6.132514    6.365575
+               5+ years  |   1.771273   .0165241    61.28   0.000     1.739181    1.803957
+                         |
+         cancer_haem_cat |
+              Last year  |    3.69988   .1652075    29.30   0.000     3.389844    4.038272
+          2-5 years ago  |   3.155419     .08715    41.61   0.000     2.989149    3.330938
+               5+ years  |    1.84724   .0441704    25.67   0.000     1.762665    1.935873
+                         |
+ 1.chronic_liver_disease |   3.772779   .0710856    70.47   0.000     3.635995    3.914709
+       1.stroke_dementia |   1.843434   .0154385    73.03   0.000     1.813422    1.873942
+           1.other_neuro |   2.518528   .0366838    63.41   0.000     2.447645    2.591463
+                         |
+reduced_kidney_functio~t |
+Stage 3a/3b egfr 30-6..  |   1.131981   .0085685    16.38   0.000     1.115311      1.1489
+      Stage 4/5 egfr<30  |   2.831482   .0360637    81.72   0.000     2.761673    2.903055
+                         |
+      1.organ_transplant |   1.891229   .0953294    12.64   0.000      1.71332    2.087612
+                1.spleen |   1.592859   .0717795    10.33   0.000     1.458208    1.739945
+      1.ra_sle_psoriasis |   1.111556   .0124636     9.43   0.000     1.087394    1.136254
+1.other_immunosuppress~n |   1.636012   .0807794     9.97   0.000     1.485107    1.802251
+                   _cons |   .0000113   1.33e-06   -96.96   0.000     9.02e-06    .0000143
+------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+. estimates save ./analysis/output/models/an_noncovid_2019_full_agespline_bmicat_noeth, rep
+> lace
+(note: file ./analysis/output/models/an_noncovid_2019_full_agespline_bmicat_noeth.ster not 
+> found)
+file ./analysis/output/models/an_noncovid_2019_full_agespline_bmicat_noeth.ster saved
+. }
+
+. else di "WARNING AGE SPLINE MODEL DID NOT FIT (OUTCOME `outcome')"
+
+.  
+. *Age group model (not adj ethnicity)
+. baselogistic, age("ib3.agegroup") bp("i.htdiag_or_highbp") ethnicity(0)
+
+. if _rc==0{
+. estimates
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     = 17,419,661
+                                                LR chi2(38)       =  406378.84
+                                                Prob > chi2       =     0.0000
+Log likelihood = -507280.48                     Pseudo R2         =     0.2860
+
+------------------------------------------------------------------------------------------
+                      _d | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                agegroup |
+                 18-<40  |   .1804043   .0047638   -64.85   0.000     .1713049    .1899871
+                 40-<50  |    .487308   .0112617   -31.11   0.000     .4657279     .509888
+                 60-<70  |   2.007919   .0309198    45.27   0.000     1.948223    2.069445
+                 70-<80  |   3.970264   .0574355    95.31   0.000     3.859274    4.084447
+                    80+  |   13.27999   .1910655   179.76   0.000     12.91073     13.6598
+                         |
+                  1.male |   1.019055   .0064536     2.98   0.003     1.006484    1.031782
+                         |
+               obese4cat |
+      Obese I (30-34.9)  |   .7160311   .0067723   -35.32   0.000       .70288    .7294283
+     Obese II (35-39.9)  |   .8224427   .0122125   -13.16   0.000     .7988516    .8467305
+        Obese III (40+)  |    1.08227   .0223037     3.84   0.000     1.039427    1.126879
+                         |
+            smoke_nomiss |
+                 Former  |   1.137178   .0080675    18.12   0.000     1.121476    1.153101
+                Current  |   1.771772   .0184585    54.90   0.000      1.73596    1.808321
+                         |
+                     imd |
+                      2  |   1.081073    .010538     8.00   0.000     1.060615    1.101926
+                      3  |   1.158898   .0112384    15.21   0.000     1.137079    1.181136
+                      4  |   1.269509   .0124517    24.33   0.000     1.245337    1.294149
+        5 most deprived  |   1.394652   .0139722    33.20   0.000     1.367534    1.422307
+                         |
+      1.htdiag_or_highbp |   .9478137   .0068272    -7.44   0.000     .9345267    .9612897
+1.chronic_respiratory_~e |    1.95979   .0154082    85.58   0.000     1.929822    1.990224
+                         |
+               asthmacat |
+            Yes, no OCS  |   .9355094   .0092929    -6.71   0.000     .9174718    .9539016
+           Yes with OCS  |   .6547805   .0147443   -18.81   0.000     .6265105     .684326
+                         |
+1.chronic_cardiac_dise~e |   1.650176   .0114805    72.00   0.000     1.627827    1.672831
+                         |
+                 diabcat |
+    Controlled diabetes  |   .6545037   .0065011   -42.67   0.000     .6418851    .6673704
+  Uncontrolled diabetes  |   .8831181   .0120933    -9.08   0.000     .8597308    .9071416
+Diabetes, no hba1c me..  |    5.44952   .0585706   157.76   0.000     5.335925    5.565534
+                         |
+       cancer_exhaem_cat |
+              Last year  |   7.768586   .1022977   155.69   0.000     7.570652    7.971696
+          2-5 years ago  |   6.020867   .0568677   190.07   0.000     5.910434    6.133364
+               5+ years  |   1.808238   .0167718    63.86   0.000     1.775662     1.84141
+                         |
+         cancer_haem_cat |
+              Last year  |   3.548204   .1576165    28.51   0.000     3.252348    3.870974
+          2-5 years ago  |   2.970272   .0818871    39.49   0.000     2.814036    3.135183
+               5+ years  |   1.804391   .0429295    24.81   0.000     1.722183    1.890524
+                         |
+ 1.chronic_liver_disease |   3.517622   .0661857    66.85   0.000     3.390263    3.649766
+       1.stroke_dementia |   2.001707   .0166513    83.43   0.000     1.969335     2.03461
+           1.other_neuro |   2.417411   .0350181    60.94   0.000     2.349742    2.487029
+                         |
+reduced_kidney_functio~t |
+Stage 3a/3b egfr 30-6..  |   1.348657   .0100188    40.26   0.000     1.329163    1.368437
+      Stage 4/5 egfr<30  |   3.673021   .0460266   103.82   0.000      3.58391    3.764349
+                         |
+      1.organ_transplant |   1.541437   .0776141     8.59   0.000     1.396582    1.701317
+                1.spleen |   1.525604   .0684582     9.41   0.000     1.397159    1.665857
+      1.ra_sle_psoriasis |   1.079266   .0120457     6.83   0.000     1.055913    1.103135
+1.other_immunosuppress~n |   1.532312   .0755556     8.66   0.000     1.391156     1.68779
+                   _cons |    .001215   .0000185  -440.09   0.000     .0011792    .0012519
+------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+. estimates save ./analysis/output/models/an_noncovid_2019_full_agegroup_bmicat_noeth, repl
+> ace
+(note: file ./analysis/output/models/an_noncovid_2019_full_agegroup_bmicat_noeth.ster not f
+> ound)
+file ./analysis/output/models/an_noncovid_2019_full_agegroup_bmicat_noeth.ster saved
+. }
+
+. else di "WARNING GROUP MODEL DID NOT FIT (OUTCOME `outcome')"
+
+. 
+. *Complete case ethnicity model
+. baselogistic, age("age1 age2 age3") bp("i.htdiag_or_highbp") ethnicity(1)
+
+. if _rc==0{
+. estimates
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     = 12,880,185
+                                                LR chi2(40)       =  303312.51
+                                                Prob > chi2       =     0.0000
+Log likelihood =    -350881                     Pseudo R2         =     0.3018
+
+------------------------------------------------------------------------------------------
+                      _d | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                    age1 |    1.11259   .0047633    24.92   0.000     1.103293    1.121965
+                    age2 |   .8660211   .0086966   -14.32   0.000     .8491427    .8832349
+                    age3 |   1.537097   .0362116    18.25   0.000     1.467737    1.609734
+                  1.male |   1.113191   .0085266    14.00   0.000     1.096604    1.130029
+                         |
+               obese4cat |
+      Obese I (30-34.9)  |   .7950683   .0088762   -20.54   0.000     .7778602    .8126572
+     Obese II (35-39.9)  |   .9245426   .0162338    -4.47   0.000     .8932663     .956914
+        Obese III (40+)  |   1.262395   .0305516     9.63   0.000     1.203913    1.323718
+                         |
+            smoke_nomiss |
+                 Former  |   1.136243   .0098464    14.74   0.000     1.117108    1.155707
+                Current  |   1.928014   .0243602    51.96   0.000     1.880855    1.976355
+                         |
+               ethnicity |
+                  Mixed  |    .788459   .0474931    -3.95   0.000      .700659    .8872613
+ Asian or Asian British  |   .7371826   .0167744   -13.40   0.000     .7050278     .770804
+                  Black  |   .6453652   .0245436   -11.52   0.000     .5990098    .6953079
+                  Other  |   .5945008   .0296058   -10.44   0.000     .5392165    .6554533
+                         |
+                     imd |
+                      2  |   1.088873   .0130638     7.10   0.000     1.063567    1.114781
+                      3  |   1.181728   .0140592    14.04   0.000     1.154491    1.209607
+                      4  |   1.320387   .0157437    23.31   0.000     1.289888    1.351608
+        5 most deprived  |   1.481598   .0178952    32.55   0.000     1.446936    1.517091
+                         |
+      1.htdiag_or_highbp |   .9106699   .0079217   -10.76   0.000     .8952752    .9263293
+1.chronic_respiratory_~e |   2.013617   .0186389    75.62   0.000     1.977415    2.050482
+                         |
+               asthmacat |
+            Yes, no OCS  |   .9718882   .0113589    -2.44   0.015     .9498783    .9944081
+           Yes with OCS  |   .6750231   .0177649   -14.93   0.000     .6410874    .7107553
+                         |
+1.chronic_cardiac_dise~e |   1.569179   .0130644    54.12   0.000     1.543781    1.594995
+                         |
+                 diabcat |
+    Controlled diabetes  |   .6999282   .0082072   -30.43   0.000     .6840257    .7162003
+  Uncontrolled diabetes  |   .9922821   .0159653    -0.48   0.630     .9614789    1.024072
+Diabetes, no hba1c me..  |   5.691411   .0729971   135.58   0.000     5.550122    5.836296
+                         |
+       cancer_exhaem_cat |
+              Last year  |   8.029103   .1262589   132.47   0.000     7.785415    8.280419
+          2-5 years ago  |   6.358774   .0717397   163.96   0.000     6.219709    6.500947
+               5+ years  |   1.786571   .0199364    52.00   0.000     1.747921    1.826076
+                         |
+         cancer_haem_cat |
+              Last year  |   3.808599   .2012987    25.30   0.000     3.433809    4.224297
+          2-5 years ago  |   3.274397    .106544    36.45   0.000     3.072094    3.490022
+               5+ years  |   1.818196   .0521142    20.86   0.000      1.71887    1.923261
+                         |
+ 1.chronic_liver_disease |   3.838013   .0836093    61.74   0.000     3.677591    4.005433
+       1.stroke_dementia |   1.865284   .0185771    62.60   0.000     1.829226    1.902052
+           1.other_neuro |   2.458751   .0427654    51.72   0.000     2.376345    2.544015
+                         |
+reduced_kidney_functio~t |
+Stage 3a/3b egfr 30-6..  |   1.135918   .0103461    13.99   0.000      1.11582    1.156378
+      Stage 4/5 egfr<30  |   2.873085   .0438293    69.18   0.000     2.788453    2.960286
+                         |
+      1.organ_transplant |    1.86813   .1121522    10.41   0.000     1.660755    2.101399
+                1.spleen |   1.575996   .0837227     8.56   0.000     1.420156    1.748936
+      1.ra_sle_psoriasis |   1.114859   .0147428     8.22   0.000     1.086335    1.144132
+1.other_immunosuppress~n |    1.69505   .0966961     9.25   0.000      1.51574    1.895572
+                   _cons |   8.25e-06   1.24e-06   -78.17   0.000     6.15e-06    .0000111
+------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+. estimates save ./analysis/output/models/an_noncovid_2019_full_agespline_bmicat_CCeth, rep
+> lace
+(note: file ./analysis/output/models/an_noncovid_2019_full_agespline_bmicat_CCeth.ster not 
+> found)
+file ./analysis/output/models/an_noncovid_2019_full_agespline_bmicat_CCeth.ster saved
+.  }
+
+.  else di "WARNING CC ETHNICITY MODEL WITH AGESPLINE DID NOT FIT (OUTCOME `outcome')"
+
+.  
+.  
+.  log close
+      name:  <unnamed>
+       log:  E:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_noncovid_2019
+> _full.log
+  log type:  text
+ closed on:  20 Nov 2020, 09:20:29
+-------------------------------------------------------------------------------------------

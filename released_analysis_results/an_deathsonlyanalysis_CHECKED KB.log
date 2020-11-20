@@ -1,0 +1,1026 @@
+-------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  E:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_deathsonlyana
+> lysis.log
+  log type:  text
+ opened on:  20 Nov 2020, 08:57:35
+
+. 
+. use ./analysis/cr_create_analysis_dataset, clear
+(covid vs noncovid 2020)
+
+. 
+. use  ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, clear
+(covid vs noncovid 2020)
+
+. 
+. keep if _d==1
+(17,304,670 observations deleted)
+
+. 
+. safetab onsdeath
+
+Failure/cen |
+     soring |
+  indicator |
+        for |
+   outcome: |
+  ONS death |
+ (1 = covid |
+  death 2 = |
+   other de |      Freq.     Percent        Cum.
+------------+-----------------------------------
+      covid |     15,260       10.99       10.99
+     cancer |     37,174       26.78       37.78
+        cvd |     31,700       22.84       60.61
+    dem_alz |     15,564       11.21       71.83
+respiratory |     14,194       10.23       82.05
+      other |     24,909       17.95      100.00
+------------+-----------------------------------
+      Total |    138,801      100.00
+
+. safetab agegroup onsdeath, col
+
+**TABLE OF agegroup onsdeath REDACTED DUE TO SMALL N**
+
+
+. safetab male onsdeath, col
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+| column percentage |
++-------------------+
+
+           |   Failure/censoring indicator for outcome: ONS death (1 = covid
+           |                        death 2 = other de
+      Male |     covid     cancer        cvd    dem_alz  respirato      other |     Total
+-----------+------------------------------------------------------------------+----------
+         0 |     6,866     17,245     14,716     10,320      6,898     13,234 |    69,279 
+           |     44.99      46.39      46.42      66.31      48.60      53.13 |     49.91 
+-----------+------------------------------------------------------------------+----------
+         1 |     8,394     19,929     16,984      5,244      7,296     11,675 |    69,522 
+           |     55.01      53.61      53.58      33.69      51.40      46.87 |     50.09 
+-----------+------------------------------------------------------------------+----------
+     Total |    15,260     37,174     31,700     15,564     14,194     24,909 |   138,801 
+           |    100.00     100.00     100.00     100.00     100.00     100.00 |    100.00 
+
+. 
+. gen coviddeath = onsdeath==1
+
+. 
+. **UNIVARIATE
+. foreach var of any                                                      ///
+>                 agegroupsex                                                     ///
+>                 agesplsex                                                       ///
+>                 asthmacat                                                       ///
+>                 cancer_exhaem_cat                                       ///
+>                 cancer_haem_cat                                         ///
+>                 chronic_cardiac_disease                         ///
+>                 reduced_kidney_function_cat                     ///
+>                 dialysis                                                        ///
+>                 chronic_liver_disease                           ///
+>                 chronic_respiratory_disease             ///
+>                 diabcat                                                         ///
+>                 ethnicity                                                       ///
+>                 htdiag_or_highbp                                        ///
+>                 imd                                                             ///
+>                 obese4cat                                                       ///
+>                 organ_transplant                                        ///
+>                 other_immunosuppression                         ///
+>                 other_neuro                                             ///
+>                 ra_sle_psoriasis                                        ///  
+>                 smoke                                                           ///
+>                 smoke_nomiss                                            ///
+>                 spleen                                                          ///
+>                 stroke_dementia {
+  2.         *Special cases
+.         if "`var'"=="agesplsex" local model "age1 age2 age3 i.male"
+  3.         else if "`var'"=="agegroupsex" local model "ib3.agegroup i.male"
+  4.         else if "`var'"=="bmicat" local model "age1 age2 age3 i.male ib2.bmicat"
+  5.         *General form of model
+.         else local model "age1 age2 age3 i.male i.`var'"
+  6. 
+.         *Fit and save model
+.         cap erase ./analysis/output/models/an_deathsonlyanalysis_AGESEX_`var'.ster
+  7.         capture logistic coviddeath `model'
+  8.         if _rc==0 {
+  9.                 estimates
+ 10.                 estimates save ./analysis/output/models/an_deathsonlyanalysis_AGESEX_`
+> var', replace
+ 11.                 }
+ 12.         else di "WARNING - `var' vs `outcome' MODEL DID NOT SUCCESSFULLY FIT"
+ 13. 
+. }
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(6)        =     446.00
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47856.716                     Pseudo R2         =     0.0046
+
+------------------------------------------------------------------------------
+  coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    agegroup |
+     18-<40  |   .5999136   .0782325    -3.92   0.000      .464608    .7746237
+     40-<50  |   .8414366   .0707499    -2.05   0.040     .7135928    .9921843
+     60-<70  |   1.074118    .052801     1.45   0.146     .9754588    1.182755
+     70-<80  |   1.230369   .0547513     4.66   0.000     1.127605    1.342498
+        80+  |    1.44537   .0611155     8.71   0.000     1.330415    1.570257
+             |
+      1.male |   1.292066   .0225033    14.71   0.000     1.248704    1.336933
+       _cons |   .0827455   .0034971   -58.96   0.000     .0761674    .0898916
+------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_agegroupsex.ster not foun
+> d)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_agegroupsex.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(4)        =     403.52
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47877.957                     Pseudo R2         =     0.0042
+
+------------------------------------------------------------------------------
+  coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        age1 |   1.021141   .0171859     1.24   0.214     .9880067    1.055386
+        age2 |   1.006029   .0375836     0.16   0.872     .9349989    1.082456
+        age3 |    .959506   .0838044    -0.47   0.636     .8085423    1.138656
+      1.male |   1.293033   .0226964    14.64   0.000     1.249305    1.338291
+       _cons |   .0251665   .0152881    -6.06   0.000     .0076513    .0827768
+------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_agesplsex.ster not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_agesplsex.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(6)        =     450.78
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47854.326                     Pseudo R2         =     0.0047
+
+-------------------------------------------------------------------------------
+   coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+         age1 |   1.021503   .0172151     1.26   0.207     .9883132    1.055807
+         age2 |    1.00554   .0376085     0.15   0.883     .9344651     1.08202
+         age3 |    .960963   .0840207    -0.46   0.649      .809623    1.140593
+       1.male |   1.302291   .0229058    15.02   0.000     1.258161    1.347968
+              |
+    asthmacat |
+ Yes, no OCS  |   1.126599   .0310969     4.32   0.000     1.067269    1.189226
+Yes with OCS  |   1.338348   .0669804     5.82   0.000     1.213302    1.476281
+              |
+        _cons |   .0239858   .0145926    -6.13   0.000     .0072794    .0790338
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_asthmacat.ster not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_asthmacat.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(7)        =    2076.98
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47041.227                     Pseudo R2         =     0.0216
+
+-----------------------------------------------------------------------------------
+       coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------+----------------------------------------------------------------
+             age1 |    1.01931   .0170274     1.14   0.252     .9864772    1.053235
+             age2 |   1.027282   .0381991     0.72   0.469     .9550768    1.104947
+             age3 |   .8935573   .0777856    -1.29   0.196     .7533971    1.059793
+           1.male |   1.317538   .0233105    15.59   0.000     1.272634    1.364028
+                  |
+cancer_exhaem_cat |
+       Last year  |    .203296    .012725   -25.45   0.000     .1798245     .229831
+   2-5 years ago  |   .3851959   .0164906   -22.28   0.000     .3541939    .4189116
+        5+ years  |   .6648447   .0185797   -14.61   0.000     .6294086    .7022759
+                  |
+            _cons |    .029629   .0178475    -5.84   0.000     .0090988    .0964833
+-----------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_cancer_exhaem_cat.ster no
+> t found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_cancer_exhaem_cat.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(7)        =     423.29
+                                                Prob > chi2       =     0.0000
+Log likelihood =  -47868.07                     Pseudo R2         =     0.0044
+
+---------------------------------------------------------------------------------
+     coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+----------------+----------------------------------------------------------------
+           age1 |    1.02034   .0171536     1.20   0.231     .9872674    1.054521
+           age2 |   1.008325    .037641     0.22   0.824     .9371842    1.084866
+           age3 |   .9538379   .0832604    -0.54   0.588     .8038469    1.131816
+         1.male |   1.295065   .0227411    14.72   0.000     1.251252    1.340413
+                |
+cancer_haem_cat |
+     Last year  |   .5858438   .0806391    -3.88   0.000     .4473188    .7672668
+ 2-5 years ago  |   .8864891   .0770675    -1.39   0.166     .7476075     1.05117
+      5+ years  |   .9597839   .0657318    -0.60   0.549     .8392243    1.097663
+                |
+          _cons |    .025899   .0157145    -6.02   0.000     .0078851    .0850663
+---------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_cancer_haem_cat.ster not 
+> found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_cancer_haem_cat.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(5)        =     407.76
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47875.835                     Pseudo R2         =     0.0042
+
+------------------------------------------------------------------------------------------
+              coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                    age1 |   1.020705   .0171665     1.22   0.223     .9876075    1.054911
+                    age2 |   1.007848   .0376383     0.21   0.834     .9367136    1.084385
+                    age3 |   .9553181   .0834166    -0.52   0.601     .8050496    1.133635
+                  1.male |   1.298535   .0229506    14.78   0.000     1.254323    1.344306
+1.chronic_cardiac_dise~e |   .9629402   .0176737    -2.06   0.040     .9289161    .9982106
+                   _cons |   .0254561   .0154518    -6.05   0.000     .0077466    .0836507
+------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_chronic_cardiac_disease.s
+> ter not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_chronic_cardiac_disease.ster sav
+> ed
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(6)        =     453.22
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47853.106                     Pseudo R2         =     0.0047
+
+------------------------------------------------------------------------------------------
+              coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                    age1 |   1.020635   .0171663     1.21   0.225     .9875381    1.054841
+                    age2 |   1.007214    .037609     0.19   0.847     .9361346    1.083691
+                    age3 |   .9529383   .0831997    -0.55   0.581     .8030592     1.13079
+                  1.male |   1.292689   .0226957    14.62   0.000     1.248963    1.337946
+                         |
+reduced_kidney_functio~t |
+Stage 3a/3b egfr 30-6..  |   1.145655   .0224433     6.94   0.000     1.102501    1.190499
+      Stage 4/5 egfr<30  |   1.109143   .0371846     3.09   0.002     1.038605    1.184471
+                         |
+                   _cons |   .0254493   .0154493    -6.05   0.000     .0077436    .0836385
+------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_reduced_kidney_function_c
+> at.ster not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_reduced_kidney_function_cat.ster
+>  saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(5)        =     432.69
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47863.371                     Pseudo R2         =     0.0045
+
+------------------------------------------------------------------------------
+  coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        age1 |   1.020985   .0171836     1.23   0.217     .9878554    1.055226
+        age2 |   1.006005    .037585     0.16   0.873     .9349723    1.082435
+        age3 |   .9603456   .0838842    -0.46   0.643     .8092391    1.139668
+      1.male |   1.290891   .0226655    14.54   0.000     1.247223    1.336088
+  1.dialysis |   1.515337   .1113188     5.66   0.000     1.312136    1.750006
+       _cons |   .0251286   .0152651    -6.06   0.000     .0076398    .0826521
+------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_dialysis.ster not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_dialysis.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(5)        =     463.45
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47847.993                     Pseudo R2         =     0.0048
+
+-----------------------------------------------------------------------------------------
+             coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+                   age1 |   1.024272    .017253     1.42   0.155     .9910093    1.058652
+                   age2 |   .9975673   .0373004    -0.07   0.948     .9270745     1.07342
+                   age3 |   .9784074   .0855277    -0.25   0.803     .8243503    1.161255
+                 1.male |   1.294167   .0227179    14.69   0.000     1.250398    1.339468
+1.chronic_liver_disease |   .6133777   .0413895    -7.24   0.000     .5373913    .7001085
+                  _cons |    .023577   .0143329    -6.16   0.000     .0071618    .0776159
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_chronic_liver_disease.ste
+> r not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_chronic_liver_disease.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(5)        =     413.30
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47873.069                     Pseudo R2         =     0.0043
+
+------------------------------------------------------------------------------------------
+              coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                    age1 |   1.019479    .017119     1.15   0.251     .9864725     1.05359
+                    age2 |   1.012378   .0377925     0.33   0.742     .9409506    1.089227
+                    age3 |   .9431855   .0823819    -0.67   0.503     .7947847    1.119295
+                  1.male |    1.29597   .0227714    14.75   0.000     1.252098    1.341378
+1.chronic_respiratory_~e |   .9355362   .0200356    -3.11   0.002       .89708     .975641
+                   _cons |   .0264205   .0160081    -6.00   0.000     .0080575    .0866329
+------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_chronic_respiratory_disea
+> se.ster not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_chronic_respiratory_disease.ster
+>  saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(7)        =     669.18
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47745.129                     Pseudo R2         =     0.0070
+
+------------------------------------------------------------------------------------------
+              coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                    age1 |   1.024287   .0173702     1.42   0.157     .9908012    1.058904
+                    age2 |   .9883585   .0371723    -0.31   0.756     .9181226    1.063967
+                    age3 |   1.010516   .0888241     0.12   0.905     .8505953    1.200504
+                  1.male |   1.272281   .0224003    13.68   0.000     1.229126    1.316951
+                         |
+                 diabcat |
+    Controlled diabetes  |   1.251213   .0274075    10.23   0.000     1.198632      1.3061
+  Uncontrolled diabetes  |    1.51013   .0430968    14.44   0.000      1.42798    1.597005
+Diabetes, no hba1c me..  |   1.251229   .0560429     5.00   0.000      1.14607    1.366036
+                         |
+                   _cons |   .0226583   .0138752    -6.18   0.000      .006823    .0752446
+------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_diabcat.ster not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_diabcat.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =     99,061
+                                                LR chi2(8)        =    1054.54
+                                                Prob > chi2       =     0.0000
+Log likelihood = -34821.923                     Pseudo R2         =     0.0149
+
+-----------------------------------------------------------------------------------------
+             coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+                   age1 |   1.012922   .0198641     0.65   0.513     .9747277    1.052613
+                   age2 |   1.035263   .0449201     0.80   0.424     .9508609    1.127157
+                   age3 |   .8939212   .0905504    -1.11   0.268     .7329532     1.09024
+                 1.male |   1.248656    .025536    10.86   0.000     1.199596    1.299722
+                        |
+              ethnicity |
+                 Mixed  |   2.139321   .2805643     5.80   0.000     1.654413    2.766356
+Asian or Asian British  |   2.906085   .1212613    25.57   0.000     2.677876    3.153741
+                 Black  |   2.684984   .1832028    14.48   0.000     2.348887    3.069171
+                 Other  |   2.281109   .2244252     8.38   0.000     1.881054    2.766247
+                        |
+                  _cons |   .0284391   .0201534    -5.02   0.000     .0070911    .1140564
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_ethnicity.ster not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_ethnicity.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(5)        =     404.56
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47877.435                     Pseudo R2         =     0.0042
+
+------------------------------------------------------------------------------------
+        coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------+----------------------------------------------------------------
+              age1 |   1.021024    .017187     1.24   0.216     .9878874    1.055271
+              age2 |   1.005462   .0375707     0.15   0.884     .9344565    1.081863
+              age3 |   .9612176   .0839782    -0.45   0.651     .8099444    1.140744
+            1.male |   1.293549   .0227121    14.66   0.000     1.249791    1.338839
+1.htdiag_or_highbp |   1.020498   .0202824     1.02   0.307     .9815097    1.061035
+             _cons |   .0251568   .0152849    -6.06   0.000     .0076468    .0827621
+------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_htdiag_or_highbp.ster not
+>  found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_htdiag_or_highbp.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(8)        =     617.53
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47770.953                     Pseudo R2         =     0.0064
+
+----------------------------------------------------------------------------------
+      coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+            age1 |   1.019703   .0171948     1.16   0.247     .9865529    1.053968
+            age2 |    1.01176   .0378713     0.31   0.755     .9401914    1.088777
+            age3 |   .9476123    .082922    -0.61   0.539     .7982617    1.124906
+          1.male |   1.299318   .0228368    14.90   0.000     1.255321    1.344857
+                 |
+             imd |
+              2  |   1.025647   .0292963     0.89   0.375     .9698046    1.084704
+              3  |   1.066826   .0300571     2.30   0.022     1.009512    1.127394
+              4  |   1.244204   .0343654     7.91   0.000      1.17864    1.313416
+5 most deprived  |   1.387976   .0381119    11.94   0.000     1.315252    1.464721
+                 |
+           _cons |   .0217705   .0132559    -6.29   0.000     .0066005    .0718058
+----------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_imd.ster not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_imd.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(7)        =     883.36
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47638.035                     Pseudo R2         =     0.0092
+
+-------------------------------------------------------------------------------------
+         coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+--------------------+----------------------------------------------------------------
+               age1 |   1.021491   .0173048     1.26   0.209     .9881308    1.055977
+               age2 |   .9959557   .0374307    -0.11   0.914     .9252298    1.072088
+               age3 |    .997367   .0876137    -0.03   0.976     .8396169    1.184756
+             1.male |   1.315975   .0232052    15.57   0.000     1.271271    1.362252
+                    |
+          obese4cat |
+ Obese I (30-34.9)  |   1.446774    .035178    15.19   0.000     1.379443    1.517391
+Obese II (35-39.9)  |   1.737521   .0621867    15.44   0.000     1.619814    1.863782
+   Obese III (40+)  |    1.82005   .0896488    12.16   0.000     1.652556    2.004519
+                    |
+              _cons |   .0222537   .0136096    -6.22   0.000     .0067117    .0737848
+-------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_obese4cat.ster not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_obese4cat.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(5)        =     416.76
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47871.337                     Pseudo R2         =     0.0043
+
+------------------------------------------------------------------------------------
+        coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------+----------------------------------------------------------------
+              age1 |   1.020874    .017175     1.23   0.219     .9877602    1.055097
+              age2 |   1.006817   .0376047     0.18   0.856     .9357461    1.083286
+              age3 |    .957916   .0836517    -0.49   0.622     .8072252    1.136737
+            1.male |   1.292425   .0226889    14.61   0.000     1.248712    1.337669
+1.organ_transplant |   1.589741   .1921221     3.84   0.000     1.254463    2.014629
+             _cons |   .0252063   .0153055    -6.06   0.000     .0076674     .082864
+------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_organ_transplant.ster not
+>  found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_organ_transplant.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(5)        =     403.66
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47877.889                     Pseudo R2         =     0.0042
+
+------------------------------------------------------------------------------------------
+              coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                    age1 |   1.021135   .0171862     1.24   0.214     .9880001    1.055381
+                    age2 |   1.006005   .0375835     0.16   0.873     .9349748    1.082431
+                    age3 |   .9595683   .0838113    -0.47   0.637     .8085923    1.138734
+                  1.male |   1.293067   .0226972    14.64   0.000     1.249338    1.338327
+1.other_immunosuppress~n |   .9535645   .1233635    -0.37   0.713      .739996     1.22877
+                   _cons |   .0251931   .0153048    -6.06   0.000     .0076591    .0828678
+------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_other_immunosuppression.s
+> ter not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_other_immunosuppression.ster sav
+> ed
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(5)        =     445.00
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47857.217                     Pseudo R2         =     0.0046
+
+-------------------------------------------------------------------------------
+   coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+         age1 |   1.023563   .0172537     1.38   0.167     .9902991    1.057944
+         age2 |    .999182   .0373775    -0.02   0.983     .9285446    1.075193
+         age3 |   .9764039   .0853865    -0.27   0.785     .8226062    1.158956
+       1.male |   1.290145   .0226512    14.51   0.000     1.246504    1.335313
+1.other_neuro |   1.267055   .0454065     6.60   0.000     1.181114     1.35925
+        _cons |   .0231175   .0140679    -6.19   0.000     .0070138    .0761958
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_other_neuro.ster not foun
+> d)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_other_neuro.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(5)        =     409.89
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47874.773                     Pseudo R2         =     0.0043
+
+------------------------------------------------------------------------------------
+        coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------+----------------------------------------------------------------
+              age1 |   1.021511   .0172102     1.26   0.207     .9883301    1.055805
+              age2 |   1.004489   .0375625     0.12   0.905     .9335016    1.080876
+              age3 |   .9636494   .0842452    -0.42   0.672     .8119035    1.143757
+            1.male |   1.294927   .0227423    14.72   0.000     1.251112    1.340277
+1.ra_sle_psoriasis |   1.080136   .0327311     2.54   0.011     1.017852    1.146231
+             _cons |   .0247918   .0150773    -6.08   0.000     .0075274    .0816533
+------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_ra_sle_psoriasis.ster not
+>  found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_ra_sle_psoriasis.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    137,890
+                                                LR chi2(6)        =     969.67
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47248.267                     Pseudo R2         =     0.0102
+
+------------------------------------------------------------------------------
+  coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        age1 |   1.031198   .0183844     1.72   0.085     .9957876    1.067868
+        age2 |   .9729454   .0382591    -0.70   0.485     .9007759    1.050897
+        age3 |   1.035965   .0949165     0.39   0.700     .8656791    1.239748
+      1.male |   1.297621   .0233558    14.47   0.000     1.252643    1.344215
+             |
+       smoke |
+     Former  |   1.010931   .0193756     0.57   0.571     .9736595    1.049628
+    Current  |   .4631847   .0172466   -20.67   0.000     .4305859    .4982515
+             |
+       _cons |   .0241563   .0155729    -5.78   0.000     .0068279    .0854623
+------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_smoke.ster not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_smoke.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(6)        =     982.05
+                                                Prob > chi2       =     0.0000
+Log likelihood =  -47588.69                     Pseudo R2         =     0.0102
+
+------------------------------------------------------------------------------
+  coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        age1 |    1.03658   .0176926     2.10   0.035     1.002477    1.071844
+        age2 |   .9636114   .0364528    -0.98   0.327     .8947497    1.037773
+        age3 |   1.058171   .0935054     0.64   0.522     .8898965    1.258266
+      1.male |    1.29855   .0232853    14.57   0.000     1.253704       1.345
+             |
+smoke_nomiss |
+     Former  |   1.007835   .0191786     0.41   0.682     .9709384    1.046135
+    Current  |   .4634532   .0172148   -20.70   0.000     .4309117    .4984522
+             |
+       _cons |   .0196319   .0120995    -6.38   0.000     .0058661    .0657015
+------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_smoke_nomiss.ster not fou
+> nd)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_smoke_nomiss.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(5)        =     408.73
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47875.354                     Pseudo R2         =     0.0043
+
+------------------------------------------------------------------------------
+  coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        age1 |   1.021315   .0171936     1.25   0.210     .9881662    1.055576
+        age2 |   1.005629   .0375772     0.15   0.881     .9346117    1.082043
+        age3 |   .9603019   .0838908    -0.46   0.643     .8091851     1.13964
+      1.male |   1.293036    .022697    14.64   0.000     1.249307    1.338295
+    1.spleen |   .7264906   .1063606    -2.18   0.029     .5452696    .9679405
+       _cons |   .0250841   .0152424    -6.07   0.000     .0076237    .0825337
+------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_spleen.ster not found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_spleen.ster saved
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(5)        =     531.64
+                                                Prob > chi2       =     0.0000
+Log likelihood = -47813.899                     Pseudo R2         =     0.0055
+
+-----------------------------------------------------------------------------------
+       coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------+----------------------------------------------------------------
+             age1 |   1.022666   .0172588     1.33   0.184     .9893922    1.057058
+             age2 |    1.00029   .0374577     0.01   0.994     .9295036    1.076467
+             age3 |   .9717955   .0850612    -0.33   0.744     .8185954    1.153667
+           1.male |   1.288301   .0226286    14.42   0.000     1.244704    1.333425
+1.stroke_dementia |   1.273359   .0267571    11.50   0.000     1.221982    1.326897
+            _cons |   .0240424   .0146476    -6.12   0.000     .0072844    .0793529
+-----------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+(note: file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_stroke_dementia.ster not 
+> found)
+file ./analysis/output/models/an_deathsonlyanalysis_AGESEX_stroke_dementia.ster saved
+
+. 
+. 
+. **MULTIVARIATE
+. cap prog drop baselogistic 
+
+. prog define baselogistic
+  1.         syntax , age(string) bp(string) [ethnicity(real 0) if(string)] 
+  2. 
+.         if `ethnicity'==1 local ethnicity "i.ethnicity"
+  3.         else local ethnicity
+  4. 
+. cap logistic coviddeath `age'                   ///
+>                         i.male                                                  ///
+>                         i.obese4cat                                             ///
+>                         i.smoke_nomiss                                  ///
+>                         `ethnicity'                                             ///
+>                         i.imd                                                   ///
+>                         `bp'                                                    ///
+>                         i.chronic_respiratory_disease   ///
+>                         i.asthmacat                                             ///
+>                         i.chronic_cardiac_disease               ///
+>                         i.diabcat                                               ///
+>                         i.cancer_exhaem_cat                             ///
+>                         i.cancer_haem_cat                               ///
+>                         i.chronic_liver_disease                 ///
+>                         i.stroke_dementia                               ///
+>                         i.other_neuro                                   ///
+>                         i.reduced_kidney_function_cat   ///
+>                         i.organ_transplant                              ///
+>                         i.spleen                                                ///
+>                         i.ra_sle_psoriasis                      ///
+>                         i.other_immunosuppression
+  5.                         
+. end                     
+
+. 
+. baselogistic, age("age1 age2 age3")  bp("i.htdiag_or_highbp") ethnicity(0)
+
+. if _rc==0{
+. estimates
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(36)       =    3663.26
+                                                Prob > chi2       =     0.0000
+Log likelihood = -46248.087                     Pseudo R2         =     0.0381
+
+------------------------------------------------------------------------------------------
+              coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                    age1 |   1.038101   .0177694     2.18   0.029     1.003852    1.073519
+                    age2 |   .9673303   .0368635    -0.87   0.383     .8977115    1.042348
+                    age3 |   1.042129   .0929693     0.46   0.644     .8749537    1.241246
+                  1.male |   1.361152   .0250828    16.73   0.000     1.312868    1.411212
+                         |
+               obese4cat |
+      Obese I (30-34.9)  |   1.346607   .0337027    11.89   0.000     1.282145     1.41431
+     Obese II (35-39.9)  |   1.535419   .0565985    11.63   0.000     1.428401    1.650456
+        Obese III (40+)  |   1.502852   .0760192     8.05   0.000     1.361005    1.659483
+                         |
+            smoke_nomiss |
+                 Former  |   1.008093   .0198153     0.41   0.682     .9699943    1.047688
+                Current  |   .4671676   .0178455   -19.92   0.000     .4334683    .5034869
+                         |
+                     imd |
+                      2  |   1.016082   .0292891     0.55   0.580     .9602681     1.07514
+                      3  |   1.048002   .0298336     1.65   0.100     .9911301    1.108137
+                      4  |    1.22041   .0341565     7.12   0.000     1.155267    1.289226
+        5 most deprived  |   1.372666   .0384491    11.31   0.000     1.299338    1.450132
+                         |
+      1.htdiag_or_highbp |   .9168631   .0188441    -4.22   0.000     .8806634    .9545508
+1.chronic_respiratory_~e |   .9458144   .0213449    -2.47   0.014      .904891    .9885886
+                         |
+               asthmacat |
+            Yes, no OCS  |   1.078021   .0302582     2.68   0.007     1.020318    1.138988
+           Yes with OCS  |   1.296626   .0666104     5.06   0.000      1.17243    1.433979
+                         |
+1.chronic_cardiac_dise~e |   .8528439   .0163743    -8.29   0.000     .8213471    .8855485
+                         |
+                 diabcat |
+    Controlled diabetes  |   1.173131   .0266918     7.02   0.000     1.121965     1.22663
+  Uncontrolled diabetes  |   1.325356   .0395798     9.43   0.000     1.250008    1.405246
+Diabetes, no hba1c me..  |   1.165923   .0529593     3.38   0.001     1.066611    1.274482
+                         |
+       cancer_exhaem_cat |
+              Last year  |   .2134765   .0134088   -24.59   0.000      .188749    .2414434
+          2-5 years ago  |   .3910441   .0168377   -21.81   0.000     .3593969    .4254779
+               5+ years  |   .6684428   .0187985   -14.32   0.000     .6325955    .7063215
+                         |
+         cancer_haem_cat |
+              Last year  |   .5648208   .0784419    -4.11   0.000     .4302257    .7415236
+          2-5 years ago  |   .8761646   .0769276    -1.51   0.132     .7376491     1.04069
+               5+ years  |   .9788803   .0678626    -0.31   0.758     .8545127    1.121349
+                         |
+ 1.chronic_liver_disease |   .5847963   .0399328    -7.86   0.000     .5115408    .6685423
+       1.stroke_dementia |   1.210957   .0259078     8.95   0.000     1.161229    1.262815
+           1.other_neuro |   1.129837   .0412103     3.35   0.001     1.051886    1.213565
+                         |
+reduced_kidney_functio~t |
+Stage 3a/3b egfr 30-6..  |   1.084985   .0218164     4.06   0.000     1.043057    1.128598
+      Stage 4/5 egfr<30  |   .9880997   .0343665    -0.34   0.731     .9229872    1.057806
+                         |
+      1.organ_transplant |   1.486768   .1841753     3.20   0.001     1.166271    1.895339
+                1.spleen |    .818855   .1213951    -1.35   0.178     .6123737    1.094958
+      1.ra_sle_psoriasis |   1.083734   .0333191     2.62   0.009     1.020358    1.151046
+1.other_immunosuppress~n |   1.058902   .1395256     0.43   0.664     .8178949    1.370925
+                   _cons |   .0162662   .0100437    -6.67   0.000     .0048496    .0545594
+------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+. estimates save ./analysis/output/models/an_deathsonlyanalysis_FULL_agespline_bmicat_noeth
+> , replace
+(note: file ./analysis/output/models/an_deathsonlyanalysis_FULL_agespline_bmicat_noeth.ster
+>  not found)
+file ./analysis/output/models/an_deathsonlyanalysis_FULL_agespline_bmicat_noeth.ster saved
+. }
+
+. else di "WARNING AGE SPLINE MODEL DID NOT FIT (OUTCOME `outcome')"
+
+.  
+. *Age group model (not adj ethnicity)
+. baselogistic, age("ib3.agegroup") bp("i.htdiag_or_highbp") ethnicity(0)
+
+. if _rc==0{
+. estimates
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =    138,801
+                                                LR chi2(38)       =    3679.08
+                                                Prob > chi2       =     0.0000
+Log likelihood = -46240.175                     Pseudo R2         =     0.0383
+
+------------------------------------------------------------------------------------------
+              coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                agegroup |
+                 18-<40  |    .565822   .0745911    -4.32   0.000     .4369863    .7326421
+                 40-<50  |   .8513436   .0727086    -1.88   0.060     .7201259    1.006471
+                 60-<70  |   1.041827   .0523684     0.82   0.415     .9440812    1.149694
+                 70-<80  |   1.122196   .0521124     2.48   0.013     1.024567    1.229126
+                    80+  |   1.227464   .0562974     4.47   0.000     1.121937    1.342916
+                         |
+                  1.male |   1.366348   .0250221    17.04   0.000     1.318176    1.416282
+                         |
+               obese4cat |
+      Obese I (30-34.9)  |   1.355962   .0338026    12.22   0.000     1.291302    1.423859
+     Obese II (35-39.9)  |   1.554451   .0571239    12.00   0.000     1.446427    1.670542
+        Obese III (40+)  |   1.531043    .077268     8.44   0.000     1.386849    1.690228
+                         |
+            smoke_nomiss |
+                 Former  |   1.010255   .0198644     0.52   0.604     .9720627    1.049949
+                Current  |   .4738079   .0180627   -19.59   0.000      .439696    .5105663
+                         |
+                     imd |
+                      2  |   1.017098   .0293211     0.59   0.556      .961223    1.076221
+                      3  |   1.049725   .0298859     1.70   0.088     .9927542    1.109966
+                      4  |   1.223592    .034246     7.21   0.000     1.158278    1.292588
+        5 most deprived  |   1.377993   .0385881    11.45   0.000       1.3044    1.455739
+                         |
+      1.htdiag_or_highbp |    .914422   .0187915    -4.35   0.000     .8783232    .9520046
+1.chronic_respiratory_~e |   .9473645   .0213556    -2.40   0.016     .9064194    .9901591
+                         |
+               asthmacat |
+            Yes, no OCS  |   1.078099   .0302541     2.68   0.007     1.020404    1.139057
+           Yes with OCS  |   1.299662   .0667643     5.10   0.000     1.175179    1.437332
+                         |
+1.chronic_cardiac_dise~e |   .8496581   .0163121    -8.49   0.000     .8182809    .8822385
+                         |
+                 diabcat |
+    Controlled diabetes  |   1.174179   .0266841     7.07   0.000     1.123027    1.227661
+  Uncontrolled diabetes  |   1.331796    .039652     9.62   0.000     1.256303    1.411825
+Diabetes, no hba1c me..  |   1.167455   .0530321     3.41   0.001     1.068006    1.276163
+                         |
+       cancer_exhaem_cat |
+              Last year  |   .2155529   .0135319   -24.44   0.000     .1905977    .2437757
+          2-5 years ago  |   .3937545    .016937   -21.67   0.000     .3619194    .4283898
+               5+ years  |   .6676117   .0187817   -14.36   0.000     .6317967    .7054569
+                         |
+         cancer_haem_cat |
+              Last year  |   .5686491   .0789659    -4.07   0.000     .4331533    .7465297
+          2-5 years ago  |   .8803827    .077273    -1.45   0.147     .7412415    1.045642
+               5+ years  |   .9795806    .067905    -0.30   0.766     .8551346    1.122137
+                         |
+ 1.chronic_liver_disease |    .591387   .0403759    -7.69   0.000     .5173179    .6760612
+       1.stroke_dementia |   1.204814   .0257848     8.71   0.000     1.155322    1.256426
+           1.other_neuro |   1.132343   .0412502     3.41   0.001     1.054313    1.216148
+                         |
+reduced_kidney_functio~t |
+Stage 3a/3b egfr 30-6..  |   1.073236   .0213381     3.55   0.000     1.032218    1.115883
+      Stage 4/5 egfr<30  |   .9785736   .0339127    -0.62   0.532     .9143129    1.047351
+                         |
+      1.organ_transplant |   1.522706     .18858     3.40   0.001     1.194534    1.941035
+                1.spleen |   .8207348   .1216756    -1.33   0.183     .6137768    1.097477
+      1.ra_sle_psoriasis |   1.086348   .0333896     2.69   0.007     1.022838    1.153802
+1.other_immunosuppress~n |   1.065594   .1403881     0.48   0.630     .8230935     1.37954
+                   _cons |   .0927291   .0047475   -46.45   0.000     .0838758     .102517
+------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+. estimates save ./analysis/output/models/an_deathsonlyanalysis_FULL_agegroup_bmicat_noeth,
+>  replace
+(note: file ./analysis/output/models/an_deathsonlyanalysis_FULL_agegroup_bmicat_noeth.ster 
+> not found)
+file ./analysis/output/models/an_deathsonlyanalysis_FULL_agegroup_bmicat_noeth.ster saved
+. }
+
+. else di "WARNING GROUP MODEL DID NOT FIT (OUTCOME `outcome')"
+
+. 
+. *Complete case ethnicity model
+. baselogistic, age("age1 age2 age3") bp("i.htdiag_or_highbp") ethnicity(1)
+
+. if _rc==0{
+. estimates
+
+-------------------------------------------------------------------------------------------
+active results
+-------------------------------------------------------------------------------------------
+
+Logistic regression                             Number of obs     =     99,061
+                                                LR chi2(40)       =    3304.00
+                                                Prob > chi2       =     0.0000
+Log likelihood = -33697.197                     Pseudo R2         =     0.0467
+
+------------------------------------------------------------------------------------------
+              coviddeath | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                    age1 |   1.028106   .0203525     1.40   0.161     .9889794     1.06878
+                    age2 |   .9965764   .0438413    -0.08   0.938     .9142492    1.086317
+                    age3 |   .9702066    .099837    -0.29   0.769         .793    1.187012
+                  1.male |   1.308018   .0281205    12.49   0.000     1.254048    1.364311
+                         |
+               obese4cat |
+      Obese I (30-34.9)  |    1.36997   .0394323    10.94   0.000     1.294824    1.449478
+     Obese II (35-39.9)  |   1.611292   .0677945    11.34   0.000     1.483749      1.7498
+        Obese III (40+)  |   1.607271   .0934145     8.16   0.000     1.434225    1.801195
+                         |
+            smoke_nomiss |
+                 Former  |   1.066941   .0249823     2.77   0.006     1.019083    1.117046
+                Current  |   .5065107   .0224712   -15.33   0.000     .4643286    .5525249
+                         |
+               ethnicity |
+                  Mixed  |   1.926421   .2574495     4.91   0.000     1.482503    2.503266
+ Asian or Asian British  |   2.477182   .1095917    20.50   0.000     2.271435    2.701565
+                  Black  |   2.272894   .1599217    11.67   0.000     1.980105    2.608976
+                  Other  |    2.15687   .2164493     7.66   0.000     1.771752    2.625699
+                         |
+                     imd |
+                      2  |   1.044063   .0360995     1.25   0.212     .9756532    1.117269
+                      3  |   1.072854   .0365833     2.06   0.039     1.003495    1.147006
+                      4  |   1.195986   .0399841     5.35   0.000     1.120131    1.276978
+        5 most deprived  |    1.29068   .0429859     7.66   0.000     1.209121    1.377742
+                         |
+      1.htdiag_or_highbp |   .9124459   .0221426    -3.78   0.000     .8700631    .9568932
+1.chronic_respiratory_~e |   .9639156   .0249948    -1.42   0.156     .9161507    1.014171
+                         |
+               asthmacat |
+            Yes, no OCS  |   .9999274   .0326122    -0.00   0.998     .9380089    1.065933
+           Yes with OCS  |   1.217064   .0713335     3.35   0.001     1.084984    1.365222
+                         |
+1.chronic_cardiac_dise~e |   .8343151   .0186587    -8.10   0.000     .7985346    .8716989
+                         |
+                 diabcat |
+    Controlled diabetes  |   1.102072   .0291104     3.68   0.000     1.046469     1.16063
+  Uncontrolled diabetes  |   1.217592   .0421544     5.69   0.000     1.137711    1.303081
+Diabetes, no hba1c me..  |   1.074468   .0565819     1.36   0.173     .9691011    1.191292
+                         |
+       cancer_exhaem_cat |
+              Last year  |   .2088788   .0153997   -21.24   0.000     .1807754    .2413512
+          2-5 years ago  |   .4061747   .0200924   -18.21   0.000     .3686432    .4475274
+               5+ years  |   .6779166   .0223221   -11.81   0.000     .6355479    .7231098
+                         |
+         cancer_haem_cat |
+              Last year  |   .4876151   .0839104    -4.17   0.000     .3480164    .6832107
+          2-5 years ago  |   .8870229   .0900326    -1.18   0.238     .7270062     1.08226
+               5+ years  |    1.01253   .0812353     0.16   0.877      .865199     1.18495
+                         |
+ 1.chronic_liver_disease |   .5967359   .0464524    -6.63   0.000     .5122962    .6950934
+       1.stroke_dementia |    1.21878   .0302734     7.97   0.000     1.160866    1.279582
+           1.other_neuro |   1.120143   .0475513     2.67   0.008     1.030716    1.217329
+                         |
+reduced_kidney_functio~t |
+Stage 3a/3b egfr 30-6..  |   1.100008   .0258228     4.06   0.000     1.050543    1.151802
+      Stage 4/5 egfr<30  |   .9453919   .0385483    -1.38   0.168     .8727788    1.024046
+                         |
+      1.organ_transplant |   1.349402   .1985429     2.04   0.042     1.011349    1.800454
+                1.spleen |   .7650434   .1338756    -1.53   0.126     .5429172    1.078049
+      1.ra_sle_psoriasis |   1.052928   .0379969     1.43   0.153     .9810283    1.130098
+1.other_immunosuppress~n |   1.034159    .152577     0.23   0.820      .774468    1.380929
+                   _cons |   .0199985   .0142914    -5.47   0.000     .0049284    .0811498
+------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+. estimates save ./analysis/output/models/an_deathsonlyanalysis_FULL_agespline_bmicat_CCeth
+> , replace
+(note: file ./analysis/output/models/an_deathsonlyanalysis_FULL_agespline_bmicat_CCeth.ster
+>  not found)
+file ./analysis/output/models/an_deathsonlyanalysis_FULL_agespline_bmicat_CCeth.ster saved
+.  }
+
+.  else di "WARNING CC ETHNICITY MODEL WITH AGESPLINE DID NOT FIT (OUTCOME `outcome')"
+
+. 
+.  log close
+      name:  <unnamed>
+       log:  E:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_deathsonlyana
+> lysis.log
+  log type:  text
+ closed on:  20 Nov 2020, 08:58:32
+-------------------------------------------------------------------------------------------
