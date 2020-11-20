@@ -60,7 +60,7 @@ log using ./analysis/output/an_covidvsnoncovid_agesex, replace t
 			estimates
 			estimates save ./analysis/output/models/an_covidvsnoncovid_agesex_`run'_MALE, replace
 			}
-	 cap logistic `run'death i.agegroup i.male
+	 cap logistic `run'death ib3.agegroup i.male
 			if _rc==0{
 			estimates
 			estimates save ./analysis/output/models/an_covidvsnoncovid_agesex_`run'_AGEGROUP, replace

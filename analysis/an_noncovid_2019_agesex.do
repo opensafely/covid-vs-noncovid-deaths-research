@@ -50,7 +50,7 @@ foreach addvariable of any asthmacat	///
 			estimates
 			estimates save ./analysis/output/models/an_noncovid_2019_agesex_SEX, replace
 		}
- cap logistic _d i.agegroup i.male
+ cap logistic _d ib3.agegroup i.male
 			if _rc==0{
 			estimates
 			estimates save ./analysis/output/models/an_noncovid_2019_agesex_AGEGROUP, replace
