@@ -1,8 +1,7 @@
 cap log close
 log using ./analysis/output/an_noncovid_2019_agesex, replace t
 
-
-use ./analysis/cr_create_analysis_dataset, clear
+use ./analysis/cr_create_analysis_dataset_2019, clear
 stset stime_primarycaredeath, fail(primarycaredeath) id(patient_id) enter(enter_date) origin(enter_date)
 
 cap prog drop baselogistic 
@@ -41,7 +40,7 @@ foreach addvariable of any asthmacat	///
 			baselogistic, age("age1 age2 age3")  addvariable("i.`addvariable'") 
 			if _rc==0{
 			estimates
-			estimates save ./analysis/output/models/an_noncovid_2019_agesex_`addvariable'
+			estimates save ./analysis/output/models/an_noncovid_2019_agesex_`addvariable', replace
 			}
 		else di "MODEL DID NOT FIT (adding `addvariable')"
  }
@@ -49,11 +48,12 @@ foreach addvariable of any asthmacat	///
  cap logistic _d age1 age2 age3 i.male
 			if _rc==0{
 			estimates
-			estimates save ./analysis/output/models/an_noncovid_2019_agesex_SEX
+			estimates save ./analysis/output/models/an_noncovid_2019_agesex_SEX, replace
 		}
  cap logistic _d i.agegroup i.male
 			if _rc==0{
 			estimates
-			estimates save ./analysis/output/models/an_noncovid_2019_agesex_AGEGROUP
+			estimates save ./analysis/output/models/an_noncovid_2019_agesex_AGEGROUP, replace
 		}
-	 
+
+log close

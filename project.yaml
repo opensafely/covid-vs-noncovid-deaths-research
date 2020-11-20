@@ -57,7 +57,7 @@ actions:
         graph: analysis/output/an_covid_vs_othercauses_abs_AGE_GRAPH.svg
         estimates: analysis/output/an_covid_vs_othercauses_abs_AGE_ESTIMATES.dta
 
-  covnoncov_logisticmodels:
+  agesexmodels:
     run: stata-mp:latest analysis/an_covidvsnoncovid_agesex.do
     needs: [crmain]
     outputs:
@@ -65,21 +65,74 @@ actions:
         log: analysis/output/an_covidvsnoncovid_agesex.log
         models: analysis/output/models/an_covidvsnoncovid_agesex_*.ster
   
+  fulladjmodels:
+    run: stata-mp:latest analysis/an_covidvsnoncovid_full.do
+    needs: [crmain]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_covidvsnoncovid_full.log
+        models: analysis/output/models/an_covidvsnoncovid_full_*.ster  
+  
+  agesex2019models:
+    run: stata-mp:latest analysis/an_noncovid_2019_agesex.do
+    needs: [cr2019]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_noncovid_2019_agesex.log
+        models: analysis/output/models/an_noncovid_2019_agesex_*.ster  
+  
+  
+  fulladj2019models:
+    run: stata-mp:latest analysis/an_noncovid_2019_full.do
+    needs: [cr2019]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_noncovid_2019_full.log
+        models: analysis/output/models/an_noncovid_2019_full_*.ster  
+    
   covnoncov_forestplot:
     run: stata-mp:latest analysis/an_processout_agesex_covvsnon_forestplots.do
-    needs: [covnoncov_logisticmodels]
+    needs: [agesexmodels]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_processout_agesex_covvsnon_forestplots_TABLE.txt
         graph: analysis/output/an_processout_agesex_covvsnon_forestplots_GRAPH.svg
  
-  ethnicity_model:
+  covnoncov_appxestimatestable:
+    run: stata-mp:latest analysis/an_processout_agesex_covvsnon_table.do
+    needs: 
+      - agesexmodels 
+      - fulladjmodels 
+      - agesex2019models 
+      - fulladj2019models
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_processout_agesex_covvsnon_table.txt
+ 
+ 
+  ethnicity_model_and_graph:
     run: stata-mp:latest analysis/an_ethnicitybycod.do
     needs: [crmain]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_ethnicitybycod.log
         graph: analysis/output/an_ethnicitybycod.svg
+ 
+  deathsonly_models:
+    run: stata-mp:latest analysis/an_deathsonlyanalysis.do
+    needs: [crmain]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_deathsonlyanalysis.log
+        models: analysis/output/models/an_deathsonlyanalysis_*.ster  
+   
+  deathsonly_ORfigure:
+    run: stata-mp:latest analysis/an_processout_deathsonlyanalysis.do
+    needs: [deathsonly_models]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_processout_deathsonlyanalysis_TABLE.txt
+        graph: analysis/output/an_processout_deathsonlyanalysis_GRAPH.svg 
    
   run_model:
     run: stata-mp:latest analysis/model.do
