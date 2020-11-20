@@ -40,4 +40,7 @@ do ./analysis/an_ethnicitybycod
 *DEATHS ONLY LOGISTIC ANALYSIS
 do ./analysis/an_deathsonlyanalysis
 
+*FOREST PLOT OF DEATHS ONLY ANALYSIS
+do ./analysis/an_processout_deathsonlyanalysis
+
 
