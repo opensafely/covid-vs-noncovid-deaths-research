@@ -111,12 +111,12 @@ actions:
  
  
   ethnicity_model_and_graph:
-    run: stata-mp:latest analysis/an_ethnicitybycod.do
+    run: stata-mp:latest analysis/an_ethnicitybycod_logisticversion.do
     needs: [crmain]
     outputs:
       moderately_sensitive:
-        log: analysis/output/an_ethnicitybycod.log
-        graph: analysis/output/an_ethnicitybycod.svg
+        log: analysis/output/an_ethnicitybycod_logisticversion.log
+        graph: analysis/output/an_ethnicitybycod_logisticversion.svg
  
   deathsonly_models:
     run: stata-mp:latest analysis/an_deathsonlyanalysis.do
