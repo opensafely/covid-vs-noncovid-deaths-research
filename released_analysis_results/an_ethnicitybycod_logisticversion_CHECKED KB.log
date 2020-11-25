@@ -1,0 +1,291 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  E:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_ethnicitybycod_logisticversion.log
+  log type:  text
+ opened on:  25 Nov 2020, 20:54:53
+
+. 
+. frames reset
+
+. use ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, clear
+(covid vs noncovid 2020)
+
+. 
+. replace onsdeath = 0 if _d==0
+(0 real changes made)
+
+. for num 1/6: gen outcomeX = onsdeath == X
+
+->  gen outcome1 = onsdeath == 1
+
+->  gen outcome2 = onsdeath == 2
+
+->  gen outcome3 = onsdeath == 3
+
+->  gen outcome4 = onsdeath == 4
+
+->  gen outcome5 = onsdeath == 5
+
+->  gen outcome6 = onsdeath == 6
+
+. 
+. cap frame drop estimates
+
+. frame create estimates outcome ethnicity rrr lci uci
+
+. 
+. foreach outcome of numlist 1/6{
+  2.         if `outcome'==4 local if " if agegroup>1"
+  3.         else local if
+  4.         logistic outcome`outcome' i.ethnicity age1 age2 age3 i.male `if'
+  5.         foreach ethnicity of numlist 2/5 {
+  6.                 cap lincom `ethnicity'.ethnicity, or
+  7.                 if _rc==0 frame post estimates (`outcome') (`ethnicity') (r(estimate)) (r(lb)) (r(ub))
+  8. }
+  9. }
+
+Logistic regression                             Number of obs     = 12,966,835
+                                                LR chi2(8)        =   35139.83
+                                                Prob > chi2       =     0.0000
+Log likelihood = -73985.302                     Pseudo R2         =     0.1919
+
+-----------------------------------------------------------------------------------------
+               outcome1 | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+              ethnicity |
+                 Mixed  |   1.789433   .2115035     4.92   0.000     1.419408    2.255921
+Asian or Asian British  |   2.325964   .0848473    23.14   0.000     2.165472    2.498351
+                 Black  |   2.314344   .1389553    13.98   0.000     2.057411    2.603364
+                 Other  |   1.579653   .1387881     5.20   0.000     1.329766    1.876498
+                        |
+                   age1 |   1.165239   .0248835     7.16   0.000     1.117475    1.215045
+                   age2 |   .9109451   .0421797    -2.01   0.044     .8319147    .9974833
+                   age3 |    1.27044   .1358745     2.24   0.025      1.03019    1.566718
+                 1.male |   1.671234    .031891    26.91   0.000     1.609883    1.734923
+                  _cons |   6.71e-08   5.21e-08   -21.28   0.000     1.47e-08    3.07e-07
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+Logistic regression                             Number of obs     = 12,966,835
+                                                LR chi2(8)        =   51739.72
+                                                Prob > chi2       =     0.0000
+Log likelihood = -169251.76                     Pseudo R2         =     0.1326
+
+-----------------------------------------------------------------------------------------
+               outcome2 | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+              ethnicity |
+                 Mixed  |   .7613912   .0761392    -2.73   0.006     .6258751    .9262497
+Asian or Asian British  |   .5660694   .0231735   -13.90   0.000     .5224246    .6133605
+                 Black  |   .8504998   .0481948    -2.86   0.004     .7610963    .9504052
+                 Other  |   .6826736   .0510865    -5.10   0.000     .5895425    .7905168
+                        |
+                   age1 |   1.104756   .0105209    10.46   0.000     1.084327    1.125571
+                   age2 |   1.087351   .0231329     3.94   0.000     1.042944    1.133649
+                   age3 |    .726353    .036354    -6.39   0.000     .6584837    .8012175
+                 1.male |   1.419572   .0174037    28.58   0.000     1.385868    1.454096
+                  _cons |   2.10e-06   7.20e-07   -38.08   0.000     1.07e-06    4.11e-06
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+Logistic regression                             Number of obs     = 12,966,835
+                                                LR chi2(8)        =   65841.49
+                                                Prob > chi2       =     0.0000
+Log likelihood = -136781.29                     Pseudo R2         =     0.1940
+
+-----------------------------------------------------------------------------------------
+               outcome3 | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+              ethnicity |
+                 Mixed  |   1.234308   .1152984     2.25   0.024     1.027807    1.482297
+Asian or Asian British  |   1.076967   .0374161     2.13   0.033     1.006074    1.152856
+                 Black  |   .9656757   .0587275    -0.57   0.566     .8571672     1.08792
+                 Other  |     .66267   .0588146    -4.64   0.000     .5568648    .7885783
+                        |
+                   age1 |   1.237983   .0182491    14.48   0.000     1.202727    1.274272
+                   age2 |   .7559573   .0239056    -8.85   0.000     .7105257    .8042939
+                   age3 |   2.023335   .1471287     9.69   0.000     1.754575    2.333263
+                 1.male |    1.63074   .0218839    36.44   0.000     1.588407    1.674201
+                  _cons |   3.26e-08   1.75e-08   -32.03   0.000     1.14e-08    9.36e-08
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+Logistic regression                             Number of obs     =  8,702,709
+                                                LR chi2(8)        =   48675.66
+                                                Prob > chi2       =     0.0000
+Log likelihood = -63527.721                     Pseudo R2         =     0.2770
+
+-----------------------------------------------------------------------------------------
+               outcome4 | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+              ethnicity |
+                 Mixed  |   .6102559   .1340367    -2.25   0.025     .3967839    .9385772
+Asian or Asian British  |   .6200917   .0442311    -6.70   0.000     .5391874    .7131356
+                 Black  |   1.176942     .10198     1.88   0.060     .9931156    1.394794
+                 Other  |   .7222683   .0993274    -2.37   0.018     .5516201    .9457079
+                        |
+                   age1 |   .0226653   .0102621    -8.36   0.000     .0093318    .0550498
+                   age2 |   3937.374   3481.541     9.36   0.000     695.9043    22277.37
+                   age3 |   8.50e-09   1.65e-08    -9.60   0.000     1.91e-10    3.78e-07
+                 1.male |   .8409682   .0168491    -8.64   0.000     .8085846    .8746487
+                  _cons |   7.46e+53   1.28e+55     7.23   0.000     1.87e+39    2.97e+68
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+Logistic regression                             Number of obs     = 12,966,835
+                                                LR chi2(8)        =   32329.77
+                                                Prob > chi2       =     0.0000
+Log likelihood = -69590.244                     Pseudo R2         =     0.1885
+
+-----------------------------------------------------------------------------------------
+               outcome5 | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+              ethnicity |
+                 Mixed  |   .7367739   .1350536    -1.67   0.096     .5144055    1.055268
+Asian or Asian British  |   .8800769    .050448    -2.23   0.026     .7865527    .9847215
+                 Black  |   .6181477   .0704446    -4.22   0.000     .4944115    .7728512
+                 Other  |    .606648   .0853728    -3.55   0.000     .4604138    .7993285
+                        |
+                   age1 |    1.17484   .0337016     5.62   0.000     1.110609    1.242786
+                   age2 |   .9367793   .0565567    -1.08   0.279     .8322374    1.054453
+                   age3 |   1.138115   .1566252     0.94   0.347     .8690512    1.490482
+                 1.male |   1.516651     .02992    21.11   0.000     1.459128    1.576441
+                  _cons |   3.63e-08   3.84e-08   -16.20   0.000     4.58e-09    2.89e-07
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+Logistic regression                             Number of obs     = 12,966,835
+                                                LR chi2(8)        =   46822.89
+                                                Prob > chi2       =     0.0000
+Log likelihood = -117492.29                     Pseudo R2         =     0.1662
+
+-----------------------------------------------------------------------------------------
+               outcome6 | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+              ethnicity |
+                 Mixed  |   .7607195   .0902262    -2.31   0.021     .6029295     .959804
+Asian or Asian British  |   .8219623   .0339329    -4.75   0.000     .7580745    .8912343
+                 Black  |   .8478836   .0574817    -2.43   0.015     .7423856    .9683735
+                 Other  |   .6511115   .0589842    -4.74   0.000     .5451864    .7776171
+                        |
+                   age1 |   1.122563   .0074031    17.53   0.000     1.108147    1.137167
+                   age2 |   .7884297   .0128737   -14.56   0.000     .7635972    .8140698
+                   age3 |   2.147659   .0857666    19.14   0.000      1.98597    2.322512
+                 1.male |   1.272038   .0189334    16.17   0.000     1.235465    1.309693
+                  _cons |   4.61e-06   1.04e-06   -54.63   0.000     2.97e-06    7.16e-06
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. 
+. frame change estimates
+
+. 
+. sort ethnicity outcome
+
+. 
+. label define ethnicity  1 "White"                                       ///
+>                                                 2 "Mixed vs White"                                      ///
+>                                                 3 "Asian or Asian British vs White"     ///
+>                                                 4 "Black vs White"                                      ///
+>                                                 5 "Other vs White"                                      
+
+.                                                 
+. label values ethnicity ethnicity
+
+. 
+. label define outcomes 1 COVID 2 CANCER 3 CVD 4 DEM_ALZ 5 RESPIR 6 OTHER 
+
+. label values outcome outcomes
+
+. 
+. gen outcometext = "COVID-19" if outcome==1
+(20 missing values generated)
+
+. replace outcometext = "Cancer" if outcome==2
+(4 real changes made)
+
+. replace outcometext = "CVD" if outcome==3
+(4 real changes made)
+
+. replace outcometext = "Dementia/Alzheim" if outcome==4
+variable outcometext was str8 now str16
+(4 real changes made)
+
+. replace outcometext = "Respiratory" if outcome==5
+(4 real changes made)
+
+. replace outcometext = "Other" if outcome==6
+(4 real changes made)
+
+. 
+. gen esthr = string(rrr, "%4.2f") + " (" + string(lci, "%4.2f") + "-" + string(uci, "%4.2f") + ")"
+
+. 
+. gen graphorder = 7-outcome
+
+. 
+. gen labelat = .
+(24 missing values generated)
+
+. replace labelat = 0.06
+(24 real changes made)
+
+. gen outcomeheadat = .
+(24 missing values generated)
+
+. replace outcomeheadat = 0.05
+(24 real changes made)
+
+. gen estimatesat = 3.5
+
+. 
+. expand 2 if outcome==1, gen(expanded)
+(4 observations created)
+
+. replace graphorder=7 if expanded==1
+(4 real changes made)
+
+. gen outcomehead="Cause of death category" if expanded==1
+(24 missing values generated)
+
+. for var rrr lci uci : replace X=. if expanded==1
+
+->  replace rrr=. if expanded==1
+(4 real changes made, 4 to missing)
+
+->  replace lci=. if expanded==1
+(4 real changes made, 4 to missing)
+
+->  replace uci=. if expanded==1
+(4 real changes made, 4 to missing)
+
+. replace outcometext="" if expanded==1
+(4 real changes made)
+
+. replace esthr="" if expanded==1
+(4 real changes made)
+
+. 
+. scatter graphorder rrr if outcome==1, mcol(black) ///
+>         || rcap lci uci graphorder if outcome==1, hor lcol(black) ///
+>         || scatter graphorder rrr if outcome>1 , mcol(gs10) ///
+>         || rcap lci uci graphorder if outcome>1, hor lcol(gs10) ///
+>         || scatter graphorder labelat, m(i) mlab(outcometext) mlabcol(black) mlabsize(small) ///
+>         || scatter graphorder outcomeheadat if graphorder==7, m(i) mlab(outcomehead) mlabcol(black) ///
+>         || scatter graphorder estimatesat , m(i) mlab(esthr) mlabcol(black) mlabsize(vsmall) ///
+>         ||, yscale(off r(0 7) lcol(white)) ytitle("") ylab(none) legend(off) xscale(log r(13)) xlab(.5 1 2 4) xtitle(Odds ratio for cause-specific death and 95% CI) xline(1, lp(das
+> h)) ///
+>         by(ethnicity, legend(off) ) 
+
+.         
+. graph export ./analysis/output/an_ethnicitybycod_logisticversion.svg, as(svg) replace
+(note: file ./analysis/output/an_ethnicitybycod_logisticversion.svg not found)
+(file ./analysis/output/an_ethnicitybycod_logisticversion.svg written in SVG format)
+
+. 
+. log close
+      name:  <unnamed>
+       log:  E:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_ethnicitybycod_logisticversion.log
+  log type:  text
+ closed on:  25 Nov 2020, 21:02:13
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
