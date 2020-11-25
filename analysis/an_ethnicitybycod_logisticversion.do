@@ -11,8 +11,9 @@ cap frame drop estimates
 frame create estimates outcome ethnicity rrr lci uci
 
 foreach outcome of numlist 1/6{
-
-	logistic outcome`outcome' i.ethnicity age1 age2 age3 i.male
+	if `outcome'==4 local if " if agegroup>1"
+	else local if
+	logistic outcome`outcome' i.ethnicity age1 age2 age3 i.male `if'
 	foreach ethnicity of numlist 2/5 {
 		cap lincom `ethnicity'.ethnicity, or
 		if _rc==0 frame post estimates (`outcome') (`ethnicity') (r(estimate)) (r(lb)) (r(ub))
