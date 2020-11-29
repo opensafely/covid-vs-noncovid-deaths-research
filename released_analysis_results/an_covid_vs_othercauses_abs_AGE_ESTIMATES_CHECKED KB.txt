@@ -1,4 +1,4 @@
-agegroup,pcovdeath,pcancer,pdem_alz,pcvd,presp,pother
+agegroup,pcovdeath,pcancer,pcvd,pdem_alz,presp,pother
 "18-<40",8.96e-06,.0000477,.0000238,3.32e-13,5.68e-06,.0001005
 "40-<50",.0000538,.0002664,.0001614,8.20e-07,.0000421,.0002764
 "50-<60",.0001667,.0008185,.0004383,.0000107,.0001268,.000511

@@ -34,7 +34,7 @@ mlogit mloutcome i.agegroup i.male, rrr
 *est save ./analysis/output/models/an_covid_vs_othercauses_abs_AGESEX, replace
 
 cap frame drop absolutes
-frame create absolutes agegroup pcovdeath pcancer pdem_alz pcvd presp pother
+frame create absolutes agegroup pcovdeath pcancer pcvd pdem_alz presp pother
 
 	forvalues j=1/6{
 	getprediction agegroup=`j'
