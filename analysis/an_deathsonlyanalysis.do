@@ -18,6 +18,7 @@ gen coviddeath = onsdeath==1
 
 **UNIVARIATE
 foreach var of any 							///
+		agelinsex							///
 		agegroupsex							///
 		agesplsex							///
 		asthmacat							///
@@ -45,6 +46,7 @@ foreach var of any 							///
 	if "`var'"=="agesplsex" local model "age1 age2 age3 i.male"
 	else if "`var'"=="agegroupsex" local model "ib3.agegroup i.male"
 	else if "`var'"=="bmicat" local model "age1 age2 age3 i.male ib2.bmicat"
+	else if "`var'"=="agelinsex" local model "age i.male"
 	*General form of model
 	else local model "age1 age2 age3 i.male i.`var'"
 
@@ -106,6 +108,15 @@ estimates
 estimates save ./analysis/output/models/an_deathsonlyanalysis_FULL_agegroup_bmicat_noeth, replace
 }
 else di "WARNING GROUP MODEL DID NOT FIT (OUTCOME `outcome')"
+
+*Age lin  model (not adj ethnicity)
+baselogistic, age("age") bp("i.htdiag_or_highbp") ethnicity(0)
+if _rc==0{
+estimates
+estimates save ./analysis/output/models/an_deathsonlyanalysis_FULL_agelin_bmicat_noeth, replace
+}
+else di "WARNING GROUP MODEL DID NOT FIT (OUTCOME `outcome')"
+ 
 
 *Complete case ethnicity model
 baselogistic, age("age1 age2 age3") bp("i.htdiag_or_highbp") ethnicity(1)

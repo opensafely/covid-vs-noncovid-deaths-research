@@ -34,7 +34,7 @@ local endwith "_tab"
 		***********************
 		*1) GET THE RIGHT ESTIMATES INTO MEMORY
 		
-		if "`modeltype'"=="agesex" & "`variable'"!="agegroup" & "`variable'"!="male" {
+		if "`modeltype'"=="agesex" & "`variable'"!="agegroup" & "`variable'"!="age" & "`variable'"!="male" {
 			cap estimates use ./analysis/output/models/an_deathsonlyanalysis_AGESEX_`variable'
 			if _rc!=0 local noestimatesflag 1
 			}
@@ -47,11 +47,25 @@ local endwith "_tab"
 				cap estimates use ./analysis/output/models/an_deathsonlyanalysis_AGESEX_agegroupsex
 				if _rc!=0 local noestimatesflag 1
 				}
+
 			if "`modeltype'"=="full" {
 				cap estimates use ./analysis/output/models/an_deathsonlyanalysis_FULL_agegroup_bmicat_noeth
 				if _rc!=0 local noestimatesflag 1
 				}
 			}
+
+		else if "`variable'"=="age" /*linear*/ {
+			if "`modeltype'"=="agesex" {
+				cap estimates use ./analysis/output/models/an_deathsonlyanalysis_AGESEX_agelinsex
+				if _rc!=0 local noestimatesflag 1
+				}
+			if "`modeltype'"=="full" {
+				cap estimates use ./analysis/output/models/an_deathsonlyanalysis_FULL_agelin_bmicat_noeth
+				if _rc!=0 local noestimatesflag 1
+				}
+			}
+			
+			
 		else if "`variable'"=="male" {
 			if "`modeltype'"=="agesex" {
 				cap estimates use ./analysis/output/models/an_deathsonlyanalysis_AGESEX_agesplsex
@@ -80,6 +94,7 @@ local endwith "_tab"
 		
 		if `noestimatesflag'==0{
 			cap lincom `i'.`variable', eform
+			if "`variable'"=="age"  lincom 10*age, eform
 			if _rc==0 file write tablecontents %4.2f (r(estimate)) (" (") %4.2f (r(lb)) ("-") %4.2f (r(ub)) (")") `endwith'
 				else file write tablecontents %4.2f ("ERR IN MODEL") `endwith'
 			}
@@ -92,7 +107,8 @@ local endwith "_tab"
 				local lb = r(lb)
 				local ub = r(ub)
 				cap gen `variable'=.
-				testparm i.`variable'
+				if "`variable'"!= "age" testparm i.`variable'
+				else test age 
 				post HRestimates ("`variable'") (`i') (`hr') (`lb') (`ub') (r(p))
 				drop `variable'
 				}
@@ -119,12 +135,15 @@ file open tablecontents using ./analysis/output/an_processout_deathsonlyanalysis
 tempfile HRestimates
 cap postutil clear
 postfile HRestimates str27 variable level hr lci uci pval using `HRestimates'
-
+/*
 *Age group
 outputHRsforvar, variable("agegroup") min(1) max(2) 
 refline
 outputHRsforvar, variable("agegroup") min(4) max(6) 
 file write tablecontents _n 
+*/
+*Age (linear)
+outputHRsforvar, variable("age") min(1) max(1) 
 
 *Sex 
 refline
@@ -230,7 +249,7 @@ gen lowerlimit = 0.15
 gen Name = variable if (level==-1&!(level[_n+1]==0&variable!="male"))|(level==1&level[_n-1]==0&variable!="male")
 replace Name = subinstr(Name, "_", " ", 10)
 replace Name = upper(substr(Name,1,1)) + substr(Name,2,.)
-replace Name = "Age group" if Name=="Agegroup"
+replace Name = "Age (per 10 year increase)" if Name=="Age"
 replace Name = "Sex" if Name=="Male"
 replace Name = "Obesity" if Name=="Obese4cat"
 replace Name = "Smoking status" if Name=="Smoke nomiss"
@@ -322,8 +341,8 @@ scatter graphorder hr if lci>=.15, mcol(black)	msize(small)		///										///
 	|| scatter graphorder estimatesat if hr<., m(i) mlab(orci) mlabsize(tiny) mlabcol(black) 	///
 		xline(1,lp(dash)) 															///
 		xscale(log r(16)) xlab(0.25 0.5 1 2 4 ) xtitle("Odds Ratio & 95% CI") ylab(none) ytitle("")						/// 
-		legend(off)  yscale(r(100)) ysize(8) text(98 2 "Larger risk factor"  "for COVID-19 deaths", size(tiny))  ///
-		text(98 0.5 "Larger risk factor" "for non-COVID deaths", size(tiny))  ///
-		text(98 8 "OR (95% CI)", size(tiny))
+		legend(off)  yscale(r(95)) ysize(8) text(92 2 "Stronger risk factor"  "for COVID-19 deaths", size(tiny))  ///
+		text(92 0.5 "Stronger risk factor" "for non-COVID deaths", size(tiny))  ///
+		text(92 8 "OR (95% CI)", size(tiny))
 
 graph export ./analysis/output/an_processout_deathsonlyanalysis_GRAPH.svg, as(svg) replace
