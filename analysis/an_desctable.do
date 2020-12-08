@@ -48,7 +48,7 @@ end
 cap file close tablecontent
 file open tablecontent using ./output/an_desctable.txt, write text replace
 
-use cr_create_analysis_dataset,clear
+use cr_create_analysis_dataset_STSET_ONSCSDEATH,clear
 
 gen byte cons=1
 tabulatevariable, variable(cons) start(1) end(1) 
