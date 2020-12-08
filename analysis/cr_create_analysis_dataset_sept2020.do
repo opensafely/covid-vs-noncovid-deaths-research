@@ -535,12 +535,12 @@ label values reduced_kidney_function_cat reduced_kidney_function_catlab
 *More detailed version incorporating stage 5 or dialysis as a separate category	
 recode ckd 0=1 2/3=2 4=3 5=4, gen(reduced_kidney_function_cat2)
 replace reduced_kidney_function_cat2 = 1 if creatinine==. 
-replace reduced_kidney_function_cat2 = 5 if dialysis==1 
+replace reduced_kidney_function_cat2 = 4 if dialysis==1 
 
 label define reduced_kidney_function_cat2lab ///
-	1 "None" 2 "Stage 3a/3b egfr 30-60	" 3 "Stage 4 egfr 15-<30" 4 "Stage 4 egfr <15-<30" 5 "Stage 5 egfr <15 or dialysis"
+	1 "None" 2 "Stage 3a/3b egfr 30-60	" 3 "Stage 4 egfr 15-<30" 4 "Stage 5 egfr <15 or dialysis"
 label values reduced_kidney_function_cat2 reduced_kidney_function_cat2lab 
- 
+  
 	
 ************
 *   Hba1c  *
@@ -760,7 +760,7 @@ label var  stime_onsdeath 				"Survival time (date); outcome ONS covid death"
 keep patient_id imd stp region enter_date  									///
 	cpnsdeath died_date_cpns  stime_cpnsdeath								///
 	onsdeath died_date_ons died_date_onscovid died_cause_ons				///
-	died_ons_covid_flag_any died_ons_covidconf_flag_underly 				/// 
+	died_ons_covid_flag_any  				/// 
 	stime_onsdeath															///
 	primarycaredeath died_date_1ocare stime_primarycaredeath				///
 	age agegroup age70 age1 age2 age3 male bmi smoke   						///
