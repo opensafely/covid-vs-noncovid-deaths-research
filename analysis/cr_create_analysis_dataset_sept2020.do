@@ -29,7 +29,7 @@ cap log close
 log using ./analysis/output/cr_create_analysis_dataset_sept2020, replace t
 
 clear
-import delimited ./output/input.csv
+import delimited ./output/input_sept2020.csv
 
 di "STARTING COUNT FROM IMPORT:"
 cou
