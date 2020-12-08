@@ -525,12 +525,21 @@ label var ckd "CKD stage calc without eth"
 * Convert into CKD group
 *recode ckd 2/5=1, gen(chronic_kidney_disease)
 *replace chronic_kidney_disease = 0 if creatinine==. 
-	
+
 recode ckd 0=1 2/3=2 4/5=3, gen(reduced_kidney_function_cat)
 replace reduced_kidney_function_cat = 1 if creatinine==. 
 label define reduced_kidney_function_catlab ///
 	1 "None" 2 "Stage 3a/3b egfr 30-60	" 3 "Stage 4/5 egfr<30"
 label values reduced_kidney_function_cat reduced_kidney_function_catlab 
+
+*More detailed version incorporating stage 5 or dialysis as a separate category	
+recode ckd 0=1 2/3=2 4=3 5=4, gen(reduced_kidney_function_cat2)
+replace reduced_kidney_function_cat2 = 1 if creatinine==. 
+replace reduced_kidney_function_cat2 = 5 if dialysis==1 
+
+label define reduced_kidney_function_cat2lab ///
+	1 "None" 2 "Stage 3a/3b egfr 30-60	" 3 "Stage 4 egfr 15-<30" 4 "Stage 4 egfr <15-<30" 5 "Stage 5 egfr <15 or dialysis"
+label values reduced_kidney_function_cat2 reduced_kidney_function_cat2lab 
  
 	
 ************
@@ -751,6 +760,7 @@ label var  stime_onsdeath 				"Survival time (date); outcome ONS covid death"
 keep patient_id imd stp region enter_date  									///
 	cpnsdeath died_date_cpns  stime_cpnsdeath								///
 	onsdeath died_date_ons died_date_onscovid died_cause_ons				///
+	died_ons_covid_flag_any died_ons_covidconf_flag_underly 				/// 
 	stime_onsdeath															///
 	primarycaredeath died_date_1ocare stime_primarycaredeath				///
 	age agegroup age70 age1 age2 age3 male bmi smoke   						///
@@ -759,7 +769,7 @@ keep patient_id imd stp region enter_date  									///
 	chronic_respiratory_disease asthma asthmacat chronic_cardiac_disease 	///
 	diabetes diabcat hba1ccat cancer_exhaem_cat cancer_haem_cat 			///
 	chronic_liver_disease organ_transplant spleen ra_sle_psoriasis 			///
-	reduced_kidney_function_cat stroke dementia stroke_dementia 			///
+	reduced_kidney_function_cat* stroke dementia stroke_dementia 			///
 	other_neuro other_immunosuppression  hiv*								///
 	creatinine egfr egfr_cat ckd dialysis 
 
@@ -770,7 +780,7 @@ keep patient_id imd stp region enter_date  									///
 
 sort patient_id
 label data "covid vs noncovid 2020"
-save ./analysis/cr_create_analysis_dataset.dta, replace
+*save ./analysis/cr_create_analysis_dataset.dta, replace
 
 stset stime_onsdeath, fail(onsdeath) id(patient_id) enter(enter_date) origin(enter_date)
 save ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, replace

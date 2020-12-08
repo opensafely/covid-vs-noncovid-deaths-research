@@ -46,7 +46,16 @@ actions:
         data: analysis/cr_create_analysis_dataset_2019.dta
       moderately_sensitive:
         log: analysis/output/cr_create_analysis_dataset_2019.log
-  
+ 
+  crsept2020:
+    run: stata-mp:latest analysis/cr_create_analysis_dataset_sept2020.do
+    needs: [generate_sep2020data]
+    outputs:
+      highly_sensitive:
+        data: analysis/cr_create_analysis_dataset_sept2020_STSET_ONSCSDEATH.dta
+      moderately_sensitive:
+        log: analysis/output/cr_create_analysis_dataset_sept2020.log
+ 
   descriptive_table1:
     run: stata-mp:latest analysis/an_tablecontent_PublicationDescriptivesTable.do
     needs: [crmain]
