@@ -33,8 +33,7 @@ actions:
     needs: [generate_cohorts]
     outputs:
       highly_sensitive:
-        data: analysis/cr_create_analysis_dataset.dta
-        stsetdata: analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta
+        data: analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta
       moderately_sensitive:
         log: analysis/output/cr_create_analysis_dataset.log
   
