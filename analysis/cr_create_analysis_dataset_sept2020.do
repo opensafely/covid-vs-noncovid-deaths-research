@@ -26,10 +26,10 @@
 
 * Open a log file
 cap log close
-log using ./analysis/output/cr_create_analysis_dataset_2019, replace t
+log using ./analysis/output/cr_create_analysis_dataset_sept2020, replace t
 
 clear
-import delimited ./output/input_2019.csv
+import delimited ./output/input.csv
 
 di "STARTING COUNT FROM IMPORT:"
 cou
@@ -118,7 +118,6 @@ foreach var of varlist 	died_date_ons died_date_cpns {
 		summ `var'
 		global `globstem'deathcensor = r(max)-7
 }
-global onsdeathcensor = $onsdeathcensor-365
 global primarycaredeathcensor = $onsdeathcensor
 
 ******************INPUT HERE TO OVERRIDE******************
@@ -406,7 +405,7 @@ foreach var of varlist	chronic_respiratory_disease_date 	///
 						temporary_immunodeficiency_date		///
 						ra_sle_psoriasis_date dialysis_date {
 	local newvar =  substr("`var'", 1, length("`var'") - 5)
-	gen `newvar' = (`var'< d(1/2/2020))
+	gen `newvar' = (`var'< d(1/9/2020))
 	order `newvar', after(`var')
 }
 
@@ -440,20 +439,20 @@ order spleen, after(sickle_cell)
 label define cancer 1 "Never" 2 "Last year" 3 "2-5 years ago" 4 "5+ years"
 
 * Haematological malignancies
-gen     cancer_haem_cat = 4 if inrange(haem_cancer_date, d(1/1/1900), d(1/2/2015))
-replace cancer_haem_cat = 3 if inrange(haem_cancer_date, d(1/2/2015), d(1/2/2019))
-replace cancer_haem_cat = 2 if inrange(haem_cancer_date, d(1/2/2019), d(1/2/2020))
+gen     cancer_haem_cat = 4 if inrange(haem_cancer_date, d(1/1/1900), d(1/9/2015))
+replace cancer_haem_cat = 3 if inrange(haem_cancer_date, d(1/9/2015), d(1/9/2019))
+replace cancer_haem_cat = 2 if inrange(haem_cancer_date, d(1/9/2019), d(1/9/2020))
 recode  cancer_haem_cat . = 1
 label values cancer_haem_cat cancer
 
 
 * All other cancers
-gen     cancer_exhaem_cat = 4 if inrange(lung_cancer_date,  d(1/1/1900), d(1/2/2015)) | ///
-								 inrange(other_cancer_date, d(1/1/1900), d(1/2/2015)) 
-replace cancer_exhaem_cat = 3 if inrange(lung_cancer_date,  d(1/2/2015), d(1/2/2019)) | ///
-								 inrange(other_cancer_date, d(1/2/2015), d(1/2/2019)) 
-replace cancer_exhaem_cat = 2 if inrange(lung_cancer_date,  d(1/2/2019), d(1/2/2020)) | ///
-								 inrange(other_cancer_date, d(1/2/2019), d(1/2/2020))
+gen     cancer_exhaem_cat = 4 if inrange(lung_cancer_date,  d(1/1/1900), d(1/9/2015)) | ///
+								 inrange(other_cancer_date, d(1/1/1900), d(1/9/2015)) 
+replace cancer_exhaem_cat = 3 if inrange(lung_cancer_date,  d(1/9/2015), d(1/9/2019)) | ///
+								 inrange(other_cancer_date, d(1/9/2015), d(1/9/2019)) 
+replace cancer_exhaem_cat = 2 if inrange(lung_cancer_date,  d(1/9/2019), d(1/9/2020)) | ///
+								 inrange(other_cancer_date, d(1/9/2019), d(1/9/2020))
 recode  cancer_exhaem_cat . = 1
 label values cancer_exhaem_cat cancer
 
@@ -469,8 +468,8 @@ order cancer_exhaem_cat cancer_haem_cat, after(other_cancer_date)
 * HIV, permanent immunodeficiency ever, OR 
 * temporary immunodeficiency or aplastic anaemia last year
 gen temp1  = max(hiv, permanent_immunodeficiency)
-gen temp2  = inrange(temporary_immunodeficiency_date, d(1/2/2019), d(1/2/2020))
-gen temp3  = inrange(aplastic_anaemia_date, d(1/2/2019), d(1/2/2020))
+gen temp2  = inrange(temporary_immunodeficiency_date, d(1/9/2019), d(1/9/2020))
+gen temp3  = inrange(aplastic_anaemia_date, d(1/9/2019), d(1/9/2020))
 
 egen other_immunosuppression = rowmax(temp1 temp2 temp3)
 drop temp1 temp2 temp3
@@ -526,13 +525,13 @@ label var ckd "CKD stage calc without eth"
 * Convert into CKD group
 *recode ckd 2/5=1, gen(chronic_kidney_disease)
 *replace chronic_kidney_disease = 0 if creatinine==. 
-	
+
 recode ckd 0=1 2/3=2 4/5=3, gen(reduced_kidney_function_cat)
 replace reduced_kidney_function_cat = 1 if creatinine==. 
 label define reduced_kidney_function_catlab ///
 	1 "None" 2 "Stage 3a/3b egfr 30-60	" 3 "Stage 4/5 egfr<30"
 label values reduced_kidney_function_cat reduced_kidney_function_catlab 
- 
+
 *More detailed version incorporating stage 5 or dialysis as a separate category	
 recode ckd 0=1 2/3=2 4=3 5=4, gen(reduced_kidney_function_cat2)
 replace reduced_kidney_function_cat2 = 1 if creatinine==. 
@@ -541,8 +540,8 @@ replace reduced_kidney_function_cat2 = 5 if dialysis==1
 label define reduced_kidney_function_cat2lab ///
 	1 "None" 2 "Stage 3a/3b egfr 30-60	" 3 "Stage 4 egfr 15-<30" 4 "Stage 4 egfr <15-<30" 5 "Stage 5 egfr <15 or dialysis"
 label values reduced_kidney_function_cat2 reduced_kidney_function_cat2lab 
-
  
+	
 ************
 *   Hba1c  *
 ************
@@ -556,8 +555,8 @@ replace hba1c_mmol_per_mol = . if hba1c_mmol_per_mol<=0
 
 
 * Only consider measurements in last 15 months
-replace hba1c_percentage   = . if hba1c_percentage_date   < d(1/11/2018)
-replace hba1c_mmol_per_mol = . if hba1c_mmol_per_mol_date < d(1/11/2018)
+replace hba1c_percentage   = . if hba1c_percentage_date   < d(1/6/2019)
+replace hba1c_mmol_per_mol = . if hba1c_mmol_per_mol_date < d(1/6/2019)
 
 
 
@@ -605,25 +604,37 @@ drop hba1c_pct hba1c_percentage hba1c_mmol_per_mol
 *  Outcomes and survival time  *
 ********************************
 
-
 /*  Cohort entry and censor dates  */
 
-* Date of cohort entry, 1 Feb 2019
-gen enter_date = date("01/02/2019", "DMY")
+* Date of cohort entry, 1 Sep 2020
+gen enter_date = date("01/09/2020", "DMY")
 format %d enter_date
 
 /*   Outcomes   */
+* Binary indicators for CPNS, primary care death outcome
+gen cpnsdeath 		= (died_date_cpns		< .)
+gen primarycaredeath = (died_date_1ocare < .)
+
 * Date of Covid death in ONS
 gen died_date_onscovid = died_date_ons if died_ons_covid_flag_any==1
 
-* Binary indicators for outcomes
-gen cpnsdeath 		= (died_date_cpns		< .)
-gen onsdeath 		= 2*(died_date_ons < .)
-replace onsdeath 	= 1 if died_ons_covid_flag_any==1
-label define onsdeathlab 1 covid 2 noncovid
+*Classify ONS deaths
+datacheck died_cause_ons!="" if died_date_ons<., nol
+datacheck died_date_ons<. if died_cause_ons!="", nol
+
+gen _causechapter = substr(died_cause,1,1)
+gen _causenumber = real(substr(died_cause,2,2))
+gen onsdeath = 1 if _causechapter=="U" & _causenumber==07
+replace onsdeath = 2 if _causechapter=="C" /*& !(_causenumber>=81 & _causenumber<=96)
+replace onsdeath = 3 if _causechapter=="C" & (_causenumber>=81 & _causenumber<=96)*/
+replace onsdeath = 3 if _causechapter=="I"
+replace onsdeath = 4 if (_causechapter=="F" & (_causenumber==0|_causenumber==1|_causenumber==3))|(_causechapter=="G" & (_causenumber==30))
+replace onsdeath = 5 if _causechapter=="J" /*& (_causenumber>=9 & _causenumber<=22)
+replace onsdeath = 7 if _causechapter=="J" & (_causenumber>=23)*/
+replace onsdeath = 6 if _causechapter!="" & onsdeath==.
+label define onsdeathlab 1 covid 2 cancer 3 cvd 4 dem_alz 5 respiratory 6 other
 label values onsdeath onsdeathlab 
 
-gen primarycaredeath = (died_date_1ocare < .)
 
 /*  Create survival times  */
 * For looping later, name must be stime_binary_outcome_name
@@ -635,7 +646,6 @@ gen stime_primarycaredeath 		= min($primarycaredeathcensor, died_date_1ocare)
 
 * If outcome was after censoring occurred, set to zero
 replace cpnsdeath 		= 0 if (died_date_cpns > $cpnsdeathcensor) 
-*replace onscoviddeath 	= 0 if (died_date_onscovid	> $onsdeathcensor) 
 replace onsdeath 		= 0 if (died_date_ons > $onsdeathcensor) 
 replace primarycaredeath = 0 if (died_date_1ocare > $primarycaredeathcensor)
 
@@ -742,8 +752,6 @@ label var  stime_cpnsdeath 				"Survival time (date); outcome CPNS covid death"
 label var  stime_onsdeath 				"Survival time (date); outcome ONS covid death"
 
 
-
-
 ***************
 *  Tidy data  *
 ***************
@@ -751,7 +759,8 @@ label var  stime_onsdeath 				"Survival time (date); outcome ONS covid death"
 * REDUCE DATASET SIZE TO VARIABLES NEEDED
 keep patient_id imd stp region enter_date  									///
 	cpnsdeath died_date_cpns  stime_cpnsdeath								///
-	onsdeath died_date_ons died_date_onscovid 								///
+	onsdeath died_date_ons died_date_onscovid died_cause_ons				///
+	died_ons_covid_flag_any died_ons_covidconf_flag_underly 				/// 
 	stime_onsdeath															///
 	primarycaredeath died_date_1ocare stime_primarycaredeath				///
 	age agegroup age70 age1 age2 age3 male bmi smoke   						///
@@ -770,8 +779,11 @@ keep patient_id imd stp region enter_date  									///
 ***************
 
 sort patient_id
-label data "covid vs non covid 2019"
-save ./analysis/cr_create_analysis_dataset_2019.dta, replace
+label data "covid vs noncovid from sept 2020"
+*save ./analysis/cr_create_analysis_dataset_sept2020.dta, replace
+
+stset stime_onsdeath, fail(onsdeath) id(patient_id) enter(enter_date) origin(enter_date)
+save ./analysis/cr_create_analysis_dataset_sept2020_STSET_ONSCSDEATH.dta, replace
 
 log close
 

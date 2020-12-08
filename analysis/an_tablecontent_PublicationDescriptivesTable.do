@@ -56,7 +56,7 @@ cap file close tablecontent
 file open tablecontent using ./analysis/output/an_tablecontent_PublicationDescriptivesTable.txt, write text replace
 
 
-use ./analysis/cr_create_analysis_dataset,clear
+use ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH,clear
 
 
 gen byte cons=1
