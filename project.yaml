@@ -22,6 +22,12 @@ actions:
       highly_sensitive:
         cohort: output/input_flow_chart.csv
 
+  generate_sep2020data:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_sept2020
+    outputs:
+      highly_sensitive:
+        cohort: output/input_sept2020.csv
+
   crmain:
     run: stata-mp:latest analysis/cr_create_analysis_dataset.do
     needs: [generate_cohorts]

@@ -22,7 +22,7 @@ study = StudyDefinition(
     },
     # This line defines the study population
     population=patients.registered_with_one_practice_between(
-        "2019-02-01", "2020-02-01"
+        "2019-09-01", "2020-09-01"
     ),
     # Outcomes
     died_date_cpns=patients.with_death_recorded_in_cpns(
@@ -37,11 +37,6 @@ study = StudyDefinition(
     ),
     died_ons_covid_flag_underlying=patients.with_these_codes_on_death_certificate(
         covid_codelist,
-        match_only_underlying_cause=True,
-        return_expectations={"date": {"earliest": "2020-03-01"}},
-    ),
-    died_ons_covidconf_flag_underlying=patients.with_these_codes_on_death_certificate(
-        covidconf_codelist,
         match_only_underlying_cause=True,
         return_expectations={"date": {"earliest": "2020-03-01"}},
     ),
@@ -66,7 +61,7 @@ study = StudyDefinition(
     # The rest of the lines define the covariates with associated GitHub issues
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/33
     age=patients.age_as_of(
-        "2020-02-01",
+        "2020-09-01",
         return_expectations={
             "rate": "universal",
             "int": {"distribution": "population_ages"},
@@ -81,7 +76,7 @@ study = StudyDefinition(
     ),
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/52
     imd=patients.address_as_of(
-        "2020-02-01",
+        "2020-09-01",
         returning="index_of_multiple_deprivation",
         round_to_nearest=100,
         return_expectations={
@@ -91,7 +86,7 @@ study = StudyDefinition(
     ),
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/54
     stp=patients.registered_practice_as_of(
-        "2020-02-01",
+        "2020-09-01",
         returning="stp_code",
         return_expectations={
             "rate": "universal",
@@ -113,7 +108,7 @@ study = StudyDefinition(
     ),
     # region - one of NHS England 9 regions
     region=patients.registered_practice_as_of(
-        "2020-02-01",
+        "2020-09-01",
         returning="nuts1_region_name",
         return_expectations={
             "rate": "universal",
@@ -132,7 +127,7 @@ study = StudyDefinition(
         },
     ),
     care_home_type=patients.care_home_status_as_of(
-        "2020-02-01",
+        "2020-09-01",
         categorised_as={
             "PC": """
               IsPotentialCareHome
@@ -154,7 +149,7 @@ study = StudyDefinition(
     ),
     # https://github.com/ebmdatalab/tpp-sql-notebook/issues/10
     bmi=patients.most_recent_bmi(
-        on_or_after="2010-02-01",
+        on_or_after="2010-09-01",
         minimum_age_at_measurement=16,
         include_measurement_date=True,
         include_month=True,
@@ -182,12 +177,12 @@ study = StudyDefinition(
         most_recent_smoking_code=patients.with_these_clinical_events(
             clear_smoking_codes,
             find_last_match_in_period=True,
-            on_or_before="2020-02-01",
+            on_or_before="2020-09-01",
             returning="category",
         ),
         ever_smoked=patients.with_these_clinical_events(
             filter_codes_by_category(clear_smoking_codes, include=["S", "E"]),
-            on_or_before="2020-02-01",
+            on_or_before="2020-09-01",
         ),
     ),
 
@@ -247,7 +242,7 @@ study = StudyDefinition(
         },
         return_expectations={"category": {"ratios": {"0": 0.8, "1": 0.1, "2": 0.1}},},
         recent_asthma_code=patients.with_these_clinical_events(
-            asthma_codes, between=["2017-02-01", "2020-02-01"],
+            asthma_codes, between=["2017-09-01", "2020-09-01"],
         ),
         asthma_code_ever=patients.with_these_clinical_events(asthma_codes),
         copd_code_ever=patients.with_these_clinical_events(
@@ -255,7 +250,7 @@ study = StudyDefinition(
         ),
         prednisolone_last_year=patients.with_these_medications(
             pred_codes,
-            between=["2019-02-01", "2020-02-01"],
+            between=["2019-09-01", "2020-09-01"],
             returning="number_of_matches_in_period",
         ),
     ),
@@ -301,7 +296,7 @@ study = StudyDefinition(
     creatinine=patients.with_these_clinical_events(
         creatinine_codes,
         find_last_match_in_period=True,
-        on_or_before="2020-02-01",
+        on_or_before="2020-09-01",
         returning="numeric_value",
         include_date_of_match=True,
         include_month=True,
@@ -356,7 +351,7 @@ study = StudyDefinition(
     bp_sys=patients.mean_recorded_value(
         systolic_blood_pressure_codes,
         on_most_recent_day_of_measurement=True,
-        on_or_before="2020-02-01",
+        on_or_before="2020-09-01",
         include_measurement_date=True,
         include_month=True,
         return_expectations={
@@ -368,7 +363,7 @@ study = StudyDefinition(
     bp_dias=patients.mean_recorded_value(
         diastolic_blood_pressure_codes,
         on_most_recent_day_of_measurement=True,
-        on_or_before="2020-02-01",
+        on_or_before="2020-09-01",
         include_measurement_date=True,
         include_month=True,
         return_expectations={
@@ -380,7 +375,7 @@ study = StudyDefinition(
     hba1c_mmol_per_mol=patients.with_these_clinical_events(
         hba1c_new_codes,
         find_last_match_in_period=True,
-        on_or_before="2020-02-01",
+        on_or_before="2020-09-01",
         returning="numeric_value",
         include_date_of_match=True,
         include_month=True,
@@ -393,7 +388,7 @@ study = StudyDefinition(
     hba1c_percentage=patients.with_these_clinical_events(
         hba1c_old_codes,
         find_last_match_in_period=True,
-        on_or_before="2020-02-01",
+        on_or_before="2020-09-01",
         returning="numeric_value",
         include_date_of_match=True,
         include_month=True,

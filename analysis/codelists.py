@@ -5,6 +5,8 @@ from cohortextractor import (
 
 covid_codelist = codelist(["U071", "U072"], system="icd10")
 
+covidconf_codelist = codelist(["U071"], system="icd10")
+
 aplastic_codes = codelist_from_csv(
     "codelists/opensafely-aplastic-anaemia.csv", system="ctv3", column="CTV3ID"
 )
