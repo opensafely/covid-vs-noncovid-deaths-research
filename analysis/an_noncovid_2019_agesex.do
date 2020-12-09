@@ -17,7 +17,7 @@ foreach addvariable of any asthmacat	///
 		cancer_exhaem_cat					///
 		cancer_haem_cat						///
 		chronic_cardiac_disease 			///
-		reduced_kidney_function_cat			///
+		reduced_kidney_function_cat2		///
 		dialysis							///
 		chronic_liver_disease 				///
 		chronic_respiratory_disease 		///
@@ -36,7 +36,8 @@ foreach addvariable of any asthmacat	///
 		smoke  								///
 		smoke_nomiss 						///
 		spleen 								///
-		stroke_dementia {
+		stroke 								///
+		dementia {
 			baselogistic, age("age1 age2 age3")  addvariable("i.`addvariable'") 
 			if _rc==0{
 			estimates

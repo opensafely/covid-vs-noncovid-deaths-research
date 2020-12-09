@@ -27,7 +27,7 @@ log using ./analysis/output/an_covidvsnoncovid_agesex, replace t
 		cancer_exhaem_cat					///
 		cancer_haem_cat						///
 		chronic_cardiac_disease 			///
-		reduced_kidney_function_cat			///
+		reduced_kidney_function_cat2		///
 		dialysis							///
 		chronic_liver_disease 				///
 		chronic_respiratory_disease 		///
@@ -46,7 +46,8 @@ log using ./analysis/output/an_covidvsnoncovid_agesex, replace t
 		smoke  								///
 		smoke_nomiss 						///
 		spleen 								///
-		stroke_dementia {
+		stroke 								///
+		dementia {
 			cap logistic `run'death age1 age2 age3 male i.`addvariable'
 			if _rc==0{
 			estimates
