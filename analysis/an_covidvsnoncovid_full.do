@@ -30,9 +30,10 @@ cap logistic `outcome' `age' 			///
 			i.cancer_exhaem_cat	 			///
 			i.cancer_haem_cat  				///
 			i.chronic_liver_disease 		///
-			i.stroke_dementia		 		///
+			i.stroke						///	
+			i.dementia		 				///
 			i.other_neuro					///
-			i.reduced_kidney_function_cat	///
+			i.reduced_kidney_function_cat2	///
 			i.organ_transplant 				///
 			i.spleen 						///
 			i.ra_sle_psoriasis  			///

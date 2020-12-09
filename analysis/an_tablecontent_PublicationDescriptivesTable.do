@@ -101,13 +101,15 @@ file write tablecontent _n
 tabulatevariable, variable(cancer_haem_cat) start(2) end(4)  /*<1, 1-4.9, 5+ years ago*/
 file write tablecontent _n
 *REDUCED KIDNEY FUNCTION
-tabulatevariable, variable(reduced_kidney_function_cat) start(2) end(3) 
+tabulatevariable, variable(reduced_kidney_function_cat2) start(2) end(4) 
 /*DIALYSIS
 tabulatevariable, variable(dialysis) start(1) end(1) */
 *LIVER
 tabulatevariable, variable(chronic_liver_disease) start(1) end(1) 
-*STROKE/DEMENTIA
-tabulatevariable, variable(stroke_dementia) start(1) end(1) 
+*DEMENTIA
+tabulatevariable, variable(dementia) start(1) end(1) 
+*STROKE
+tabulatevariable, variable(stroke) start(1) end(1) 
 *OTHER NEURO
 tabulatevariable, variable(other_neuro) start(1) end(1) 
 *ORGAN TRANSPLANT

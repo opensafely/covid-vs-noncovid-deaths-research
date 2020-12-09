@@ -135,9 +135,10 @@ outputHRsforvar, variable("cancer_exhaem_cat") min(2) max(4)
 file write tablecontents _n		
 outputHRsforvar, variable("cancer_haem_cat") min(2) max(4) 		
 file write tablecontents _n
-outputHRsforvar, variable("reduced_kidney_function_cat") min(2) max(3) 		
+outputHRsforvar, variable("reduced_kidney_function_cat2") min(2) max(4) 		
 outputHRsforvar, variable("chronic_liver_disease") min(1) max(1) 			
-outputHRsforvar, variable("stroke_dementia") min(1) max(1) 	
+outputHRsforvar, variable("dementia") min(1) max(1) 	
+outputHRsforvar, variable("stroke") min(1) max(1) 	
 outputHRsforvar, variable("other_neuro") min(1) max(1) 		
 outputHRsforvar, variable("organ_transplant") min(1) max(1)			
 outputHRsforvar, variable("spleen") min(1) max(1) 

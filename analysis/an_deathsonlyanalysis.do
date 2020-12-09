@@ -23,7 +23,7 @@ foreach var of any 							///
 		cancer_exhaem_cat					///
 		cancer_haem_cat						///
 		chronic_cardiac_disease 			///
-		reduced_kidney_function_cat			///
+		reduced_kidney_function_cat2		///
 		dialysis							///
 		chronic_liver_disease 				///
 		chronic_respiratory_disease 		///
@@ -39,7 +39,8 @@ foreach var of any 							///
 		smoke  								///
 		smoke_nomiss 						///
 		spleen 								///
-		stroke_dementia {
+		stroke								///
+		dementia {
 	*Special cases
 	if "`var'"=="agesplsex" local model "age1 age2 age3 i.male"
 	else if "`var'"=="agegroupsex" local model "ib3.agegroup i.male"
@@ -82,9 +83,10 @@ cap logistic coviddeath `age' 			///
 			i.cancer_exhaem_cat	 			///
 			i.cancer_haem_cat  				///
 			i.chronic_liver_disease 		///
-			i.stroke_dementia		 		///
+			i.stroke						///
+			i.dementia		 				///
 			i.other_neuro					///
-			i.reduced_kidney_function_cat	///
+			i.reduced_kidney_function_cat2	///
 			i.organ_transplant 				///
 			i.spleen 						///
 			i.ra_sle_psoriasis  			///

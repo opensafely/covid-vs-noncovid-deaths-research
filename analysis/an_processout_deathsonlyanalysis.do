@@ -134,7 +134,7 @@ file open tablecontents using ./analysis/output/an_processout_deathsonlyanalysis
 
 tempfile HRestimates
 cap postutil clear
-postfile HRestimates str27 variable level hr lci uci pval using `HRestimates'
+postfile HRestimates str28 variable level hr lci uci pval using `HRestimates'
 /*
 *Age group
 outputHRsforvar, variable("agegroup") min(1) max(2) 
@@ -185,9 +185,10 @@ outputHRsforvar, variable("cancer_exhaem_cat") min(2) max(4)
 file write tablecontents _n		
 outputHRsforvar, variable("cancer_haem_cat") min(2) max(4) 		
 file write tablecontents _n
-outputHRsforvar, variable("reduced_kidney_function_cat") min(2) max(3) 		
+outputHRsforvar, variable("reduced_kidney_function_cat2") min(2) max(4) 		
 outputHRsforvar, variable("chronic_liver_disease") min(1) max(1) 			
-outputHRsforvar, variable("stroke_dementia") min(1) max(1) 	
+outputHRsforvar, variable("dementia") min(1) max(1) 	
+outputHRsforvar, variable("stroke") min(1) max(1) 	
 outputHRsforvar, variable("other_neuro") min(1) max(1) 		
 outputHRsforvar, variable("organ_transplant") min(1) max(1)			
 outputHRsforvar, variable("spleen") min(1) max(1) 
@@ -204,7 +205,7 @@ use `HRestimates', clear
 gen varorder = 1 
 local i=2
 foreach var of any male obese4cat smoke_nomiss ethnicity imd  diabcat ///
-	cancer_exhaem_cat cancer_haem_cat reduced_kidney_function_cat asthmacat chronic_respiratory_disease ///
+	cancer_exhaem_cat cancer_haem_cat reduced_kidney_function_cat2 asthmacat chronic_respiratory_disease ///
 	chronic_cardiac_disease htdiag_or_highbp chronic_liver_disease ///
 	stroke_dementia other_neuro organ_transplant ///
 	spleen ra_sle_psoriasis other_immunosuppression {
@@ -221,7 +222,7 @@ for var hr lci uci: replace X = 1 if expanded==1
 sort obsorder
 drop obsorder
 replace level = 0 if expanded == 1
-replace level = 1 if expanded == 1 & (variable=="obese4cat"|variable=="smoke_nomiss"|variable=="ethnicity"|variable=="imd"|variable=="asthmacat"|variable=="diabcat"|substr(variable,1,6)=="cancer"|variable=="reduced_kidney_function_cat"|variable=="agegroup")
+replace level = 1 if expanded == 1 & (variable=="obese4cat"|variable=="smoke_nomiss"|variable=="ethnicity"|variable=="imd"|variable=="asthmacat"|variable=="diabcat"|substr(variable,1,6)=="cancer"|variable=="reduced_kidney_function_cat2"|variable=="agegroup")
 replace level = 3 if expanded == 1 & variable=="agegroup"
 
 gen varorder = 1 if variable!=variable[_n-1]
@@ -262,7 +263,7 @@ replace Name = "Haematological malignancy" if Name=="Cancer haem cat"
 replace Name = "Stroke or dementia" if Name=="Stroke dementia"
 replace Name = "Other neurological" if Name=="Other neuro"
 replace Name = "Rheumatoid arthritis/Lupus/Psoriasis" if Name=="Ra sle psoriasis"
-replace Name = "Reduced kidney function" if Name=="Reduced kidney function cat"
+replace Name = "Reduced kidney function" if Name=="Reduced kidney function cat2"
 replace Name = "Asplenia" if Name=="Spleen"
 
 *Levels
@@ -312,9 +313,10 @@ replace leveldesc = "<1 year ago" if substr(variable,1,6)=="cancer" & level==2
 replace leveldesc = "1-4.9 years ago" if substr(variable,1,6)=="cancer" & level==3
 replace leveldesc = "5+ years ago" if substr(variable,1,6)=="cancer" & level==4
 
-replace leveldesc = "None (ref)" if variable=="reduced_kidney_function_cat" & level==1
-replace leveldesc = "eGFR 30-60 ml/min/1.73m2" if variable=="reduced_kidney_function_cat" & level==2
-replace leveldesc = "eGFR <30 ml/min/1.73m2" if variable=="reduced_kidney_function_cat" & level==3
+replace leveldesc = "None (ref)" if variable=="reduced_kidney_function_cat2" & level==1
+replace leveldesc = "eGFR 30-60 (ml/min/1.73m2)" if variable=="reduced_kidney_function_cat2" & level==2
+replace leveldesc = "eGFR 15-<30 " if variable=="reduced_kidney_function_cat2" & level==3
+replace leveldesc = "eGFR <15 or dialysis" if variable=="reduced_kidney_function_cat2" & level==4
 
 
 *replace leveldesc = "Absent" if level==0
