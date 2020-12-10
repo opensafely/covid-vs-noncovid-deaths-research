@@ -2,7 +2,7 @@
 *KB 16/7/2020
 
 cap log close
-log using ./output/an_impute_MAIN, replace t
+log using ./analysis/output/an_impute_MAIN, replace t
 
 frames reset
 use  ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, clear
@@ -42,6 +42,6 @@ mi impute mlogit ethnicity	///
 			i.other_immunosuppression		///
 			coviddeath noncoviddeath, add(10) rseed(309484) noisily
 
-save an_impute_imputeddata_MAIN, replace
+save ./analysis/an_impute_imputeddata_MAIN, replace
 
 log close
