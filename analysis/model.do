@@ -49,4 +49,25 @@ do ./analysis/an_processout_deathsonlyanalysis
 do ./analysis/an_impute_GENERAL MAIN
 do ./analysis/an_impute_GENERAL SEPT2020
 do ./analysis/an_impute_GENERAL 2019
+do ./analysis/an_imputed_GENERAL MAIN coviddeath agesex agespl
+do ./analysis/an_imputed_GENERAL MAIN noncoviddeath agesex agespl
+do ./analysis/an_imputed_GENERAL MAIN coviddeath full agespl
+do ./analysis/an_imputed_GENERAL MAIN coviddeath full agegrp
+do ./analysis/an_imputed_GENERAL MAIN noncoviddeath full agespl
+do ./analysis/an_imputed_GENERAL MAIN noncoviddeath full agegrp
+do ./analysis/an_imputed_GENERAL SEPT2020 coviddeath agesex agespl
+do ./analysis/an_imputed_GENERAL SEPT2020 noncoviddeath agesex agespl
+do ./analysis/an_imputed_GENERAL SEPT2020 coviddeath full agespl
+do ./analysis/an_imputed_GENERAL SEPT2020 coviddeath full agegrp
+do ./analysis/an_imputed_GENERAL SEPT2020 noncoviddeath full agespl
+do ./analysis/an_imputed_GENERAL SEPT2020 noncoviddeath full agegrp
+do ./analysis/an_imputed_GENERAL 2019 primarycaredeath agesex agespl
+do ./analysis/an_imputed_GENERAL 2019 primarycaredeath full agespl
+do ./analysis/an_imputed_GENERAL 2019 primarycaredeath full agegrp
+
+
+*first argument dataset (MAIN SEPT2020 2019)
+*second argument outcome (coviddeath noncoviddeath primarycaredeath)
+*third argument modeltorun (agesex full)
+*fourth argument agetype (agespl agegrp)
 */
