@@ -147,7 +147,35 @@ actions:
       moderately_sensitive:
         log: analysis/output/an_processout_deathsonlyanalysis_TABLE.txt
         graph: analysis/output/an_processout_deathsonlyanalysis_GRAPH.svg 
-   
+
+  getimputations_main:
+    run: stata-mp:latest analysis/an_impute_MAIN.do
+    needs: [crmain]
+    outputs:
+      highly_sensitive:
+        data: analysis/an_impute_imputeddata_MAIN.dta
+      moderately_sensitive:
+        log: analysis/output/an_impute_MAIN.log
+
+  getimputations_sept2020:
+    run: stata-mp:latest analysis/an_impute_SEPT2020.do
+    needs: [crsept2020]
+    outputs:
+      highly_sensitive:
+        data: analysis/an_impute_imputeddata_SEPT2020.dta   
+      moderately_sensitive:
+        log: analysis/output/an_impute_SEPT2020.log
+
+  getimputations_2019:
+    run: stata-mp:latest analysis/an_impute_2019.do
+    needs: [cr2019]
+    outputs:
+      highly_sensitive:
+        data: analysis/an_impute_imputeddata_2019.dta   
+      moderately_sensitive:
+        log: analysis/output/an_impute_2019.log
+
+
   run_model:
     run: stata-mp:latest analysis/model.do
     needs: [generate_cohorts]

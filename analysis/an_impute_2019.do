@@ -2,7 +2,7 @@
 *KB 16/7/2020
 
 cap log close
-log using ./output/an_impute_2019, replace t
+log using ./analysis/output/an_impute_2019, replace t
 
 run global 
 
@@ -38,6 +38,6 @@ mi impute mlogit ethnicity	///
 			i.other_immunosuppression		///
 			_d, add(10) rseed(309484)
 
-save an_impute_imputeddata_2019, replace
+save ./analysis/an_impute_imputeddata_2019, replace
 
 log close
