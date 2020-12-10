@@ -40,6 +40,10 @@ rename hiv hiv_code
 *  Create required cohort  *
 ****************************
 
+* DROP IF DIED ON/BEFORE STUDY START DATE
+noi di "DIED ON/BEFORE STUDY START DATE:" 
+drop if date(died_date_ons, "YMD")<=d(1/2/2020)
+
 * Age: Exclude children
 noi di "DROPPING AGE<18:" 
 drop if age<18
@@ -110,6 +114,7 @@ foreach var of varlist 	died_date_ons died_date_cpns died_date_1ocare {
 		drop _tmp
 		format %d `var'
 }
+ 
  
 ********* DEFAULT CENSORING IS MAX OUTCOME DATE MINUS 7 **********
 foreach var of varlist 	died_date_ons died_date_cpns {
@@ -783,6 +788,7 @@ label data "covid vs noncovid 2020"
 *save ./analysis/cr_create_analysis_dataset.dta, replace
 
 stset stime_onsdeath, fail(onsdeath) id(patient_id) enter(enter_date) origin(enter_date)
+assert _st==1
 save ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, replace
 
 log close
