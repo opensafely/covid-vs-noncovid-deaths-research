@@ -42,7 +42,7 @@ rename hiv hiv_code
 
 * DROP IF DIED ON/BEFORE STUDY START DATE
 noi di "DIED ON/BEFORE STUDY START DATE:" 
-drop if date(died_date_1ocare, "YMD")<=d(1/2/2020)
+drop if date(died_date_1ocare, "YMD")<=d(1/2/2019)
 
 
 

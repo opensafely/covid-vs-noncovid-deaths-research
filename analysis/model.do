@@ -14,6 +14,7 @@ import delimited `c(pwd)'/output/input_2019.csv
 *DATA MANAGEMENT
 do ./analysis/cr_create_analysis_dataset
 do ./analysis/cr_create_analysis_dataset_2019
+do ./analysis/cr_create_analysis_dataset_sept2020
 
 *TABLE 1 DESCRIPTIVES
 do ./analysis/an_tablecontent_PublicationDescriptivesTable
@@ -45,7 +46,7 @@ do ./analysis/an_processout_deathsonlyanalysis
 
 *MI
 /*
-do ./analysis/an_impute_MAIN
-do ./analysis/an_impute_SEPT2020
-do ./analysis/an_impute_2019
+do ./analysis/an_impute_GENERAL MAIN
+do ./analysis/an_impute_GENERAL SEPT2020
+do ./analysis/an_impute_GENERAL 2019
 */
