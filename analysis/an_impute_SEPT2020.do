@@ -4,8 +4,6 @@
 cap log close
 log using ./analysis/output/an_impute_SEPT2020, replace t
 
-run global 
-
 frames reset
 use  ./analysis/cr_create_analysis_dataset_sept2020_STSET_ONSCSDEATH.dta, clear
 

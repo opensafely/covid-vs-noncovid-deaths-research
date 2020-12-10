@@ -4,8 +4,6 @@
 cap log close
 log using ./analysis/output/an_impute_2019, replace t
 
-run global 
-
 frames reset
 use  ./analysis/cr_create_analysis_dataset_2019.dta, clear
 
