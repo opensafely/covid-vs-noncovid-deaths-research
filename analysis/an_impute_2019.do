@@ -8,6 +8,10 @@ frames reset
 use  ./analysis/cr_create_analysis_dataset_2019.dta, clear
 
 stset stime_primarycaredeath, fail(primarycaredeath) id(patient_id) enter(enter_date) origin(enter_date)
+assert _st==1
+assert _d==primarycaredeath
+
+tab primarycaredeath
 
 mi set wide
 mi register imputed ethnicity
@@ -34,7 +38,7 @@ mi impute mlogit ethnicity	///
 			i.spleen 						///
 			i.ra_sle_psoriasis  			///
 			i.other_immunosuppression		///
-			_d, add(10) rseed(309484)
+			primarycaredeath, add(10) rseed(309484)
 
 save ./analysis/an_impute_imputeddata_2019, replace
 

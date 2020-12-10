@@ -3,10 +3,13 @@ log using ./analysis/output/an_covidvsnoncovid_full, replace t
 
 use  ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, clear
 	
-gen coviddeath = onsdeath==1 if  _d==1
-replace coviddeath= 0 if _d==0
-gen noncoviddeath = onsdeath>1 if _d==1
-replace noncoviddeath= 0 if _d==0
+assert onsdeath>=1 & onsdeath<. if _d==1
+		
+gen coviddeath = onsdeath==1 
+gen noncoviddeath = onsdeath>1 & onsdeath<. 
+	
+tab coviddeath
+tab noncoviddeath
 	
 **MULTIVARIATE
 cap prog drop baselogistic 
