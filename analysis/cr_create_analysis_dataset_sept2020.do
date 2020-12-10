@@ -40,6 +40,11 @@ rename hiv hiv_code
 *  Create required cohort  *
 ****************************
 
+* DROP IF DIED ON/BEFORE STUDY START DATE
+noi di "DIED ON/BEFORE STUDY START DATE:" 
+drop if date(died_date_ons, "YMD")<=d(1/9/2020)
+
+
 * Age: Exclude children
 noi di "DROPPING AGE<18:" 
 drop if age<18
@@ -783,6 +788,7 @@ label data "covid vs noncovid from sept 2020"
 *save ./analysis/cr_create_analysis_dataset_sept2020.dta, replace
 
 stset stime_onsdeath, fail(onsdeath) id(patient_id) enter(enter_date) origin(enter_date)
+assert _st==1
 save ./analysis/cr_create_analysis_dataset_sept2020_STSET_ONSCSDEATH.dta, replace
 
 log close

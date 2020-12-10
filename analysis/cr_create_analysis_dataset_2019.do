@@ -40,6 +40,12 @@ rename hiv hiv_code
 *  Create required cohort  *
 ****************************
 
+* DROP IF DIED ON/BEFORE STUDY START DATE
+noi di "DIED ON/BEFORE STUDY START DATE:" 
+drop if date(died_date_1ocare, "YMD")<=d(1/2/2020)
+
+
+
 * Age: Exclude children
 noi di "DROPPING AGE<18:" 
 drop if age<18
