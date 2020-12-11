@@ -22,75 +22,11 @@ actions:
       highly_sensitive:
         cohort: output/input_sept2020.csv
         
-  generate_flowchartdata:
+ generate_flowchartdata:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_flow_chart
     outputs:
       highly_sensitive:
         cohort: output/input_flow_chart.csv
-
-  crMAIN:
-    run: stata-mp:latest analysis/cr_create_analysis_dataset_GENERAL.do MAIN
-    needs: [generate_cohortMAIN]
-    outputs:
-      highly_sensitive:
-        data: analysis/cr_create_analysis_dataset_MAIN_STSET.dta
-      moderately_sensitive:
-        log: analysis/output/cr_create_analysis_datasetMAIN.log
-  
-  crSEPT2020:
-    run: stata-mp:latest analysis/cr_create_analysis_dataset_GENERAL.do SEPT2020
-    needs: [generate_cohortSEPT2020]
-    outputs:
-      highly_sensitive:
-        data: analysis/cr_create_analysis_dataset_SEPT2020_STSET.dta
-      moderately_sensitive:
-        log: analysis/output/cr_create_analysis_datasetSEPT2020.log
-  
-  cr2019:
-    run: stata-mp:latest analysis/cr_create_analysis_dataset_GENERAL.do 2019
-    needs: [generate_cohort2019]
-    outputs:
-      highly_sensitive:
-        data: analysis/cr_create_analysis_dataset_2019_STSET.dta
-      moderately_sensitive:
-        log: analysis/output/cr_create_analysis_dataset2019.log
-  
-  imputedataMAIN:
-    run: stata-mp:latest analysis/an_impute_GENERAL.do MAIN
-    needs: [crMAIN]
-    outputs:
-      highly_sensitive:
-        data: analysis/an_impute_imputeddata_MAIN.dta
-      moderately_sensitive:
-        log: analysis/output/an_impute_MAIN.log
-
-  imputedataSEPT2020:
-    run: stata-mp:latest analysis/an_impute_GENERAL.do SEPT2020
-    needs: [crSEPT2020]
-    outputs:
-      highly_sensitive:
-        data: analysis/an_impute_imputeddata_SEPT2020.dta
-      moderately_sensitive:
-        log: analysis/output/an_impute_SEPT2020.log
-  
-  imputedata2019:
-    run: stata-mp:latest analysis/an_impute_GENERAL.do 2019
-    needs: [cr2019]
-    outputs:
-      highly_sensitive:
-        data: analysis/an_impute_imputeddata_2019.dta
-      moderately_sensitive:
-        log: analysis/output/an_impute_2019.log
-    
-
-  ethnicity_model_and_graph:
-    run: stata-mp:latest analysis/an_ethnicitybycod_logisticversion.do
-    needs: [imputedataMAIN]
-    outputs:
-      moderately_sensitive:
-        log: analysis/output/an_ethnicitybycod_logisticversion.log
-        graph: analysis/output/an_ethnicitybycod_logisticversion.svg
- 
 
   run_model:
     run: stata-mp:latest analysis/model.do
