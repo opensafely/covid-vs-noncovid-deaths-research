@@ -2,12 +2,11 @@ cap log close
 log using ./analysis/output/an_ethnicitybycod, replace t
 
 frames reset
-use ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, clear
+use ./analysis/an_impute_imputeddata_MAIN, replace
 
-gen mloutcome = onsdeath if _d==1
-replace mloutcome = 0 if _d==0
+gen mloutcome = onsdeath 
 
-mlogit mloutcome i.ethnicity i.agegroup i.male, rrr
+mi estimate, eform post: mlogit mloutcome i.ethnicity i.agegroup i.male, rrr
 
 cap frame drop estimates
 frame create estimates outcome ethnicity rrr lci uci

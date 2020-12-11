@@ -4,7 +4,7 @@
 cap log close
 log using ./analysis/output/an_deathsonlyanalysis, replace t
 
-use  ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, clear
+use  ./analysis/cr_create_analysis_dataset_MAIN_STSET.dta, clear
 
 keep if _d==1
 

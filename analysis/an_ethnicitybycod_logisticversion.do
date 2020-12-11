@@ -2,9 +2,8 @@ cap log close
 log using ./analysis/output/an_ethnicitybycod_logisticversion, replace t
 
 frames reset
-use ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, clear
+use ./analysis/an_impute_imputeddata_MAIN, replace
 
-replace onsdeath = 0 if _d==0
 for num 1/6: gen outcomeX = onsdeath == X
 
 cap frame drop estimates
@@ -13,7 +12,7 @@ frame create estimates outcome ethnicity rrr lci uci
 foreach outcome of numlist 1/6{
 	if `outcome'==4 local if " if agegroup>1"
 	else local if
-	logistic outcome`outcome' i.ethnicity age1 age2 age3 i.male `if'
+	mi estimate, or post: logistic outcome`outcome' i.ethnicity age1 age2 age3 i.male `if'
 	foreach ethnicity of numlist 2/5 {
 		cap lincom `ethnicity'.ethnicity, or
 		if _rc==0 frame post estimates (`outcome') (`ethnicity') (r(estimate)) (r(lb)) (r(ub))

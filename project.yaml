@@ -1,10 +1,10 @@
 version: "3.0"
 
 expectations:
-  population_size: 10000
+  population_size: 100000
 
 actions:
-  generate_cohorts:
+  generate_cohortMAIN:
     run: cohortextractor:latest generate_cohort --study-definition study_definition
     outputs:
       highly_sensitive:
@@ -15,6 +15,12 @@ actions:
     outputs:
       highly_sensitive:
         cohort: output/input_2019.csv
+  
+ generate_cohortSEPT2020:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_sept2020
+    outputs:
+      highly_sensitive:
+        cohort: output/input_sept2020.csv
         
   generate_flowchartdata:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_flow_chart
@@ -22,111 +28,143 @@ actions:
       highly_sensitive:
         cohort: output/input_flow_chart.csv
 
-  generate_sep2020data:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition_sept2020
+  crMAIN:
+    run: stata-mp:latest analysis/cr_create_analysis_dataset_GENERAL.do MAIN
+    needs: [generate_cohortMAIN]
     outputs:
       highly_sensitive:
-        cohort: output/input_sept2020.csv
-
-  crmain:
-    run: stata-mp:latest analysis/cr_create_analysis_dataset.do
-    needs: [generate_cohorts]
-    outputs:
-      highly_sensitive:
-        data: analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta
+        data: analysis/cr_create_analysis_dataset_MAIN_STSET.dta
       moderately_sensitive:
-        log: analysis/output/cr_create_analysis_dataset.log
+        log: analysis/output/cr_create_analysis_datasetMAIN.log
+  
+  crSEPT2020:
+    run: stata-mp:latest analysis/cr_create_analysis_dataset_GENERAL.do SEPT2020
+    needs: [generate_cohortSEPT2020]
+    outputs:
+      highly_sensitive:
+        data: analysis/cr_create_analysis_dataset_SEPT2020_STSET.dta
+      moderately_sensitive:
+        log: analysis/output/cr_create_analysis_datasetSEPT2020.log
   
   cr2019:
-    run: stata-mp:latest analysis/cr_create_analysis_dataset_2019.do
+    run: stata-mp:latest analysis/cr_create_analysis_dataset_GENERAL.do 2019
     needs: [generate_cohort2019]
     outputs:
       highly_sensitive:
-        data: analysis/cr_create_analysis_dataset_2019.dta
+        data: analysis/cr_create_analysis_dataset_2019_STSET.dta
       moderately_sensitive:
-        log: analysis/output/cr_create_analysis_dataset_2019.log
- 
-  crsept2020:
-    run: stata-mp:latest analysis/cr_create_analysis_dataset_sept2020.do
-    needs: [generate_sep2020data]
+        log: analysis/output/cr_create_analysis_dataset2019.log
+  
+  imputedataMAIN:
+    run: stata-mp:latest analysis/an_impute_GENERAL.do MAIN
+    needs: [crMAIN]
     outputs:
       highly_sensitive:
-        data: analysis/cr_create_analysis_dataset_sept2020_STSET_ONSCSDEATH.dta
+        data: analysis/an_impute_imputeddata_MAIN.dta
       moderately_sensitive:
-        log: analysis/output/cr_create_analysis_dataset_sept2020.log
- 
+        log: analysis/output/an_impute_MAIN.log
+
+  imputedataSEPT2020:
+    run: stata-mp:latest analysis/an_impute_GENERAL.do SEPT2020
+    needs: [crSEPT2020]
+    outputs:
+      highly_sensitive:
+        data: analysis/an_impute_imputeddata_SEPT2020.dta
+      moderately_sensitive:
+        log: analysis/output/an_impute_SEPT2020.log
+  
+  imputedata2019:
+    run: stata-mp:latest analysis/an_impute_GENERAL.do 2019
+    needs: [cr2019]
+    outputs:
+      highly_sensitive:
+        data: analysis/an_impute_imputeddata_2019.dta
+      moderately_sensitive:
+        log: analysis/output/an_impute_2019.log
+    
   descriptive_table1:
     run: stata-mp:latest analysis/an_tablecontent_PublicationDescriptivesTable.do
-    needs: [crmain]
+    needs: [crMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_tablecontent_PublicationDescriptivesTable.txt
   
   absoluterisksbycause:
     run: stata-mp:latest analysis/an_covid_vs_othercauses_abs_AGE.do
-    needs: [crmain]
+    needs: [crMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_covid_vs_othercauses_abs_AGE.log
         graph: analysis/output/an_covid_vs_othercauses_abs_AGE_GRAPH.svg
         estimates: analysis/output/an_covid_vs_othercauses_abs_AGE_ESTIMATES.dta
 
-  agesexmodels:
-    run: stata-mp:latest analysis/an_covidvsnoncovid_agesex.do
+  agesexmodelsMAIN:
+    run: stata-mp:latest analysis/an_covidvsnoncovid_agesex_GENERAL.do MAIN
     needs: [crmain]
     outputs:
       moderately_sensitive:
-        log: analysis/output/an_covidvsnoncovid_agesex.log
-        models: analysis/output/models/an_covidvsnoncovid_agesex_*.ster
-  
-  fulladjmodels:
-    run: stata-mp:latest analysis/an_covidvsnoncovid_full.do
+        log: analysis/output/an_covidvsnoncovid_agesex_MAIN.log
+        models: analysis/output/models/an_covidvsnoncovid_agesex_MAIN*.ster
+
+  agesexmodelsSEPT2020:
+    run: stata-mp:latest analysis/an_covidvsnoncovid_agesex_GENERAL.do SEPT2020
+    needs: [crSEPT2020]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_covidvsnoncovid_agesex_SEPT2020.log
+        models: analysis/output/models/an_covidvsnoncovid_agesex_SEPT2020*.ster
+ 
+  agesexmodels2019:
+    run: stata-mp:latest analysis/an_covidvsnoncovid_agesex_GENERAL.do 2019
+    needs: [cr2019]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_covidvsnoncovid_agesex_2019.log
+        models: analysis/output/models/an_covidvsnoncovid_agesex_2019*.ster
+ 
+  agesexmodelsSA_anyonDC:
+    run: stata-mp:latest analysis/an_covidvsnoncovid_agesex_GENERAL.do MAIN SA_anywhereonDC
     needs: [crmain]
     outputs:
       moderately_sensitive:
-        log: analysis/output/an_covidvsnoncovid_full.log
-        models: analysis/output/models/an_covidvsnoncovid_full_*.ster  
-  
-  agesex2019models:
-    run: stata-mp:latest analysis/an_noncovid_2019_agesex.do
+        log: analysis/output/an_covidvsnoncovid_agesex_MAINSA_anywhereonDC.log
+        models: analysis/output/models/an_covidvsnoncovid_agesex_MAINSA_anywhereonDC*.ster
+
+  agesexmodelsSA_u071only:
+    run: stata-mp:latest analysis/an_covidvsnoncovid_agesex_GENERAL.do MAIN SA_u071only
+    needs: [crmain]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_covidvsnoncovid_agesex_MAINSA_u071only.log
+        models: analysis/output/models/an_covidvsnoncovid_agesex_MAINSA_u071only*.ster
+
+  fullmodelsMAIN:
+    run: stata-mp:latest analysis/an_covidvsnoncovid_full_GENERAL.do MAIN
+    needs: [crmain]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_covidvsnoncovid_full_MAIN.log
+        models: analysis/output/models/an_covidvsnoncovid_full_MAIN*.ster
+
+  fullmodelsSEPT2020:
+    run: stata-mp:latest analysis/an_covidvsnoncovid_full_GENERAL.do SEPT2020
+    needs: [crSEPT2020]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_covidvsnoncovid_full_SEPT2020.log
+        models: analysis/output/models/an_covidvsnoncovid_full_SEPT2020*.ster
+
+  fullmodels2019:
+    run: stata-mp:latest analysis/an_covidvsnoncovid_full_GENERAL.do 2019
     needs: [cr2019]
     outputs:
       moderately_sensitive:
-        log: analysis/output/an_noncovid_2019_agesex.log
-        models: analysis/output/models/an_noncovid_2019_agesex_*.ster  
+        log: analysis/output/an_covidvsnoncovid_full_2019.log
+        models: analysis/output/models/an_covidvsnoncovid_full_2019*.ster
   
-  
-  fulladj2019models:
-    run: stata-mp:latest analysis/an_noncovid_2019_full.do
-    needs: [cr2019]
-    outputs:
-      moderately_sensitive:
-        log: analysis/output/an_noncovid_2019_full.log
-        models: analysis/output/models/an_noncovid_2019_full_*.ster  
-    
-  covnoncov_forestplot:
-    run: stata-mp:latest analysis/an_processout_agesex_covvsnon_forestplots.do
-    needs: [agesexmodels]
-    outputs:
-      moderately_sensitive:
-        log: analysis/output/an_processout_agesex_covvsnon_forestplots_TABLE.txt
-        graph: analysis/output/an_processout_agesex_covvsnon_forestplots_GRAPH.svg
- 
-  covnoncov_appxestimatestable:
-    run: stata-mp:latest analysis/an_processout_agesex_covvsnon_table.do
-    needs: 
-      - agesexmodels 
-      - fulladjmodels 
-      - agesex2019models 
-      - fulladj2019models
-    outputs:
-      moderately_sensitive:
-        log: analysis/output/an_processout_agesex_covvsnon_table.txt
- 
- 
   ethnicity_model_and_graph:
     run: stata-mp:latest analysis/an_ethnicitybycod_logisticversion.do
-    needs: [crmain]
+    needs: [imputedataMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_ethnicitybycod_logisticversion.log
@@ -139,41 +177,205 @@ actions:
       moderately_sensitive:
         log: analysis/output/an_deathsonlyanalysis.log
         models: analysis/output/models/an_deathsonlyanalysis_*.ster  
-   
+
+  imp_modelMAIN_C_AGESEX:
+    run: stata-mp:latest analysis/an_imputed_GENERAL MAIN coviddeath agesex agespl
+    needs: [imputedataMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed_MAIN_coviddeath_agesex_agespl.log
+        models: analysis/output/models/an_imputed_agesex_MAIN_coviddeath.ster  
+         
+  imp_modelMAIN_NC_AGESEX:
+    run: stata-mp:latest analysis/an_imputed_GENERAL MAIN noncoviddeath agesex agespl
+        needs: [imputedataMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed_MAIN_noncoviddeath_agesex_agespl.log
+        models: analysis/output/models/an_imputed_agesex_MAIN_noncoviddeath.ster  
+         
+  imp_modelMAIN_C_FULLspl:
+    run: stata-mp:latest analysis/an_imputed_GENERAL MAIN coviddeath full agespl
+        needs: [imputedataMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+         
+  imp_modelMAIN_C_FULLgrp:    
+    run: stata-mp:latest analysis/an_imputed_GENERAL MAIN coviddeath full agegrp
+        needs: [imputedataMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+ 
+  imp_modelMAIN_NC_FULLspl:
+    run: stata-mp:latest analysis/an_imputed_GENERAL MAIN noncoviddeath full agespl
+        needs: [imputedataMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+ 
+  imp_modelMAIN_NC_FULLgrp:    
+    run: stata-mp:latest analysis/an_imputed_GENERAL MAIN noncoviddeath full agegrp
+        needs: [imputedataSEPT2020]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+ 
+  imp_modelSEPT2020_C_AGESEX:
+    run: stata-mp:latest analysis/an_imputed_GENERAL SEPT2020 coviddeath agesex agespl
+        needs: [imputedataSEPT2020]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+ 
+  imp_modelSEPT2020_NC_AGESEX:
+    run: stata-mp:latest analysis/an_imputed_GENERAL SEPT2020 noncoviddeath agesex agespl
+        needs: [imputedataSEPT2020]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+ 
+  imp_modelSEPT2020_C_FULLspl:
+    run: stata-mp:latest analysis/an_imputed_GENERAL SEPT2020 coviddeath full agespl
+        needs: [imputedataSEPT2020]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+ 
+  imp_modelSEPT2020_C_FULLgrp:
+    run: stata-mp:latest analysis/an_imputed_GENERAL SEPT2020 coviddeath full agegrp
+        needs: [imputedataSEPT2020]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+ 
+  imp_modelSEPT2020_NC_FULLspl:
+    run: stata-mp:latest analysis/an_imputed_GENERAL SEPT2020 noncoviddeath full agespl
+        needs: [imputedataSEPT2020]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+ 
+  imp_modelSEPT2020_NC_FULLgrp:
+    run: stata-mp:latest analysis/an_imputed_GENERAL SEPT2020 noncoviddeath full agegrp
+        needs: [imputedataSEPT2020]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+ 
+  imp_model2019_AGESEX:
+    run: stata-mp:latest analysis/an_imputed_GENERAL 2019 primarycaredeath agesex agespl
+        needs: [imputedata2019]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+ 
+  imp_model2019_FULLspl: 
+    run: stata-mp:latest analysis/an_imputed_GENERAL 2019 primarycaredeath full agespl
+        needs: [imputedata2019]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+ 
+  imp_model2019_FULLgrp:
+    run: stata-mp:latest analysis/an_imputed_GENERAL 2019 primarycaredeath full agegrp
+    needs: [imputedata2019]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+ 
+  imp_modelMAIN_C_SAanywhereonDC:
+    run: stata-mp:latest analysis/an_imputed_GENERAL MAIN coviddeath agesex agespl SA_anywhereonDC
+    needs: [imputedataMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+        
+  imp_modelMAIN_NC_SAanywhereonDC:
+    run: stata-mp:latest analysis/an_imputed_GENERAL MAIN noncoviddeath agesex agespl SA_anywhereonDC
+    needs: [imputedataMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+        
+  imp_modelMAIN_C_SAu071only:
+    run: stata-mp:latest analysis/an_imputed_GENERAL MAIN coviddeath agesex agespl SA_u071only
+    needs: [imputedataMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+        
+  imp_modelMAIN_C_SAu071only:   
+    run: stata-mp:latest analysis/an_imputed_GENERAL MAIN noncoviddeath agesex agespl SA_u071only
+    needs: [imputedataMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+ 
+  imp_modelMAIN_DEATHSONLY:     
+    run: stata-mp:latest analysis/an_imputed_GENERAL MAIN deathsonlyCvN agesex agespl
+    needs: [imputedataMAIN]  
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed*.log
+        models: analysis/output/models/an_imputed*.ster  
+        
+  covnoncov_forestplot:
+    run: stata-mp:latest analysis/an_processout_agesex_covvsnon_forestplots.do
+    needs: 
+      - agesexmodelsMAIN 
+      - imp_modelMAIN_C_AGESEX 
+      - imp_modelMAIN_NC_AGESEX
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_processout_agesex_covvsnon_forestplots_TABLE.txt
+        graph: analysis/output/an_processout_agesex_covvsnon_forestplots_GRAPH.svg
+ 
+  covnoncov_appxestimatestable:
+    run: stata-mp:latest analysis/an_processout_agesex_covvsnon_table.do
+    needs: 
+      - agesexmodelsMAIN 
+      - agesexmodels2019
+      - imp_modelMAIN_C_AGESEX
+      - imp_modelMAIN_NC_AGESEX
+      - imp_model2019_AGESEX
+      - imp_modelMAIN_C_FULLspl
+      - imp_modelMAIN_C_FULLgrp
+      - imp_modelMAIN_NC_FULLspl
+      - imp_modelMAIN_NC_FULLgrp
+      - imp_model2019_FULLspl
+      - imp_model2019_FULLgrp
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_processout_agesex_covvsnon_table.txt
+ 
   deathsonly_ORfigure:
     run: stata-mp:latest analysis/an_processout_deathsonlyanalysis.do
-    needs: [deathsonly_models]
+    needs: 
+      - deathsonly_models 
+      - imp_modelMAIN_DEATHSONLY
     outputs:
       moderately_sensitive:
         log: analysis/output/an_processout_deathsonlyanalysis_TABLE.txt
         graph: analysis/output/an_processout_deathsonlyanalysis_GRAPH.svg 
-
-  getimputations_main:
-    run: stata-mp:latest analysis/an_impute_MAIN.do
-    needs: [crmain]
-    outputs:
-      highly_sensitive:
-        data: analysis/an_impute_imputeddata_MAIN.dta
-      moderately_sensitive:
-        log: analysis/output/an_impute_MAIN.log
-
-  getimputations_sept2020:
-    run: stata-mp:latest analysis/an_impute_SEPT2020.do
-    needs: [crsept2020]
-    outputs:
-      highly_sensitive:
-        data: analysis/an_impute_imputeddata_SEPT2020.dta   
-      moderately_sensitive:
-        log: analysis/output/an_impute_SEPT2020.log
-
-  getimputations_2019:
-    run: stata-mp:latest analysis/an_impute_2019.do
-    needs: [cr2019]
-    outputs:
-      highly_sensitive:
-        data: analysis/an_impute_imputeddata_2019.dta   
-      moderately_sensitive:
-        log: analysis/output/an_impute_2019.log
 
 
   run_model:

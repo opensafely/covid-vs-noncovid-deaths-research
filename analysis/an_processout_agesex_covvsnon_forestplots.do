@@ -19,12 +19,19 @@ local endwith "_tab"
 	
 	foreach failn of numlist 1 2 3 {
 	
-		
-		local non
-		if `failn'==1 local non ""
-		else if `failn'==2 local non "NON"
-		local outcome "`non'COV"
-		if `failn'==3 local outcome "NONCOV_2019"
+		if `failn'==1{
+			local dataset MAIN 
+			local outcome coviddeath
+		}
+		else if `failn'==2{
+			local dataset MAIN 
+			local outcome noncoviddeath
+		}
+		else if `failn'==3{
+			local dataset 2019 
+			local outcome primarycaredeath
+		}
+
 		local noestimatesflag 0 /*reset*/
 
 *CHANGE THE OUTCOME BELOW TO LAST IF BRINGING IN MORE COLS
@@ -33,19 +40,15 @@ local endwith "_tab"
 		***********************
 		*1) GET THE RIGHT ESTIMATES INTO MEMORY
 
+		cap estimates use ./analysis/output/models/an_covidvsnoncovid_agesex_`dataset'_`outcome'_`variable'
+		if _rc!=0 local noestimatesflag 1				
 		
-
-		*FOR AGEGROUP - need to use the separate univariate/multivariate model fitted with age group rather than spline
-		*FOR ETHNICITY - use the separate complete case multivariate model
-		*FOR REST - use the "main" multivariate model
-		if `failn'==3{
-				cap estimates use ./analysis/output/models/an_noncovid_2019_agesex_`variable'
-				if _rc!=0 local noestimatesflag 1	
+		if "`variable'"=="ethnicity"{
+			cap estimates use ./analysis/output/models/an_imputed_agesex_`dataset'_`outcome'
+			if _rc!=0 local noestimatesflag 1				
+		
 		}
-		else{
-				cap estimates use ./analysis/output/models/an_covidvsnoncovid_agesex_`non'covid_`variable'
-				if _rc!=0 local noestimatesflag 1				
-		}
+		
 		***********************
 		*2) WRITE THE HRs TO THE OUTPUT FILE
 		
@@ -87,7 +90,7 @@ file open tablecontents using ./analysis/output/an_processout_agesex_covvsnon_fo
 
 tempfile HRestimates
 cap postutil clear
-postfile HRestimates str11 outcome str28 variable level hr lci uci pval using `HRestimates'
+postfile HRestimates str20 outcome str28 variable level hr lci uci pval using `HRestimates'
 
 *Age group
 outputHRsforvar, variable("agegroup") min(1) max(2) 
@@ -152,7 +155,7 @@ postclose HRestimates
 
 use `HRestimates', clear
 
-drop if outcome=="NONCOV_2019"
+drop if outcome=="primarycaredeath"
 
 gen varorder = 1 
 local i=2
@@ -289,7 +292,7 @@ sort obsorder
 
 gen displayhrci = "<<< HR = " + string(hr, "%3.2f") + " (" + string(lci, "%3.2f") + "-" + string(uci, "%3.2f") + ")" if lci<0.15
 
-qui summ obsorder if outcome=="NONCOV" & variable=="imd" & level ==5
+qui summ obsorder if outcome=="noncoviddeath" & variable=="imd" & level ==5
 local endofdemog = r(mean)
 foreach graphtype of any demogs comorbs{
 if "`graphtype'"=="demogs" {
@@ -300,14 +303,12 @@ if "`graphtype'"=="comorbs" {
 	local if "if _n>`endofdemog'"
 	local title "Comorbidities"
 	}
-scatter graphorder hr if lci>=.15 & outcome=="COV", mcol(black)	msize(small)		///										///
-	|| rcap lci uci graphorder if lci>=.15 & outcome=="COV", hor mcol(black)	lcol(black)			///
-	|| scatter graphorder hr if lci>=.15 & outcome=="NONCOV", mcol(gs9)	msize(small)		///										///
-	|| rcap lci uci graphorder if lci>=.15 & outcome=="NONCOV", hor mcol(gs9)	lcol(gs9)			///
-	|| scatter graphorder hr if lci>=.15 & outcome=="NONCOV_2019", mcol(blue)	msize(small)		///										///
-	|| rcap lci uci graphorder if lci>=.15 & outcome=="NONCOV_2019", hor mcol(blue)	lcol(gs9)			///
+scatter graphorder hr if lci>=.15 & outcome=="coviddeath", mcol(black)	msize(small)		///										///
+	|| rcap lci uci graphorder if lci>=.15 & outcome=="coviddeath", hor mcol(black)	lcol(black)			///
+	|| scatter graphorder hr if lci>=.15 & outcome=="noncoviddeath", mcol(gs9)	msize(small)		///										///
+	|| rcap lci uci graphorder if lci>=.15 & outcome=="noncoviddeath", hor mcol(gs9)	lcol(gs9)			///
 	|| scatter graphorder lowerlimit, m(i) mlab(displayhrci) mlabcol(black) mlabsize(tiny) ///
-	|| scatter graphorder varx if outcome=="COV", m(i) mlab(Name) mlabsize(vsmall) mlabcol(black) 	///
+	|| scatter graphorder varx if outcome=="coviddeath", m(i) mlab(Name) mlabsize(vsmall) mlabcol(black) 	///
 	|| scatter graphorder levelx, m(i) mlab(leveldesc) mlabsize(tiny) mlabcol(gs4) 	///
 		xline(1,lp(dash)) 															///
 		xscale(log) xlab(0.25 0.5 1 2 5 10 20) xtitle("Odds Ratio & 95% CI") ylab(none) ytitle("")						/// 

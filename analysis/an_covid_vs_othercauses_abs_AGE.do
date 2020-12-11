@@ -24,7 +24,7 @@ end
 
 ****
 frames reset
-use ./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta, clear
+use ./analysis/cr_create_analysis_dataset_MAIN_STSET.dta, clear
 
 gen mloutcome = onsdeath if _d==1
 replace mloutcome = 0 if _d==0

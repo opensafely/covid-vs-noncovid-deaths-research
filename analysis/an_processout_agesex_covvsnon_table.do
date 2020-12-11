@@ -18,14 +18,17 @@ local endwith "_tab"
 	*put the varname and condition to left so that alignment can be checked vs shell
 	file write tablecontents ("`variable'") _tab ("`i'") _tab
 	
-	foreach run of numlist 1/6 {
+	foreach run of numlist 1/6 { /*AGESEX: cov noncov 2019, FULL: cov noncov 2019*/
 	
-		
-		local non
-		if `run'==1|`run'==4 local non ""
-		else if `run'==2|`run'==5 local non "NON"
-		local noestimatesflag 0 /*reset*/
+		if `run'==1|`run'==4 local outcome coviddeath 
+		if `run'==2|`run'==5 local outcome noncoviddeath
+		if `run'==3|`run'==6 local outcome primarycaredeath
+		if `run'<=3 local model agesex
+		if `run'>3 local model full
 
+		if `run'==3|`run'==6 local dataset "2019"
+		else local dataset "MAIN"
+		
 		local noestimatesflag 0 /*reset*/
 
 		
@@ -35,31 +38,23 @@ local endwith "_tab"
 		***********************
 		*1) GET THE RIGHT ESTIMATES INTO MEMORY
 
-		
-
-		*FOR AGEGROUP - need to use the separate univariate/multivariate model fitted with age group rather than spline
-		*FOR ETHNICITY - use the separate complete case multivariate model
-		*FOR REST - use the "main" multivariate model
-		if `run'==1|`run'==2 {
-				cap estimates use ./analysis/output/models/an_covidvsnoncovid_agesex_`non'covid_`variable'
-				if _rc!=0 local noestimatesflag 1				
-		}
-		else if `run'==3{
-				cap estimates use ./analysis/output/models/an_noncovid_2019_agesex_`variable'
-				if _rc!=0 local noestimatesflag 1	
-		}
-		else if `run'==4|`run'==5{
-			if "`variable'"=="agegroup" cap estimates use ./analysis/output/models/an_covidvsnoncovid_full_`non'covid_agegroup_bmicat_noeth
-			else if "`variable'"=="ethnicity" cap estimates use ./analysis/output/models/an_covidvsnoncovid_full_`non'covid_agespline_bmicat_cceth
-			else cap estimates use ./analysis/output/models/an_covidvsnoncovid_full_`non'covid_agespline_bmicat_noeth
+		if "`model'"=="agesex" {
+			cap estimates use ./analysis/output/models/an_covidvsnoncovid_`model'_`dataset'_`outcome'_`variable'
 			if _rc!=0 local noestimatesflag 1				
+			if "`variable'"=="ethnicity"{
+				cap estimates use ./analysis/output/models/an_imputed_agesex_`dataset'_`outcome'
+				if _rc!=0 local noestimatesflag 1						
+				}
 		}
-		else if `run'==6{
-			if "`variable'"=="agegroup" cap estimates use ./analysis/output/models/an_noncovid_2019_full_agegroup_bmicat_noeth
-			else if "`variable'"=="ethnicity" cap estimates use ./analysis/output/models/an_noncovid_2019_full_agespline_bmicat_cceth
-			else cap estimates use ./analysis/output/models/an_noncovid_2019_full_agespline_bmicat_noeth
-			if _rc!=0 local noestimatesflag 1	
+		if "`model'"=="full" {
+			cap estimates use ./analysis/output/models/an_imputed_full_agespl_`dataset'_`outcome'		
+			if _rc!=0 local noestimatesflag 1
+			if "`variable'"=="agegroup"{
+				cap estimates use ./analysis/output/models/an_imputed_full_agegrp_`dataset'_`outcome'		
+				if _rc!=0 local noestimatesflag 1						
+				}
 		}
+		
 		
 		***********************
 		*2) WRITE THE HRs TO THE OUTPUT FILE
