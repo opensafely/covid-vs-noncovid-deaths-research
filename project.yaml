@@ -22,7 +22,7 @@ actions:
       highly_sensitive:
         cohort: output/input_sept2020.csv
         
-   generate_flowchartdata:
+  generate_flowchartdata:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_flow_chart
     outputs:
       highly_sensitive:
@@ -188,7 +188,7 @@ actions:
          
   imp_modelMAIN_NC_AGESEX:
     run: stata-mp:latest analysis/an_imputed_GENERAL MAIN noncoviddeath agesex agespl
-        needs: [imputedataMAIN]
+    needs: [imputedataMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed_MAIN_noncoviddeath_agesex_agespl.log
@@ -196,7 +196,7 @@ actions:
          
   imp_modelMAIN_C_FULLspl:
     run: stata-mp:latest analysis/an_imputed_GENERAL MAIN coviddeath full agespl
-        needs: [imputedataMAIN]
+    needs: [imputedataMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed*.log
@@ -204,7 +204,7 @@ actions:
          
   imp_modelMAIN_C_FULLgrp:    
     run: stata-mp:latest analysis/an_imputed_GENERAL MAIN coviddeath full agegrp
-        needs: [imputedataMAIN]
+    needs: [imputedataMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed*.log
@@ -212,7 +212,7 @@ actions:
  
   imp_modelMAIN_NC_FULLspl:
     run: stata-mp:latest analysis/an_imputed_GENERAL MAIN noncoviddeath full agespl
-        needs: [imputedataMAIN]
+    needs: [imputedataMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed*.log
@@ -220,7 +220,7 @@ actions:
  
   imp_modelMAIN_NC_FULLgrp:    
     run: stata-mp:latest analysis/an_imputed_GENERAL MAIN noncoviddeath full agegrp
-        needs: [imputedataSEPT2020]
+    needs: [imputedataSEPT2020]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed*.log
@@ -228,7 +228,7 @@ actions:
  
   imp_modelSEPT2020_C_AGESEX:
     run: stata-mp:latest analysis/an_imputed_GENERAL SEPT2020 coviddeath agesex agespl
-        needs: [imputedataSEPT2020]
+    needs: [imputedataSEPT2020]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed*.log
@@ -236,7 +236,7 @@ actions:
  
   imp_modelSEPT2020_NC_AGESEX:
     run: stata-mp:latest analysis/an_imputed_GENERAL SEPT2020 noncoviddeath agesex agespl
-        needs: [imputedataSEPT2020]
+    needs: [imputedataSEPT2020]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed*.log
@@ -244,7 +244,7 @@ actions:
  
   imp_modelSEPT2020_C_FULLspl:
     run: stata-mp:latest analysis/an_imputed_GENERAL SEPT2020 coviddeath full agespl
-        needs: [imputedataSEPT2020]
+    needs: [imputedataSEPT2020]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed*.log
@@ -252,7 +252,7 @@ actions:
  
   imp_modelSEPT2020_C_FULLgrp:
     run: stata-mp:latest analysis/an_imputed_GENERAL SEPT2020 coviddeath full agegrp
-        needs: [imputedataSEPT2020]
+    needs: [imputedataSEPT2020]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed*.log
@@ -260,7 +260,7 @@ actions:
  
   imp_modelSEPT2020_NC_FULLspl:
     run: stata-mp:latest analysis/an_imputed_GENERAL SEPT2020 noncoviddeath full agespl
-        needs: [imputedataSEPT2020]
+    needs: [imputedataSEPT2020]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed*.log
@@ -268,7 +268,7 @@ actions:
  
   imp_modelSEPT2020_NC_FULLgrp:
     run: stata-mp:latest analysis/an_imputed_GENERAL SEPT2020 noncoviddeath full agegrp
-        needs: [imputedataSEPT2020]
+    needs: [imputedataSEPT2020]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed*.log
@@ -276,7 +276,7 @@ actions:
  
   imp_model2019_AGESEX:
     run: stata-mp:latest analysis/an_imputed_GENERAL 2019 primarycaredeath agesex agespl
-        needs: [imputedata2019]
+    needs: [imputedata2019]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed*.log
@@ -284,7 +284,7 @@ actions:
  
   imp_model2019_FULLspl: 
     run: stata-mp:latest analysis/an_imputed_GENERAL 2019 primarycaredeath full agespl
-        needs: [imputedata2019]
+    needs: [imputedata2019]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed*.log
