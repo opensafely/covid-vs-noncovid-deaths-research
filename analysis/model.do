@@ -13,7 +13,7 @@ import delimited `c(pwd)'/output/input_2019.csv
 
 *DATA MANAGEMENT
 do ./analysis/cr_create_analysis_dataset_GENERAL MAIN
-do ./analysis/cr_create_analysis_dataset_GENERAL SEPT2020
+do ./analysis/cr_create_analysis_dataset_GENERAL sept2020
 do ./analysis/cr_create_analysis_dataset_GENERAL 2019
 
 *GEN MI DATA
