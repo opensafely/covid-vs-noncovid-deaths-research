@@ -1,7 +1,6 @@
 *an_impute
 *KB 16/7/2020
 if "`1'"=="MAIN" | "`1'"=="SEPT2020" {
-local inputfile "./analysis/cr_create_analysis_dataset_STSET_ONSCSDEATH.dta"
 local check "assert onsdeath>=1 & onsdeath<. if _d==1"
 local genoutput1 "gen coviddeath = onsdeath==1" 
 local genoutput2 "gen noncoviddeath = onsdeath>1 & onsdeath<." 
@@ -10,12 +9,7 @@ local taboutput2 "tab coviddeath"
 local outcomes "coviddeath noncoviddeath"
 }
 
-if "`1'"=="SEPT2020"{
-local inputfile "./analysis/cr_create_analysis_dataset_sept2020_STSET_ONSCSDEATH.dta"
-}
-
 if "`1'"=="2019"{
-local inputfile "./analysis/cr_create_analysis_dataset_2019.dta"	
 local check "assert stime_primarycaredeath>d(1/2/2019) if primarycaredeath==1"
 local outcomes "primarycaredeath"	
 }
@@ -24,7 +18,7 @@ cap log close
 log using ./analysis/output/an_impute_`1', replace t
 
 frames reset
-use  `inputfile', clear
+use  cr_create_analysis_dataset_`1'_STSET, clear
 `check'
 	
 `genoutput1'
