@@ -17,10 +17,10 @@ actions:
         cohort: output/input_2019.csv
   
  generate_cohortSEPT2020:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition_sept2020
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_SEPT2020
     outputs:
       highly_sensitive:
-        cohort: output/input_sept2020.csv
+        cohort: output/input_SEPT2020.csv
         
  generate_flowchartdata:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_flow_chart
