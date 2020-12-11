@@ -322,7 +322,7 @@ actions:
         log: analysis/output/an_imputed*.log
         models: analysis/output/models/an_imputed*.ster  
         
-  imp_modelMAIN_C_SAu071only:   
+  imp_modelMAIN_NC_SAu071only:   
     run: stata-mp:latest analysis/an_imputed_GENERAL MAIN noncoviddeath agesex agespl SA_u071only
     needs: [imputedataMAIN]
     outputs:
