@@ -18,7 +18,7 @@ cap log close
 log using ./analysis/output/an_impute_`1', replace t
 
 frames reset
-use  cr_create_analysis_dataset_`1'_STSET, clear
+use  ./analysis/cr_create_analysis_dataset_`1'_STSET, clear
 `check'
 	
 `genoutput1'

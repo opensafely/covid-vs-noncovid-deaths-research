@@ -14,9 +14,9 @@ if "`agetype'"=="agespl" local age "age1 age2 age3"
 if "`agetype'"=="agegrp" local age "i.agegroup"
 local sensan `5'
 
-log using ./analysis/an_imputed_GENERAL_`dataset'`sensan'_`outcome'_`modeltorun'_`agetype', replace t
+log using ./analysis/output/an_imputed_GENERAL_`dataset'`sensan'_`outcome'_`modeltorun'_`agetype', replace t
 
-use ./analysis/output/an_impute_imputeddata_`dataset', replace
+use ./analysis/an_impute_imputeddata_`dataset', replace
 
 if "`5'"=="SA_anywhereonDC"{
 	replace coviddeath = 1 if onsdeath>=1 & onsdeath<. & died_ons_covid_flag_any==1

@@ -37,7 +37,7 @@ do ./analysis/an_covidvsnoncovid_agesex_GENERAL MAIN SA_u071only
 
 do ./analysis/an_covidvsnoncovid_full_GENERAL MAIN
 do ./analysis/an_covidvsnoncovid_full_GENERAL SEPT2020
-do ./analysis/an_covidvsnoncovid_full_GENERAL 2020
+do ./analysis/an_covidvsnoncovid_full_GENERAL 2019
 
 *ETHNICITY EFFECTS ON DIFFERENT CAUSE-SPECIFIC MORTALITY OUTCOMES (FIG 4)
 do ./analysis/an_ethnicitybycod_logisticversion
