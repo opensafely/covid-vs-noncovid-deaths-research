@@ -100,7 +100,7 @@ actions:
 
   agesexmodelsMAIN:
     run: stata-mp:latest analysis/an_covidvsnoncovid_agesex_GENERAL.do MAIN
-    needs: [crmain]
+    needs: [crMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_covidvsnoncovid_agesex_MAIN.log
@@ -124,7 +124,7 @@ actions:
  
   agesexmodelsSA_anyonDC:
     run: stata-mp:latest analysis/an_covidvsnoncovid_agesex_GENERAL.do MAIN SA_anywhereonDC
-    needs: [crmain]
+    needs: [crMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_covidvsnoncovid_agesex_MAINSA_anywhereonDC.log
@@ -132,7 +132,7 @@ actions:
 
   agesexmodelsSA_u071only:
     run: stata-mp:latest analysis/an_covidvsnoncovid_agesex_GENERAL.do MAIN SA_u071only
-    needs: [crmain]
+    needs: [crMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_covidvsnoncovid_agesex_MAINSA_u071only.log
@@ -140,7 +140,7 @@ actions:
 
   fullmodelsMAIN:
     run: stata-mp:latest analysis/an_covidvsnoncovid_full_GENERAL.do MAIN
-    needs: [crmain]
+    needs: [crMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_covidvsnoncovid_full_MAIN.log
@@ -172,7 +172,7 @@ actions:
  
   deathsonly_models:
     run: stata-mp:latest analysis/an_deathsonlyanalysis.do
-    needs: [crmain]
+    needs: [crMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_deathsonlyanalysis.log
