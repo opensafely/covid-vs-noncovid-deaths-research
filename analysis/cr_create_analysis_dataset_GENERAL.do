@@ -52,7 +52,9 @@ rename hiv hiv_code
 
 * DROP IF DIED ON/BEFORE STUDY START DATE
 noi di "DIED ON/BEFORE STUDY START DATE:" 
-drop if date(died_date_ons, "YMD")<=`studystart'
+if "`dataset'"=="2019" drop if date(died_date_1ocare, "YMD")<=d(1/2/2019)
+else drop if date(died_date_ons, "YMD")<=`studystart'
+
 
 * Age: Exclude children
 noi di "DROPPING AGE<18:" 
