@@ -35,7 +35,7 @@ actions:
       highly_sensitive:
         data: analysis/cr_create_analysis_dataset_MAIN_STSET.dta
       moderately_sensitive:
-        log: analysis/output/cr_create_analysis_datasetMAIN.log
+        log: analysis/output/cr_create_analysis_dataset.log
   
   crSEPT2020:
     run: stata-mp:latest analysis/cr_create_analysis_dataset_GENERAL.do SEPT2020
@@ -44,7 +44,7 @@ actions:
       highly_sensitive:
         data: analysis/cr_create_analysis_dataset_SEPT2020_STSET.dta
       moderately_sensitive:
-        log: analysis/output/cr_create_analysis_datasetSEPT2020.log
+        log: analysis/output/cr_create_analysis_dataset_SEPT2020.log
   
   cr2019:
     run: stata-mp:latest analysis/cr_create_analysis_dataset_GENERAL.do 2019
@@ -53,7 +53,7 @@ actions:
       highly_sensitive:
         data: analysis/cr_create_analysis_dataset_2019_STSET.dta
       moderately_sensitive:
-        log: analysis/output/cr_create_analysis_dataset2019.log
+        log: analysis/output/cr_create_analysis_dataset_2019.log
   
   imputedataMAIN:
     run: stata-mp:latest analysis/an_impute_GENERAL.do MAIN
