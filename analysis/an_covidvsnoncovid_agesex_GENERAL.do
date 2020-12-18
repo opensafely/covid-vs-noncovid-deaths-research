@@ -44,6 +44,8 @@ if "`2'"=="SA_u071only"{
 	replace noncoviddeath = 1 if onsdeath>=1 & onsdeath<. & died_ons_covidconf_flag_und!=1
 }
 
+gen obese4catCC = obese4cat
+replace obese4catCC = . if bmicat==.
 	
 foreach outcome of local outcomes{
 	tab `outcome'
@@ -66,7 +68,7 @@ foreach outcome of local outcomes{
 		 hypertension						///
 		imd 								///
 		obese4cat							///
-		 bmicat 							///
+		 obese4catCC						///
 		organ_transplant 					///
 		other_immunosuppression				///
 		other_neuro 						///

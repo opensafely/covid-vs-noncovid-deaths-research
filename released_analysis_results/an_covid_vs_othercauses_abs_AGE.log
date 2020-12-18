@@ -1,0 +1,196 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_covid_vs_othercauses_abs_AGE.log
+  log type:  text
+ opened on:  14 Dec 2020, 18:55:08
+
+. 
+. ***
+. 
+. cap prog drop getprediction
+
+. prog define getprediction, rclass
+  1. 
+. cap frame drop topredict
+  2. frame put in 1, into(topredict)
+  3. frame change topredict
+  4. replace `1'
+  5. replace male = 0.5 
+  6. predict pr0 pr1 pr2 pr3 pr4 pr5 pr6, pr
+  7. return scalar pr0=pr0
+  8. return scalar pr1=pr1
+  9. return scalar pr2=pr2
+ 10. return scalar pr3=pr3
+ 11. return scalar pr4=pr4
+ 12. return scalar pr5=pr5
+ 13. return scalar pr6=pr6
+ 14. frame change default
+ 15. end
+
+. 
+. ****
+. frames reset
+
+. use ./analysis/cr_create_analysis_dataset_MAIN_STSET.dta, clear
+
+. 
+. gen mloutcome = onsdeath if _d==1
+(17,305,136 missing values generated)
+
+. replace mloutcome = 0 if _d==0
+(17,305,136 real changes made)
+
+. 
+. *FIT AGE SEX MODEL
+. mlogit mloutcome i.agegroup i.male, rrr
+
+Iteration 0:   log likelihood = -1129897.8  
+Iteration 1:   log likelihood = -995098.18  
+Iteration 2:   log likelihood = -944571.74  
+Iteration 3:   log likelihood = -930904.54  
+Iteration 4:   log likelihood = -929338.67  
+Iteration 5:   log likelihood = -929183.29  
+Iteration 6:   log likelihood = -929159.65  
+Iteration 7:   log likelihood = -929155.92  
+Iteration 8:   log likelihood = -929155.15  
+Iteration 9:   log likelihood = -929154.97  
+Iteration 10:  log likelihood = -929154.93  
+Iteration 11:  log likelihood = -929154.92  
+Iteration 12:  log likelihood = -929154.92  
+Iteration 13:  log likelihood = -929154.92  
+Iteration 14:  log likelihood = -929154.92  
+Iteration 15:  log likelihood = -929154.92  
+
+Multinomial logistic regression                 Number of obs     = 17,456,515
+                                                LR chi2(34)       =  401485.84
+                                                Prob > chi2       =     0.0000
+Log likelihood = -929154.92                     Pseudo R2         =     0.1777
+
+------------------------------------------------------------------------------
+   mloutcome |        RRR   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+0            |  (base outcome)
+-------------+----------------------------------------------------------------
+1            |
+    agegroup |
+     40-<50  |   6.421504   .8645009    13.81   0.000     4.932226    8.360468
+     50-<60  |    19.4067   2.382451    24.16   0.000     15.25648    24.68589
+     60-<70  |   55.88438   6.685749    33.63   0.000      44.2035    70.65197
+     70-<80  |   171.8855   20.30205    43.58   0.000     136.3643    216.6596
+        80+  |   844.9467   99.25356    57.37   0.000     671.1831    1063.696
+             |
+      1.male |   1.591514   .0246628    29.99   0.000     1.543902    1.640593
+       _cons |   9.39e-06   1.10e-06   -98.57   0.000     7.46e-06    .0000118
+-------------+----------------------------------------------------------------
+2            |
+    agegroup |
+     40-<50  |   5.378071   .3256504    27.78   0.000     4.776228    6.055752
+     50-<60  |   16.82963   .9142848    51.97   0.000     15.12977    18.72047
+     60-<70  |   47.60495   2.512186    73.20   0.000     42.92724    52.79239
+     70-<80  |   107.9673   5.634161    89.72   0.000     97.47053    119.5946
+        80+  |   239.0933   12.45205   105.16   0.000      215.892     264.788
+             |
+      1.male |   1.381171   .0138908    32.11   0.000     1.354212    1.408667
+       _cons |    .000053   2.74e-06  -190.13   0.000     .0000479    .0000587
+-------------+----------------------------------------------------------------
+3            |
+    agegroup |
+     40-<50  |   6.546125   .5325397    23.10   0.000     5.581327      7.6777
+     50-<60  |   17.90239    1.33622    38.65   0.000       15.466    20.72259
+     60-<70  |   46.05177   3.352124    52.61   0.000     39.92888    53.11358
+     70-<80  |   125.4011   9.000925    67.31   0.000     108.9443    144.3438
+        80+  |   594.4301    42.3564    89.64   0.000     516.9494    683.5237
+             |
+      1.male |   1.467212    .016005    35.14   0.000     1.436175    1.498919
+       _cons |   .0000269   1.92e-06  -147.80   0.000     .0000234    .0000309
+-------------+----------------------------------------------------------------
+4            |
+    agegroup |
+     40-<50  |    2268026   1.68e+09     0.02   0.984            0           .
+     50-<60  |   2.96e+07   2.20e+10     0.02   0.982            0           .
+     60-<70  |   3.08e+08   2.29e+11     0.03   0.979            0           .
+     70-<80  |   3.40e+09   2.52e+12     0.03   0.976            0           .
+        80+  |   4.34e+10   3.22e+13     0.03   0.974            0           .
+             |
+      1.male |   .7022823   .0115138   -21.56   0.000     .6800743    .7252155
+       _cons |   3.62e-13   2.69e-10    -0.04   0.969            0           .
+-------------+----------------------------------------------------------------
+5            |
+    agegroup |
+     40-<50  |   7.006724   1.189109    11.47   0.000     5.024095    9.771745
+     50-<60  |   21.61762   3.364193    19.75   0.000     15.93461    29.32744
+     60-<70  |   81.98781   12.40666    29.12   0.000     60.94565     110.295
+     70-<80  |   272.7413   40.89132    37.41   0.000     203.2978    365.9056
+        80+  |   1190.402   177.9033    47.39   0.000     888.1435    1595.527
+             |
+      1.male |   1.366592   .0222444    19.19   0.000     1.323682    1.410893
+       _cons |   6.35e-06   9.49e-07   -80.11   0.000     4.74e-06    8.51e-06
+-------------+----------------------------------------------------------------
+6            |
+    agegroup |
+     40-<50  |   2.719431   .1342054    20.27   0.000     2.468714     2.99561
+     50-<60  |   4.950739   .2170909    36.48   0.000      4.54302    5.395049
+     60-<70  |   9.107843   .3819632    52.68   0.000      8.38915    9.888105
+     70-<80  |   22.17106   .8800915    78.06   0.000     20.51151    23.96489
+        80+  |   125.9837   4.791563   127.16   0.000     116.9339    135.7339
+             |
+      1.male |   1.115031   .0136256     8.91   0.000     1.088643    1.142059
+       _cons |   .0001146   4.33e-06  -240.37   0.000     .0001064    .0001234
+------------------------------------------------------------------------------
+Note: _cons estimates baseline relative risk for each outcome.
+
+. *est save ./analysis/output/models/an_covid_vs_othercauses_abs_AGESEX, replace
+. 
+. cap frame drop absolutes
+
+. frame create absolutes agegroup pcovdeath pcancer pcvd pdem_alz presp pother
+
+. 
+.         forvalues j=1/6{
+  2.         getprediction agegroup=`j'
+  3.         frame post absolutes (`j') (r(pr1)) (r(pr2)) (r(pr3)) (r(pr4)) (r(pr5)) (r(pr6))  
+  4.         }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(0 real changes made)
+(1 real change made)
+
+. 
+. frame change absolutes
+
+. label define agegroup   1 "18-<40" ///
+>                                                 2 "40-<50" ///
+>                                                 3 "50-<60" ///
+>                                                 4 "60-<70" ///
+>                                                 5 "70-<80" ///
+>                                                 6 "80+"
+
+. label values agegroup agegroup
+
+. save ./analysis/output/an_covid_vs_othercauses_abs_AGE_ESTIMATES, replace
+file ./analysis/output/an_covid_vs_othercauses_abs_AGE_ESTIMATES.dta saved
+
+. 
+. gen gap = 0
+
+. 
+. graph bar (mean) pcovdeath gap pcancer pdem_alz pcvd presp pother, by(age, cols(3) rescale legend(off)) ylab(, angle(0)) showyvars yvaroptions(relabel(1 COVID 2 "---------" 3 CANCER 4 CVD 5 DEM_ALZ 6 RESPIR 7 OTHER) label(angle(90) labsize(vsmall))) 
+> bargap(10) bar(1, color(black)) bar(3, color(gs7)) bar(4, color(gs7)) bar(5, color(gs7)) bar(6, color(gs7)) bar(7, color(gs7))
+
+. graph export ./analysis/output/an_covid_vs_othercauses_abs_AGE_GRAPH.svg, as(svg) replace
+(file ./analysis/output/an_covid_vs_othercauses_abs_AGE_GRAPH.svg written in SVG format)
+
+. 
+. 
+. 
+end of do-file
+
+. exit, clear

@@ -21,7 +21,7 @@ local endwith "_tab"
 	foreach run of numlist 1/10 { /*AGESEX: ORIG_C ORIG_NC U71_C U71_NC UL_C UL_NC SEP_C SEP_NC CCA_C CC_NC*/
 	
 		/*reset to main obesity/smoking variables after runs 9/10*/
-		if "`variable'"=="bmicat" local variable "obese4cat"
+		if "`variable'"=="obese4catCC" local variable "obese4cat"
 		if "`variable'"=="smoke" local variable "smoke_nomiss"	
 			
 	
@@ -33,7 +33,7 @@ local endwith "_tab"
 				else if `run'==7|`run'==8 local datasetSA SEPT2020
 				else if `run'==9|`run'==10 local datasetSA MAIN
 				
-				if (`run'==9|`run'==10) & "`variable'"== "obese4cat" local variable bmicat
+				if (`run'==9|`run'==10) & "`variable'"== "obese4cat" local variable obese4catCC
 				if (`run'==9|`run'==10) & "`variable'"== "smoke_nomiss" local variable smoke
 
 						
@@ -160,7 +160,7 @@ file close tablecontents
 postclose HRestimates
 use `HRestimates', clear
 
-replace variable="obese4cat" if variable=="bmicat"
+replace variable="obese4cat" if variable=="obese4catCC"
 replace variable="smoke_nomiss" if variable=="smoke"
 
 drop if (run==9|run==10) &!(variable=="ethnicity"|variable=="obese4cat"|variable=="smoke_nomiss")
@@ -233,8 +233,8 @@ replace leveldesc = "4" if variable=="imd" & level==4
 replace leveldesc = "5 (most deprived)" if variable=="imd" & level==5
 
 replace leveldesc = "No diabetes (ref)" if variable=="diabcat" & level==1
-replace leveldesc = "Controlled (HbA1c <58mmol/mol)" if variable=="diabcat" & level==2
-replace leveldesc = "Uncontrolled (HbA1c >=58mmol/mol) " if variable=="diabcat" & level==3
+replace leveldesc = "Controlled " if variable=="diabcat" & level==2
+replace leveldesc = "Uncontrolled" if variable=="diabcat" & level==3
 replace leveldesc = "Unknown HbA1c" if variable=="diabcat" & level==4
 
 replace leveldesc = "No asthma (ref)" if variable=="asthmacat" & level==1
@@ -247,7 +247,7 @@ replace leveldesc = "1-4.9 years ago" if substr(variable,1,6)=="cancer" & level=
 replace leveldesc = "5+ years ago" if substr(variable,1,6)=="cancer" & level==4
 
 replace leveldesc = "None (ref)" if variable=="reduced_kidney_function_cat2" & level==1
-replace leveldesc = "eGFR 30-60 (ml/min/1.73m2)" if variable=="reduced_kidney_function_cat2" & level==2
+replace leveldesc = "eGFR 30-60" if variable=="reduced_kidney_function_cat2" & level==2
 replace leveldesc = "eGFR 15-<30 " if variable=="reduced_kidney_function_cat2" & level==3
 replace leveldesc = "eGFR <15 or dialysis" if variable=="reduced_kidney_function_cat2" & level==4
 
@@ -261,10 +261,13 @@ cap drop xforanalysis levelx lowerlimit
 gen xforanalysis = 10
 gen levelx = 0.09
 gen lowerlimit = 0.15
+gen upperlimit = 13
 
-gen displayhrcilo = "<<<" if lci<0.15
+gen displayhrcilo = "<<<" if lci<lowerlimit
+gen displayhrcihi = ">>>" if uci>upperlimit
 gen displayhrci = string(hr, "%3.2f") + " (" + string(lci, "%3.2f") + "-" + string(uci, "%3.2f") + ")" if hr!=.
 replace displayhrci = "1.00 (REF)" if reference==1
+replace displayhrci = ">>> " +  displayhrci if uci>upperlimit & uci<.
 
 levelsof variable, local(vars)
 
@@ -287,8 +290,8 @@ if "`graphtitle'"=="Ra sle psoriasis" local graphtitle "Rheum arthritis/Lupus/Ps
 if "`graphtitle'"=="Reduced kidney function cat2" local graphtitle "Reduced kidney function" 
 if "`graphtitle'"=="Spleen" local graphtitle "Asplenia" 
 
-scatter order hr if outcome=="coviddeath", mc(black) msize(small) || rcap lci uci order if outcome=="coviddeath", hor lc(black) ///
-|| scatter order hr if outcome=="noncoviddeath", mc(gs9) msize(small)  || rcap lci uci order if outcome=="noncoviddeath", hor  lc(gs9) ///
+scatter order hr if outcome=="coviddeath" & lci>lowerlimit & uci<upperlimit, mc(black) msize(small) || rcap lci uci order if outcome=="coviddeath" & lci>lowerlimit & uci<upperlimit, hor lc(black) ///
+|| scatter order hr if outcome=="noncoviddeath" & lci>lowerlimit & uci<upperlimit, mc(gs9) msize(small)  || rcap lci uci order if outcome=="noncoviddeath" & lci>lowerlimit & uci<upperlimit, hor  lc(gs9) ///
 || scatter order xforanalysis, m(i) mlab(analysis) mlabcol(black) mlabsize(tiny) ///
 || scatter order levelx, m(i) mlab(leveldesc) mlabsize(tiny) mlabcol(gs4) 	///
 		xline(1,lp(dash)) 															///
@@ -298,18 +301,18 @@ scatter order hr if outcome=="coviddeath", mc(black) msize(small) || rcap lci uc
 }
 
 grc1leg agegroup male, name(agesex, replace)
-graph export "./analysis/output/an_processout_sensanresults_AGESEX.svg, as(svg) replace
+graph export "./analysis/output/an_processout_sensanresults_AGESEX.svg", as(svg) replace
 
 grc1leg ethnicity imd obese4cat smoke_nomiss, name(_otherdemog, replace)
 graph combine _otherdemog, ysize(8) name(otherdemog, replace)
-graph export "./analysis/output/an_processout_sensanresults_OTHERDEMOG.svg, as(svg) replace 
+graph export "./analysis/output/an_processout_sensanresults_OTHERDEMOG.svg", as(svg) replace 
 
 grc1leg diabcat cancer_exhaem_cat cancer_haem_cat reduced_kidney_function_cat2, name(_cm1, replace)
 graph combine _cm1, ysize(8) name(cm1, replace)
-graph export "./analysis/output/an_processout_sensanresults_COMORBS1.svg, as(svg) replace 
+graph export "./analysis/output/an_processout_sensanresults_COMORBS1.svg", as(svg) replace 
 
 grc1leg asthmacat chronic_respiratory_disease chronic_cardiac_disease htdiag_or_highbp chronic_liver_disease dementia, name(cm2, replace)
-graph export "./analysis/output/an_processout_sensanresults_COMORBS2.svg, as(svg) replace 
+graph export "./analysis/output/an_processout_sensanresults_COMORBS2.svg", as(svg) replace 
 
 grc1leg stroke other_neuro organ_transplant spleen ra_sle_psoriasis other_immunosuppression, name(cm3, replace)
-graph export "./analysis/output/an_processout_sensanresults_COMORBS3.svg, as(svg) replace 
+graph export "./analysis/output/an_processout_sensanresults_COMORBS3.svg", as(svg) replace 

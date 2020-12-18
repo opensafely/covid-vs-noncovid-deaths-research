@@ -1,0 +1,315 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_ethnicitybycod_logisticversion.log
+  log type:  text
+ opened on:  14 Dec 2020, 18:55:12
+
+. 
+. frames reset
+
+. use ./analysis/an_impute_imputeddata_MAIN, replace
+
+. 
+. for num 1/6: gen outcomeX = onsdeath == X
+
+->  gen outcome1 = onsdeath == 1
+
+->  gen outcome2 = onsdeath == 2
+
+->  gen outcome3 = onsdeath == 3
+
+->  gen outcome4 = onsdeath == 4
+
+->  gen outcome5 = onsdeath == 5
+
+->  gen outcome6 = onsdeath == 6
+
+. 
+. cap frame drop estimates
+
+. frame create estimates outcome ethnicity rrr lci uci
+
+. 
+. foreach outcome of numlist 1/6{
+  2.         if `outcome'==4 local if " if agegroup>1"
+  3.         else local if
+  4.         mi estimate, or post: logistic outcome`outcome' i.ethnicity age1 age2 age3 i.male `if'
+  5.         foreach ethnicity of numlist 2/5 {
+  6.                 cap lincom `ethnicity'.ethnicity, or
+  7.                 if _rc==0 frame post estimates (`outcome') (`ethnicity') (r(estimate)) (r(lb)) (r(ub))
+  8. }
+  9. }
+
+Multiple-imputation estimates                   Imputations       =         10
+Logistic regression                             Number of obs     = 17,456,515
+                                                Average RVI       =     0.1636
+                                                Largest FMI       =     0.4129
+DF adjustment:   Large sample                   DF:     min       =      58.23
+                                                        avg       =   3.08e+08
+                                                        max       =   9.87e+08
+Model F test:       Equal FMI                   F(   8, 2688.1)   =    3489.11
+Within VCE type:          OIM                   Prob > F          =     0.0000
+
+-----------------------------------------------------------------------------------------
+               outcome1 | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+              ethnicity |
+                 Mixed  |   1.748388   .1910503     5.11   0.000     1.410273    2.167566
+Asian or Asian British  |   2.332839   .0905146    21.83   0.000     2.158526    2.521229
+                 Black  |   2.199307   .1309685    13.23   0.000     1.955301    2.473763
+                 Other  |   1.535181   .1292161     5.09   0.000     1.300058    1.812829
+                        |
+                   age1 |   1.156396   .0200915     8.36   0.000      1.11768    1.196452
+                   age2 |   .9417671   .0356113    -1.59   0.113     .8744939    1.014215
+                   age3 |   1.155432   .1011239     1.65   0.099     .9733003    1.371645
+                 1.male |   1.712462   .0267746    34.41   0.000     1.660781    1.765752
+                  _cons |   8.35e-08   5.27e-08   -25.83   0.000     2.42e-08    2.88e-07
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+Multiple-imputation estimates                   Imputations       =         10
+Logistic regression                             Number of obs     = 17,456,515
+                                                Average RVI       =     0.1590
+                                                Largest FMI       =     0.3629
+DF adjustment:   Large sample                   DF:     min       =      75.13
+                                                        avg       =   1.26e+09
+                                                        max       =   4.28e+09
+Model F test:       Equal FMI                   F(   8, 2818.7)   =    4417.23
+Within VCE type:          OIM                   Prob > F          =     0.0000
+
+-----------------------------------------------------------------------------------------
+               outcome2 | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+              ethnicity |
+                 Mixed  |   .7517218   .0735833    -2.92   0.004     .6193461    .9123906
+Asian or Asian British  |   .5689582   .0239528   -13.40   0.000     .5231892    .6187311
+                 Black  |   .8347957   .0465784    -3.24   0.002     .7475428    .9322328
+                 Other  |   .6452168   .0444851    -6.36   0.000     .5634266    .7388801
+                        |
+                   age1 |   1.089077   .0078106    11.90   0.000     1.073876    1.104494
+                   age2 |   1.127476   .0184314     7.34   0.000     1.091924    1.164186
+                   age3 |   .6643244   .0257784   -10.54   0.000     .6156732    .7168202
+                 1.male |   1.410156   .0142259    34.07   0.000     1.382548    1.438316
+                  _cons |   3.69e-06   9.47e-07   -48.76   0.000     2.23e-06    6.10e-06
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+Multiple-imputation estimates                   Imputations       =         10
+Logistic regression                             Number of obs     = 17,456,515
+                                                Average RVI       =     0.1100
+                                                Largest FMI       =     0.2606
+DF adjustment:   Large sample                   DF:     min       =     143.58
+                                                        avg       =   4.36e+09
+                                                        max       =   2.47e+10
+Model F test:       Equal FMI                   F(   8, 5334.7)   =    7389.73
+Within VCE type:          OIM                   Prob > F          =     0.0000
+
+-----------------------------------------------------------------------------------------
+               outcome3 | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+              ethnicity |
+                 Mixed  |    1.13568   .1054311     1.37   0.172      .945609    1.363957
+Asian or Asian British  |   1.031515   .0352775     0.91   0.366     .9640897    1.103657
+                 Black  |   .9576701   .0546976    -0.76   0.449     .8558563    1.071596
+                 Other  |   .6641183   .0526987    -5.16   0.000     .5682248    .7761949
+                        |
+                   age1 |   1.228426   .0147007    17.19   0.000     1.199948    1.257579
+                   age2 |   .7744984   .0199579    -9.92   0.000     .7363531    .8146197
+                   age3 |   1.897951   .1126767    10.79   0.000     1.689473    2.132155
+                 1.male |   1.590836   .0175277    42.14   0.000      1.55685    1.625563
+                  _cons |   4.44e-08   1.94e-08   -38.79   0.000     1.89e-08    1.05e-07
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+Multiple-imputation estimates                   Imputations       =         10
+Logistic regression                             Number of obs     = 11,490,771
+                                                Average RVI       =     0.1720
+                                                Largest FMI       =     0.3749
+DF adjustment:   Large sample                   DF:     min       =      70.47
+                                                        avg       =   1.95e+11
+                                                        max       =   6.55e+11
+Model F test:       Equal FMI                   F(   8, 2473.1)   =    3322.71
+Within VCE type:          OIM                   Prob > F          =     0.0000
+
+-----------------------------------------------------------------------------------------
+               outcome4 | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+              ethnicity |
+                 Mixed  |   .7378894   .1585468    -1.41   0.162      .480769     1.13252
+Asian or Asian British  |   .6673415   .0438729    -6.15   0.000     .5861274    .7598087
+                 Black  |   1.143905   .0935082     1.64   0.101     .9742411    1.343115
+                 Other  |    .714164   .1033432    -2.33   0.023      .535147    .9530655
+                        |
+                   age1 |   .0175605   .0074603    -9.51   0.000     .0076368    .0403793
+                   age2 |   6959.861   5731.522    10.74   0.000     1385.565    34960.23
+                   age3 |   2.28e-09   4.10e-09   -11.07   0.000     6.72e-11    7.74e-08
+                 1.male |   .8143904   .0135423   -12.35   0.000     .7882759    .8413701
+                  _cons |   5.89e+57   9.52e+58     8.23   0.000     1.03e+44    3.36e+71
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+Multiple-imputation estimates                   Imputations       =         10
+Logistic regression                             Number of obs     = 17,456,515
+                                                Average RVI       =     0.0566
+                                                Largest FMI       =     0.1459
+DF adjustment:   Large sample                   DF:     min       =     445.57
+                                                        avg       =   3.35e+10
+                                                        max       =   1.75e+11
+Model F test:       Equal FMI                   F(   8,18013.3)   =    3210.52
+Within VCE type:          OIM                   Prob > F          =     0.0000
+
+-----------------------------------------------------------------------------------------
+               outcome5 | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+              ethnicity |
+                 Mixed  |     .76258   .1224799    -1.69   0.092     .5564977    1.044979
+Asian or Asian British  |   .8485044   .0453347    -3.07   0.002     .7639261    .9424467
+                 Black  |   .6555102   .0671925    -4.12   0.000     .5359693    .8017132
+                 Other  |   .5941834   .0751453    -4.12   0.000     .4635712    .7615958
+                        |
+                   age1 |   1.085955   .0193484     4.63   0.000     1.048688    1.124548
+                   age2 |   1.119727   .0444823     2.85   0.004     1.035851    1.210395
+                   age3 |   .7515452   .0698274    -3.07   0.002     .6264241    .9016579
+                 1.male |   1.478209    .024266    23.81   0.000     1.431406    1.526543
+                  _cons |   5.90e-07   3.78e-07   -22.38   0.000     1.68e-07    2.07e-06
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+Multiple-imputation estimates                   Imputations       =         10
+Logistic regression                             Number of obs     = 17,456,515
+                                                Average RVI       =     0.1419
+                                                Largest FMI       =     0.3493
+DF adjustment:   Large sample                   DF:     min       =      80.96
+                                                        avg       =   2.08e+09
+                                                        max       =   1.11e+10
+Model F test:       Equal FMI                   F(   8, 3423.0)   =    7064.18
+Within VCE type:          OIM                   Prob > F          =     0.0000
+
+-----------------------------------------------------------------------------------------
+               outcome6 | Odds Ratio   Std. Err.      t    P>|t|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+              ethnicity |
+                 Mixed  |   .8142403   .0996103    -1.68   0.097     .6383232    1.038639
+Asian or Asian British  |   .8497177    .033756    -4.10   0.000     .7856173    .9190483
+                 Black  |   .8886315   .0564733    -1.86   0.064     .7841514    1.007033
+                 Other  |   .6609988   .0568129    -4.82   0.000     .5580287    .7829695
+                        |
+                   age1 |   1.124386   .0065154    20.23   0.000     1.111688    1.137228
+                   age2 |   .8030928   .0115067   -15.30   0.000     .7808538    .8259652
+                   age3 |   2.020123    .070682    20.10   0.000     1.886232    2.163518
+                 1.male |   1.219294   .0150536    16.06   0.000     1.190144    1.249159
+                  _cons |   3.78e-06   7.48e-07   -63.14   0.000     2.57e-06    5.57e-06
+-----------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. 
+. frame change estimates
+
+. 
+. sort ethnicity outcome
+
+. 
+. label define ethnicity  1 "White"                                       ///
+>                                                 2 "Mixed vs White"                                      ///
+>                                                 3 "Asian or Asian British vs White"     ///
+>                                                 4 "Black vs White"                                      ///
+>                                                 5 "Other vs White"                                      
+
+.                                                 
+. label values ethnicity ethnicity
+
+. 
+. label define outcomes 1 COVID 2 CANCER 3 CVD 4 DEM_ALZ 5 RESPIR 6 OTHER 
+
+. label values outcome outcomes
+
+. 
+. gen outcometext = "COVID-19" if outcome==1
+(20 missing values generated)
+
+. replace outcometext = "Cancer" if outcome==2
+(4 real changes made)
+
+. replace outcometext = "CVD" if outcome==3
+(4 real changes made)
+
+. replace outcometext = "Dementia/Alzheim" if outcome==4
+variable outcometext was str8 now str16
+(4 real changes made)
+
+. replace outcometext = "Respiratory" if outcome==5
+(4 real changes made)
+
+. replace outcometext = "Other" if outcome==6
+(4 real changes made)
+
+. 
+. gen esthr = string(rrr, "%4.2f") + " (" + string(lci, "%4.2f") + "-" + string(uci, "%4.2f") + ")"
+
+. 
+. gen graphorder = 7-outcome
+
+. 
+. gen labelat = .
+(24 missing values generated)
+
+. replace labelat = 0.06
+(24 real changes made)
+
+. gen outcomeheadat = .
+(24 missing values generated)
+
+. replace outcomeheadat = 0.05
+(24 real changes made)
+
+. gen estimatesat = 3.5
+
+. 
+. expand 2 if outcome==1, gen(expanded)
+(4 observations created)
+
+. replace graphorder=7 if expanded==1
+(4 real changes made)
+
+. gen outcomehead="Cause of death category" if expanded==1
+(24 missing values generated)
+
+. for var rrr lci uci : replace X=. if expanded==1
+
+->  replace rrr=. if expanded==1
+(4 real changes made, 4 to missing)
+
+->  replace lci=. if expanded==1
+(4 real changes made, 4 to missing)
+
+->  replace uci=. if expanded==1
+(4 real changes made, 4 to missing)
+
+. replace outcometext="" if expanded==1
+(4 real changes made)
+
+. replace esthr="" if expanded==1
+(4 real changes made)
+
+. 
+. scatter graphorder rrr if outcome==1, mcol(black) ///
+>         || rcap lci uci graphorder if outcome==1, hor lcol(black) ///
+>         || scatter graphorder rrr if outcome>1 , mcol(gs10) ///
+>         || rcap lci uci graphorder if outcome>1, hor lcol(gs10) ///
+>         || scatter graphorder labelat, m(i) mlab(outcometext) mlabcol(black) mlabsize(small) ///
+>         || scatter graphorder outcomeheadat if graphorder==7, m(i) mlab(outcomehead) mlabcol(black) ///
+>         || scatter graphorder estimatesat , m(i) mlab(esthr) mlabcol(black) mlabsize(vsmall) ///
+>         ||, yscale(off r(0 7) lcol(white)) ytitle("") ylab(none) legend(off) xscale(log r(13)) xlab(.5 1 2 4) xtitle(Odds ratio for cause-specific death and 95% CI) xline(1, lp(dash)) ///
+>         by(ethnicity, legend(off) ) 
+
+.         
+. graph export ./analysis/output/an_ethnicitybycod_logisticversion.svg, as(svg) replace
+(file ./analysis/output/an_ethnicitybycod_logisticversion.svg written in SVG format)
+
+. 
+. log close
+      name:  <unnamed>
+       log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_ethnicitybycod_logisticversion.log
+  log type:  text
+ closed on:  14 Dec 2020, 22:25:42
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

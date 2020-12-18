@@ -1,0 +1,110 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_imputed_GENERAL_MAIN_noncoviddeath_agesex_agespl.log
+  log type:  text
+ opened on:  14 Dec 2020, 21:12:34
+
+. 
+. use ./analysis/an_impute_imputeddata_`dataset', replace
+
+. 
+. if "`5'"=="SA_anywhereonDC"{
+.         replace coviddeath = 1 if onsdeath>=1 & onsdeath<. & died_ons_covid_flag_any==1
+.         replace noncoviddeath = 0 if died_ons_covid_flag_any==1
+. }
+
+. 
+. if "`5'"=="SA_u071only"{
+.         replace coviddeath = 0 if died_ons_covidconf_flag_und!=1
+.         replace noncoviddeath = 1 if onsdeath>=1 & onsdeath<. & died_ons_covidconf_flag_und!=1
+. }
+
+. 
+. if "`outcome'"=="deathsonlyCvN"{
+.         drop if !(onsdeath>=1&onsdeath<.)
+.         gen deathsonlyCvN = (coviddeath==1)
+. }
+
+. 
+. tab `outcome'
+
+noncoviddea |
+         th |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 | 17,322,199       99.23       99.23
+          1 |    134,316        0.77      100.00
+------------+-----------------------------------
+      Total | 17,456,515      100.00
+
+.                 
+. if "`modeltorun'"=="agesex"{
+. *Age-sex model
+. mi estimate, eform post: logistic `outcome' age1 age2 age3 i.male i.ethnicity
+
+Multiple-imputation estimates                   Imputations       =         10
+Logistic regression                             Number of obs     = 17,456,515
+                                                Average RVI       =     0.1560
+                                                Largest FMI       =     0.4341
+DF adjustment:   Large sample                   DF:     min       =      52.75
+                                                        avg       =   1.75e+09
+                                                        max       =   5.38e+09
+Model F test:       Equal FMI                   F(   8, 2912.5)   =   26807.40
+Within VCE type:          OIM                   Prob > F          =     0.0000
+
+-----------------------------------------------------------------------------------------
+          noncoviddeath |     exp(b)   Std. Err.      t    P>|t|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+                   age1 |   1.135539   .0046362    31.13   0.000     1.126488    1.144662
+                   age2 |   .8958857   .0084311   -11.68   0.000     .8795126    .9125636
+                   age3 |   1.386285   .0309782    14.62   0.000     1.326879    1.448351
+                 1.male |   1.338034   .0075972    51.29   0.000     1.323226    1.353007
+                        |
+              ethnicity |
+                 Mixed  |    .855274   .0522299    -2.56   0.013     .7566655    .9667332
+Asian or Asian British  |   .7770605   .0144509   -13.56   0.000     .7491509      .80601
+                 Black  |   .8815324   .0265125    -4.19   0.000     .8308559    .9352997
+                 Other  |    .648309   .0272334   -10.32   0.000     .5967385    .7043362
+                        |
+                  _cons |   4.40e-06   6.36e-07   -85.39   0.000     3.32e-06    5.84e-06
+-----------------------------------------------------------------------------------------
+. estimates save ./analysis/output/models/an_imputed_agesex_`dataset'`sensan'_`outcome', replace
+(note: file ./analysis/output/models/an_imputed_agesex_MAIN_noncoviddeath.ster not found)
+file ./analysis/output/models/an_imputed_agesex_MAIN_noncoviddeath.ster saved
+. }
+
+. 
+. if "`modeltorun'"=="full"{
+. *Full model
+. mi estimate, eform post: logistic `outcome' ///
+>                         `age'                                                   ///
+>                         i.male                                                  ///
+>                         i.obese4cat                                             ///
+>                         i.smoke_nomiss                                  ///
+>                         i.ethnicity                                             ///
+>                         i.imd                                                   ///
+>                         i.htdiag_or_highbp                              ///
+>                         i.chronic_respiratory_disease   ///
+>                         i.asthmacat                                             ///
+>                         i.chronic_cardiac_disease               ///
+>                         i.diabcat                                               ///
+>                         i.cancer_exhaem_cat                             ///
+>                         i.cancer_haem_cat                               ///
+>                         i.chronic_liver_disease                 ///
+>                         i.stroke                                                ///     
+>                         i.dementia                                              ///
+>                         i.other_neuro                                   ///
+>                         i.reduced_kidney_function_cat2  ///
+>                         i.organ_transplant                              ///
+>                         i.spleen                                                ///
+>                         i.ra_sle_psoriasis                      ///
+>                         i.other_immunosuppression
+. estimates save ./analysis/output/models/an_imputed_full_`dataset'`sensan'_`outcome'_`agetype', replace
+. }
+
+. 
+. log close
+      name:  <unnamed>
+       log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_imputed_GENERAL_MAIN_noncoviddeath_agesex_agespl.log
+  log type:  text
+ closed on:  14 Dec 2020, 21:47:56
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
