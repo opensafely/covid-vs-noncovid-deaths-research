@@ -47,10 +47,10 @@ local endwith "_tab"
 				}
 		}
 		if "`model'"=="full" {
-			cap estimates use ./analysis/output/models/an_imputed_full_agespl_`dataset'_`outcome'		
+			cap estimates use ./analysis/output/models/an_imputed_full_`dataset'_`outcome'_agespl		
 			if _rc!=0 local noestimatesflag 1
 			if "`variable'"=="agegroup"{
-				cap estimates use ./analysis/output/models/an_imputed_full_agegrp_`dataset'_`outcome'		
+				cap estimates use ./analysis/output/models/an_imputed_full_`dataset'_`outcome'_agegrp		
 				if _rc!=0 local noestimatesflag 1						
 				}
 		}
