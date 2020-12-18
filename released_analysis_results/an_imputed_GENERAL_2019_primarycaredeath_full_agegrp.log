@@ -1,0 +1,167 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_imputed_GENERAL_2019_primarycaredeath_full_agegrp.log
+  log type:  text
+ opened on:  15 Dec 2020, 00:53:23
+
+. 
+. use ./analysis/an_impute_imputeddata_`dataset', replace
+
+. 
+. if "`5'"=="SA_anywhereonDC"{
+.         replace coviddeath = 1 if onsdeath>=1 & onsdeath<. & died_ons_covid_flag_any==1
+.         replace noncoviddeath = 0 if died_ons_covid_flag_any==1
+. }
+
+. 
+. if "`5'"=="SA_u071only"{
+.         replace coviddeath = 0 if died_ons_covidconf_flag_und!=1
+.         replace noncoviddeath = 1 if onsdeath>=1 & onsdeath<. & died_ons_covidconf_flag_und!=1
+. }
+
+. 
+. if "`outcome'"=="deathsonlyCvN"{
+.         drop if !(onsdeath>=1&onsdeath<.)
+.         gen deathsonlyCvN = (coviddeath==1)
+. }
+
+. 
+. tab `outcome'
+
+primarycare |
+      death |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 | 17,132,364       99.25       99.25
+          1 |    129,364        0.75      100.00
+------------+-----------------------------------
+      Total | 17,261,728      100.00
+
+.                 
+. if "`modeltorun'"=="agesex"{
+. *Age-sex model
+. mi estimate, eform post: logistic `outcome' age1 age2 age3 i.male i.ethnicity
+. estimates save ./analysis/output/models/an_imputed_agesex_`dataset'`sensan'_`outcome', replace
+. }
+
+. 
+. if "`modeltorun'"=="full"{
+. *Full model
+. mi estimate, eform post: logistic `outcome' ///
+>                         `age'                                                   ///
+>                         i.male                                                  ///
+>                         i.obese4cat                                             ///
+>                         i.smoke_nomiss                                  ///
+>                         i.ethnicity                                             ///
+>                         i.imd                                                   ///
+>                         i.htdiag_or_highbp                              ///
+>                         i.chronic_respiratory_disease   ///
+>                         i.asthmacat                                             ///
+>                         i.chronic_cardiac_disease               ///
+>                         i.diabcat                                               ///
+>                         i.cancer_exhaem_cat                             ///
+>                         i.cancer_haem_cat                               ///
+>                         i.chronic_liver_disease                 ///
+>                         i.stroke                                                ///     
+>                         i.dementia                                              ///
+>                         i.other_neuro                                   ///
+>                         i.reduced_kidney_function_cat2  ///
+>                         i.organ_transplant                              ///
+>                         i.spleen                                                ///
+>                         i.ra_sle_psoriasis                      ///
+>                         i.other_immunosuppression
+
+Multiple-imputation estimates                   Imputations       =         10
+Logistic regression                             Number of obs     = 17,261,728
+                                                Average RVI       =     0.0395
+                                                Largest FMI       =     0.4129
+DF adjustment:   Large sample                   DF:     min       =      58.26
+                                                        avg       =   4.83e+08
+                                                        max       =   8.14e+09
+Model F test:       Equal FMI                   F(  44,257496.0)  =    6877.59
+Within VCE type:          OIM                   Prob > F          =     0.0000
+
+-----------------------------------------------------------------------------------------------
+             primarycaredeath |     exp(b)   Std. Err.      t    P>|t|     [95% Conf. Interval]
+------------------------------+----------------------------------------------------------------
+                     agegroup |
+                      40-<50  |   2.763424   .0769574    36.50   0.000     2.616633     2.91845
+                      50-<60  |   5.583567   .1362449    70.48   0.000     5.322817     5.85709
+                      60-<70  |   11.38516   .2658514   104.16   0.000     10.87584    11.91832
+                      70-<80  |   23.06231   .5310471   136.29   0.000     22.04461    24.12699
+                         80+  |   78.70061   1.815133   189.29   0.000     75.22222    82.33984
+                              |
+                       1.male |   1.052311   .0063438     8.46   0.000     1.039951    1.064819
+                              |
+                    obese4cat |
+           Obese I (30-34.9)  |   .6921306   .0062333   -40.86   0.000     .6800208    .7044561
+          Obese II (35-39.9)  |   .7819726   .0110407   -17.42   0.000     .7606298    .8039142
+             Obese III (40+)  |     1.0302   .0201097     1.52   0.127       .99153    1.070378
+                              |
+                 smoke_nomiss |
+                      Former  |   1.143443   .0077705    19.72   0.000     1.128314    1.158774
+                     Current  |   1.865642   .0183201    63.51   0.000     1.830078    1.901897
+                              |
+                    ethnicity |
+                       Mixed  |   .7616947   .0473484    -4.38   0.000     .6725839    .8626118
+      Asian or Asian British  |   .6838909   .0137298   -18.93   0.000     .6573987    .7114507
+                       Black  |   .6246532   .0241918   -12.15   0.000     .5781682    .6748756
+                       Other  |    .591693   .0270422   -11.48   0.000      .540582    .6476364
+                              |
+                          imd |
+                           2  |   1.078012   .0099672     8.12   0.000     1.058652    1.097725
+                           3  |   1.157575   .0106733    15.87   0.000     1.136844    1.178685
+                           4  |   1.279356   .0120066    26.25   0.000     1.256038    1.303106
+             5 most deprived  |   1.422236   .0135485    36.97   0.000     1.395928     1.44904
+                              |
+           1.htdiag_or_highbp |   1.023096   .0070886     3.30   0.001     1.009296    1.037084
+1.chronic_respiratory_disease |   1.918421   .0146974    85.04   0.000      1.88983    1.947445
+                              |
+                    asthmacat |
+                 Yes, no OCS  |   .9261894   .0088198    -8.05   0.000     .9090632    .9436382
+                Yes with OCS  |   .9053595    .017222    -5.23   0.000     .8722265    .9397512
+                              |
+    1.chronic_cardiac_disease |   1.560803   .0104457    66.52   0.000     1.540464    1.581411
+                              |
+                      diabcat |
+         Controlled diabetes  |   1.134482   .0093359    15.33   0.000     1.116331    1.152929
+       Uncontrolled diabetes  |   1.433538   .0167926    30.74   0.000        1.401    1.466831
+  Diabetes, no hba1c measure  |   1.790389   .0305942    34.08   0.000     1.731418    1.851368
+                              |
+            cancer_exhaem_cat |
+                   Last year  |   9.991781   .1249533   184.06   0.000     9.749854    10.23971
+               2-5 years ago  |   3.402016   .0372665   111.77   0.000     3.329754    3.475847
+                    5+ years  |   1.609385   .0146025    52.44   0.000     1.581017    1.638261
+                              |
+              cancer_haem_cat |
+                   Last year  |   4.351738   .1818598    35.19   0.000     4.009507    4.723181
+               2-5 years ago  |   2.359808   .0724787    27.95   0.000     2.221944    2.506226
+                    5+ years  |   1.820794   .0433028    25.20   0.000     1.737869    1.907675
+                              |
+      1.chronic_liver_disease |   3.490042   .0661362    65.96   0.000     3.362795    3.622104
+                     1.stroke |   1.565335   .0139947    50.12   0.000     1.538145    1.593006
+                   1.dementia |   3.168863   .0484733    75.40   0.000     3.075267    3.265307
+                1.other_neuro |   2.544737   .0359717    66.08   0.000     2.475201    2.616226
+                              |
+ reduced_kidney_function_cat2 |
+Stage 3a/3b egfr 30-60        |   1.363035   .0096164    43.90   0.000     1.344317    1.382014
+         Stage 4 egfr 15-<30  |   2.931116   .0426436    73.92   0.000     2.848717    3.015899
+Stage 5 egfr <15 or dialysis  |   6.580188   .1676275    73.96   0.000     6.259712    6.917072
+                              |
+           1.organ_transplant |    .781671   .0400185    -4.81   0.000     .7070429     .864176
+                     1.spleen |   1.502224   .0666495     9.17   0.000     1.377112    1.638702
+           1.ra_sle_psoriasis |   1.102984   .0117318     9.22   0.000     1.080228    1.126219
+    1.other_immunosuppression |   2.152436   .0944175    17.48   0.000     1.975113    2.345679
+                        _cons |   .0002634   6.05e-06  -358.65   0.000     .0002518    .0002755
+-----------------------------------------------------------------------------------------------
+. estimates save ./analysis/output/models/an_imputed_full_`dataset'`sensan'_`outcome'_`agetype', replace
+(note: file ./analysis/output/models/an_imputed_full_2019_primarycaredeath_agegrp.ster not found)
+file ./analysis/output/models/an_imputed_full_2019_primarycaredeath_agegrp.ster saved
+. }
+
+. 
+. log close
+      name:  <unnamed>
+       log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_imputed_GENERAL_2019_primarycaredeath_full_agegrp.log
+  log type:  text
+ closed on:  15 Dec 2020, 02:09:20
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
