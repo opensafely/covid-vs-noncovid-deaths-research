@@ -78,3 +78,7 @@ do ./analysis/an_processout_agesex_covvsnon_table
 
 *FOREST PLOT OF DEATHS ONLY ANALYSIS
 do ./analysis/an_processout_deathsonlyanalysis
+
+*FOREST PLOT OF SENS AN RESULTS
+do ./analysis/an_processout_sensanresults
+

@@ -298,13 +298,18 @@ scatter order hr if outcome=="coviddeath", mc(black) msize(small) || rcap lci uc
 }
 
 grc1leg agegroup male, name(agesex, replace)
+graph export "./analysis/output/an_processout_sensanresults_AGESEX.svg, as(svg) replace
 
 grc1leg ethnicity imd obese4cat smoke_nomiss, name(_otherdemog, replace)
 graph combine _otherdemog, ysize(8) name(otherdemog, replace)
+graph export "./analysis/output/an_processout_sensanresults_OTHERDEMOG.svg, as(svg) replace 
 
 grc1leg diabcat cancer_exhaem_cat cancer_haem_cat reduced_kidney_function_cat2, name(_cm1, replace)
 graph combine _cm1, ysize(8) name(cm1, replace)
+graph export "./analysis/output/an_processout_sensanresults_COMORBS1.svg, as(svg) replace 
 
 grc1leg asthmacat chronic_respiratory_disease chronic_cardiac_disease htdiag_or_highbp chronic_liver_disease dementia, name(cm2, replace)
+graph export "./analysis/output/an_processout_sensanresults_COMORBS2.svg, as(svg) replace 
 
 grc1leg stroke other_neuro organ_transplant spleen ra_sle_psoriasis other_immunosuppression, name(cm3, replace)
+graph export "./analysis/output/an_processout_sensanresults_COMORBS3.svg, as(svg) replace 
