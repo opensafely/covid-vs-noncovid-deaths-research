@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_imputed_GENERAL_MAIN_coviddeath_full_agegrp.log
   log type:  text
- opened on:  14 Dec 2020, 21:12:37
+ opened on:  21 Dec 2020, 22:03:27
 
 . 
 . use ./analysis/an_impute_imputeddata_`dataset', replace
@@ -74,7 +74,7 @@ Logistic regression                             Number of obs     = 17,456,515
                                                 Average RVI       =     0.0372
                                                 Largest FMI       =     0.4674
 DF adjustment:   Large sample                   DF:     min       =      45.55
-                                                        avg       =   3.03e+08
+                                                        avg       =   2.12e+08
                                                         max       =   4.67e+09
 Model F test:       Equal FMI                   F(  44,289630.3)  =     903.67
 Within VCE type:          OIM                   Prob > F          =     0.0000
@@ -83,11 +83,11 @@ Within VCE type:          OIM                   Prob > F          =     0.0000
                    coviddeath |     exp(b)   Std. Err.      t    P>|t|     [95% Conf. Interval]
 ------------------------------+----------------------------------------------------------------
                      agegroup |
-                      40-<50  |   6.108245   .8228401    13.43   0.000     4.690848    7.953927
-                      50-<60  |   17.88086   2.200821    23.43   0.000     14.04819    22.75917
-                      60-<70  |   45.29439   5.449559    31.69   0.000     35.77938    57.33979
-                      70-<80  |   117.1731   13.98344    39.92   0.000     92.73537    148.0506
-                         80+  |   417.1946      49.77    50.58   0.000     330.2121    527.0895
+                      18-<40  |   .0559257   .0068835   -23.43   0.000     .0439383    .0711836
+                      40-<50  |   .3416081   .0260707   -14.07   0.000     .2941484    .3967253
+                      60-<70  |   2.533122   .1135244    20.74   0.000     2.320111    2.765691
+                      70-<80  |   6.552991   .2720698    45.28   0.000     6.040863    7.108535
+                         80+  |   23.33192   .9635059    76.27   0.000     21.51788    25.29888
                               |
                        1.male |   1.416198   .0229076    21.51   0.000     1.372004    1.461815
                               |
@@ -150,10 +150,9 @@ Stage 5 egfr <15 or dialysis  |   4.771278   .2870906    25.97   0.000     4.240
                      1.spleen |   1.197467   .1592887     1.35   0.176     .9226469    1.554145
            1.ra_sle_psoriasis |   1.205798   .0325946     6.92   0.000     1.143577    1.271405
     1.other_immunosuppression |   1.813343   .2210928     4.88   0.000     1.427897    2.302837
-                        _cons |   5.92e-06   7.08e-07  -100.67   0.000     4.69e-06    7.49e-06
+                        _cons |   .0001059   4.70e-06  -206.42   0.000     .0000971    .0001156
 -----------------------------------------------------------------------------------------------
 . estimates save ./analysis/output/models/an_imputed_full_`dataset'`sensan'_`outcome'_`agetype', replace
-(note: file ./analysis/output/models/an_imputed_full_MAIN_coviddeath_agegrp.ster not found)
 file ./analysis/output/models/an_imputed_full_MAIN_coviddeath_agegrp.ster saved
 . }
 
@@ -162,5 +161,5 @@ file ./analysis/output/models/an_imputed_full_MAIN_coviddeath_agegrp.ster saved
       name:  <unnamed>
        log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_imputed_GENERAL_MAIN_coviddeath_full_agegrp.log
   log type:  text
- closed on:  14 Dec 2020, 23:11:27
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ closed on:  21 Dec 2020, 23:16:31
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

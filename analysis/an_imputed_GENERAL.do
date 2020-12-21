@@ -11,7 +11,7 @@ local outcome `2'
 local modeltorun `3'
 local agetype `4'
 if "`agetype'"=="agespl" local age "age1 age2 age3"
-if "`agetype'"=="agegrp" local age "i.agegroup"
+if "`agetype'"=="agegrp" local age "ib3.agegroup"
 local sensan `5'
 
 log using ./analysis/output/an_imputed_GENERAL_`dataset'`sensan'_`outcome'_`modeltorun'_`agetype', replace t
