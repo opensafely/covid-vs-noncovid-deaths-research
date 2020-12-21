@@ -165,6 +165,9 @@ replace variable="smoke_nomiss" if variable=="smoke"
 
 drop if (run==9|run==10) &!(variable=="ethnicity"|variable=="obese4cat"|variable=="smoke_nomiss")
 
+*LEAVE OUT THE SEPT2020 ANALYSIS FOR NOW
+drop if run==7|run==8
+
 *ORIG_C ORIG_NC U71_C U71_NC UL_C UL_NC SEP_C SEP_NC CCA_C CC_NC*/
 gen analysis = "PRIMARY ANALYSIS" if run==1
 replace analysis = "CONFIRMED COVID" if run==3
@@ -195,6 +198,10 @@ expand 2 if analysis!=""
 replace level = -1 if level==.
 sort variable run outcome level 
 by variable run: replace analysis="" if _n==1
+
+drop if level==0 & variable!="male"
+drop if outcome=="noncoviddeath" & hr==. & hr[_n+1]
+
 by variable : gen order = _N-_n
 
 replace reference = 0 if hr==.
@@ -254,7 +261,7 @@ replace leveldesc = "eGFR <15 or dialysis" if variable=="reduced_kidney_function
 
 *replace leveldesc = "Absent" if level==0
 *replace leveldesc = "Present" if level==1 & leveldesc==""
-drop if level==0 & variable!="male"
+
 
 
 cap drop xforanalysis levelx lowerlimit

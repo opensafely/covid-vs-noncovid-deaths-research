@@ -1,394 +1,26 @@
-
-
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-*******THE FIRST SET OF RESULTS ARE FOR COVID AS UNDERLYING CAUSE OF DEATH****************
-
-*******(SEE LOWER DOWN FOR COVID ANYWHERE ON DC)*******
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
        log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/_kbadhoc_ethnicity_2ndwave.log
   log type:  text
- opened on:  18 Dec 2020, 17:34:13
+ opened on:  21 Dec 2020, 11:55:36
 
 . 
 . use  ./analysis/cr_create_analysis_dataset_SEPT2020_STSET.dta, clear
 
 . 
-. stset stime_onsdeath, fail(onsdeath=1) id(patient_id) enter(enter_date) origin(enter_date)
-
-                id:  patient_id
-     failure event:  onsdeath == 1
-obs. time interval:  (stime_onsdeath[_n-1], stime_onsdeath]
- enter on or after:  time enter_date
- exit on or before:  failure
-    t for analysis:  (time-origin)
-            origin:  time enter_date
-
-------------------------------------------------------------------------------
-   17695074  total observations
-          0  exclusions
-------------------------------------------------------------------------------
-   17695074  observations remaining, representing
-   17695074  subjects
-      2,365  failures in single-failure-per-subject data
- 1.2199e+09  total analysis time at risk and under observation
-                                                at risk from t =         0
-                                     earliest observed entry t =         0
-                                          last observed exit t =        69
+. gen coviddeath = died_ons_covid_flag_any==1 & died_date_ons<=d(9/11/2020)
 
 . 
-. safetab ethnicity if onsdeath==1
-
-             Ethnicity |      Freq.     Percent        Cum.
------------------------+-----------------------------------
-                 White |      1,555       85.96       85.96
-                 Mixed |          6        0.33       86.29
-Asian or Asian British |        211       11.66       97.95
-                 Black |         22        1.22       99.17
-                 Other |         15        0.83      100.00
------------------------+-----------------------------------
-                 Total |      1,809      100.00
-
-. 
-. summ died_date_ons if onsdeath==1, f d
-
-                        died_date_ons
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%    09sep2020      02sep2020
- 5%    25sep2020      02sep2020
-10%    06oct2020      02sep2020       Obs               2,365
-25%    18oct2020      02sep2020       Sum of Wgt.       2,365
-
-50%    28oct2020                      Mean          24oct2020
-                        Largest       Std. Dev.      13.73235
-75%    04nov2020      09nov2020
-90%    07nov2020      09nov2020       Variance       188.5775
-95%    09nov2020      09nov2020       Skewness      -1.338435
-99%    09nov2020      09nov2020       Kurtosis       4.664896
-
-. 
-. stcox age1 age2 age3 i.male i.ethnicity , strata(stp) 
-
-         failure _d:  onsdeath == 1
-   analysis time _t:  (stime_onsdeath-origin)
-             origin:  time enter_date
-  enter on or after:  time enter_date
-                 id:  patient_id
-
-Iteration 0:   log likelihood = -24114.452
-Iteration 1:   log likelihood = -21908.226
-Iteration 2:   log likelihood = -21289.172
-Iteration 3:   log likelihood = -21268.163
-Iteration 4:   log likelihood = -21267.019
-Iteration 5:   log likelihood = -21266.927
-Iteration 6:   log likelihood = -21266.926
-Iteration 7:   log likelihood = -21266.926
-Refining estimates:
-Iteration 0:   log likelihood = -21266.926
-
-Stratified Cox regr. -- Breslow method for ties
-
-No. of subjects =   13,223,154                  Number of obs    =  13,223,154
-No. of failures =        1,809
-Time at risk    =    911660733
-                                                LR chi2(8)       =     5695.05
-Log likelihood  =   -21266.926                  Prob > chi2      =      0.0000
-
------------------------------------------------------------------------------------------
-                     _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
-------------------------+----------------------------------------------------------------
-                   age1 |   1.117602   .0588926     2.11   0.035     1.007936    1.239201
-                   age2 |    1.03758   .1165327     0.33   0.743      .832571    1.293069
-                   age3 |   .9092429   .2379664    -0.36   0.716     .5443824    1.518643
-                 1.male |   1.944972   .0937311    13.80   0.000     1.769671    2.137637
-                        |
-              ethnicity |
-                 Mixed  |   1.120757    .459407     0.28   0.781     .5018773    2.502797
-Asian or Asian British  |   3.707542   .2937927    16.54   0.000     3.174207    4.330489
-                 Black  |   1.195801   .2604012     0.82   0.412     .7803662    1.832395
-                 Other  |   1.360193   .3550408     1.18   0.239     .8154888    2.268732
------------------------------------------------------------------------------------------
-                                                             Stratified by stp
-
-
-. stcox age1 age2 age3 i.male i.ethnicity_16 , strata(stp) 
-
-         failure _d:  onsdeath == 1
-   analysis time _t:  (stime_onsdeath-origin)
-             origin:  time enter_date
-  enter on or after:  time enter_date
-                 id:  patient_id
-
-Iteration 0:   log likelihood = -24114.452
-Iteration 1:   log likelihood =  -21899.83
-Iteration 2:   log likelihood = -21279.138
-Iteration 3:   log likelihood = -21256.492
-Iteration 4:   log likelihood =  -21255.14
-Iteration 5:   log likelihood = -21255.007
-Iteration 6:   log likelihood = -21254.994
-Iteration 7:   log likelihood = -21254.989
-Iteration 8:   log likelihood = -21254.987
-Iteration 9:   log likelihood = -21254.987
-Iteration 10:  log likelihood = -21254.986
-Iteration 11:  log likelihood = -21254.986
-Iteration 12:  log likelihood = -21254.986
-Iteration 13:  log likelihood = -21254.986
-Iteration 14:  log likelihood = -21254.986
-Iteration 15:  log likelihood = -21254.986
-Iteration 16:  log likelihood = -21254.986
-Iteration 17:  log likelihood = -21254.986
-Iteration 18:  log likelihood = -21254.986
-Iteration 19:  log likelihood = -21254.986
-Iteration 20:  log likelihood = -21254.986
-Iteration 21:  log likelihood = -21254.986
-Iteration 22:  log likelihood = -21254.986
-Iteration 23:  log likelihood = -21254.986
-Iteration 24:  log likelihood = -21254.986
-Iteration 25:  log likelihood = -21254.986
-Iteration 26:  log likelihood = -21254.986
-Iteration 27:  log likelihood = -21254.986
-Iteration 28:  log likelihood = -21254.986
-Iteration 29:  log likelihood = -21254.986
-Iteration 30:  log likelihood = -21254.986
-Iteration 31:  log likelihood = -21254.986
-Iteration 32:  log likelihood = -21254.986
-Iteration 33:  log likelihood = -21254.986
-Iteration 34:  log likelihood = -21254.986
-Iteration 35:  log likelihood = -21254.986
-Iteration 36:  log likelihood = -21254.986
-Iteration 37:  log likelihood = -21254.986
-Iteration 38:  log likelihood = -21254.986
-Iteration 39:  log likelihood = -21254.986
-Iteration 40:  log likelihood = -21254.986
-Iteration 41:  log likelihood = -21254.986
-Iteration 42:  log likelihood = -21254.986
-Iteration 43:  log likelihood = -21254.986
-Iteration 44:  log likelihood = -21254.986
-Iteration 45:  log likelihood = -21254.986
-Refining estimates:
-Iteration 0:   log likelihood = -21254.986
-
-Stratified Cox regr. -- Breslow method for ties
-
-No. of subjects =   13,223,154                  Number of obs    =  13,223,154
-No. of failures =        1,809
-Time at risk    =    911660733
-                                                LR chi2(18)      =     5718.93
-Log likelihood  =   -21254.986                  Prob > chi2      =      0.0000
-
------------------------------------------------------------------------------------------------------
-                                 _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
-------------------------------------+----------------------------------------------------------------
-                               age1 |   1.116577   .0587051     2.10   0.036     1.007247    1.237774
-                               age2 |   1.043485   .1169898     0.38   0.704     .8376338    1.299925
-                               age3 |   .8943905   .2337312    -0.43   0.669     .5358985    1.492697
-                             1.male |   1.945707    .093766    13.81   0.000     1.770341    2.138444
-                                    |
-                       ethnicity_16 |
-                             Irish  |   .7269747   .2437087    -0.95   0.342     .3768471    1.402405
-                       Other White  |   1.203314   .1335838     1.67   0.095     .9680203    1.495801
-           White + Black Caribbean  |   .9860143   .6981716    -0.02   0.984     .2461326    3.950002
-             White + Black African  |   1.236591   1.237744     0.21   0.832     .1738725    8.794704
-                     White + Asian  |   9.17e-20          .        .       .            .           .
-                       Other mixed  |   1.879245   1.087967     1.09   0.276     .6042132    5.844892
-          Indian or British Indian  |   2.931293   .3667929     8.59   0.000     2.293762    3.746021
-    Pakistani or British Pakistani  |   4.792809   .5150008    14.58   0.000     3.882631    5.916354
-Bangladeshi or British Bangladeshi  |   6.399238   1.674486     7.09   0.000     3.831728    10.68715
-                       Other Asian  |   2.487125   .5837763     3.88   0.000     1.570016    3.939953
-                         Caribbean  |   1.115401   .3142598     0.39   0.698     .6421085    1.937554
-                           African  |   1.166673   .5254251     0.34   0.732     .4826144    2.820317
-                       Other Black  |   1.572435   .7890915     0.90   0.367     .5880527    4.204644
-                           Chinese  |   1.237001   .6198918     0.42   0.671     .4632465    3.303149
-                             Other  |   1.401642   .4271764     1.11   0.268     .7712897    2.547162
------------------------------------------------------------------------------------------------------
-                                                             Stratified by stp
-
-
-
-. stcox age1 age2 age3 i.male i.ethnicity i.imd, strata(stp) 
-
-         failure _d:  onsdeath == 1
-   analysis time _t:  (stime_onsdeath-origin)
-             origin:  time enter_date
-  enter on or after:  time enter_date
-                 id:  patient_id
-
-Iteration 0:   log likelihood = -24114.452
-Iteration 1:   log likelihood = -21834.985
-Iteration 2:   log likelihood = -21183.921
-Iteration 3:   log likelihood = -21163.203
-Iteration 4:   log likelihood = -21162.151
-Iteration 5:   log likelihood = -21162.072
-Iteration 6:   log likelihood = -21162.071
-Iteration 7:   log likelihood = -21162.071
-Refining estimates:
-Iteration 0:   log likelihood = -21162.071
-
-Stratified Cox regr. -- Breslow method for ties
-
-No. of subjects =   13,223,154                  Number of obs    =  13,223,154
-No. of failures =        1,809
-Time at risk    =    911660733
-                                                LR chi2(12)      =     5904.76
-Log likelihood  =   -21162.071                  Prob > chi2      =      0.0000
-
------------------------------------------------------------------------------------------
-                     _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
-------------------------+----------------------------------------------------------------
-                   age1 |   1.115031   .0583577     2.08   0.037     1.006323    1.235483
-                   age2 |   1.051088   .1174902     0.45   0.656     .8442914    1.308538
-                   age3 |   .8769066   .2286233    -0.50   0.614     .5260557    1.461756
-                 1.male |   1.968799    .094967    14.04   0.000     1.791195    2.164013
-                        |
-              ethnicity |
-                 Mixed  |   .9795464   .4016627    -0.05   0.960     .4385206    2.188064
-Asian or Asian British  |   3.038003   .2444372    13.81   0.000     2.594781    3.556933
-                 Black  |   .9458856   .2064721    -0.25   0.799      .616644    1.450917
-                 Other  |   1.232478   .3219205     0.80   0.424     .7386648    2.056417
-                        |
-                    imd |
-                     2  |   1.244627    .112087     2.43   0.015     1.043236    1.484894
-                     3  |   1.453951   .1291338     4.21   0.000     1.221658    1.730413
-                     4  |   2.251959   .1855315     9.85   0.000     1.916164    2.646599
-       5 most deprived  |   2.569014   .2076419    11.67   0.000     2.192642    3.009991
------------------------------------------------------------------------------------------
-                                                             Stratified by stp
-
-. 
-end of do-file
-
-
-
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-*******THE RESULTS BELOW ARE FOR COVID ANYWHERE ON THE DC****************
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-. ***
-. *DEATHS WITH COVID IN ANY POSITION (AS PER NATURE PPR)
-. 
-. use  ./analysis/cr_create_analysis_dataset_SEPT2020_STSET.dta, clear
-
-
-
-
-. gen coviddeath = died_ons_covid_flag_any==1
-
-. 
-end of do-file
-
-. do "E:\STATATMP\STD59a8_000000.tmp"
-
 . tab coviddeath
 
  coviddeath |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 | 17,692,146       99.98       99.98
-          1 |      2,928        0.02      100.00
+          0 | 17,692,388       99.98       99.98
+          1 |      2,686        0.02      100.00
 ------------+-----------------------------------
       Total | 17,695,074      100.00
 
 . 
-end of do-file
-
-. tab coviddeath _d
-
-           |  1 if failure; 0 if
-           |       censored
-coviddeath |         0          1 |     Total
------------+----------------------+----------
-         0 |17,663,141     29,005 |17,692,146 
-         1 |       242      2,686 |     2,928 
------------+----------------------+----------
-     Total |17,663,383     31,691 |17,695,074 
-
-. br if coviddeath==1 & _d==0
-
-. drop coviddeath
-
-. do "E:\STATATMP\STD59a8_000000.tmp"
-
-. gen coviddeath = died_ons_covid_flag_any==1 & died_date_ons<=d(9/11/2020)
-
-. 
-end of do-file
-
-. tab coviddeath _d
-
-           |  1 if failure; 0 if
-           |       censored
-coviddeath |         0          1 |     Total
------------+----------------------+----------
-         0 |17,663,383     29,005 |17,692,388 
-         1 |         0      2,686 |     2,686 
------------+----------------------+----------
-     Total |17,663,383     31,691 |17,695,074 
-
-. tab coviddeath ons
-
-           |   Failure/censoring indicator for outcome: ONS death (1 = covid death 2 =
-           |                                   other de
-coviddeath |         0      covid     cancer        cvd    dem_alz  respirato      other |     Total
------------+-----------------------------------------------------------------------------+----------
-         0 |17,663,383          0      9,287      7,639      3,391      3,022      5,666 |17,692,388 
-         1 |         0      2,365         93         98         41         19         70 |     2,686 
------------+-----------------------------------------------------------------------------+----------
-     Total |17,663,383      2,365      9,380      7,737      3,432      3,041      5,736 |17,695,074 
-
-. di 2365/2686
-.88049144
-
-. tab ethnicity_16 coviddeath
-
-      Ethnicity in 16 |      coviddeath
-           categories |         0          1 |     Total
-----------------------+----------------------+----------
-British or Mixed Brit | 9,816,316      1,665 | 9,817,981 
-                Irish |    81,282         12 |    81,294 
-          Other White | 1,396,129         94 | 1,396,223 
-White + Black Caribbe |    41,137          SMALL N
-White + Black African |    34,969          SMALL N
-        White + Asian |    36,170          SMALL N
-          Other mixed |    66,969          SMALL N
-Indian or British Ind |   446,827         80 |   446,907 
-Pakistani or British  |   308,778        106 |   308,884 
-Bangladeshi or Britis |    73,017         16 |    73,033 
-          Other Asian |   230,531         22 |   230,553 
-            Caribbean |    84,260         17 |    84,277 
-              African |   198,800          SMALL N
-          Other Black |    72,108          SMALL N
-              Chinese |   105,421          SMALL N
-                Other |   228,394         12 |   228,406 
-----------------------+----------------------+----------
-                Total |13,221,108      2,046 |13,223,154 
-
-. safetab ethnicity_16 if coviddeath==1
-
-**TABLE OF ethnicity_16 REDACTED DUE TO SMALL N**
-
-
-. do "E:\STATATMP\STD59a8_000000.tmp"
-
-. log close
-      name:  <unnamed>
-       log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/_kbadhoc_ethnicity_2ndwave.log
-  log type:  text
- closed on:  18 Dec 2020, 22:48:37
-
-      name:  <unnamed>
-       log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/_kbadhoc_ethnicity_2ndwave.log
-  log type:  text
- opened on:  18 Dec 2020, 22:50:15
-
-. 
-end of do-file
-
-. do "E:\STATATMP\STD59a8_000000.tmp"
-
 . stset stime_onsdeath, fail(coviddeath) id(patient_id) enter(enter_date) origin(enter_date)
 
                 id:  patient_id
@@ -410,6 +42,61 @@ obs. time interval:  (stime_onsdeath[_n-1], stime_onsdeath]
                                                 at risk from t =         0
                                      earliest observed entry t =         0
                                           last observed exit t =        69
+
+. 
+. strate ethnicity, output(./analysis/_kbadhoc_ethnicity_2ndwaveSTRATES, replace)
+
+         failure _d:  coviddeath
+   analysis time _t:  (stime_onsdeath-origin)
+             origin:  time enter_date
+  enter on or after:  time enter_date
+                 id:  patient_id
+
+Estimated failure rates
+Number of records  =       13223154
+
+  +-----------------------------------------------------------------------------+
+  |              ethnicity      D         Y        Rate       Lower       Upper |
+  |-----------------------------------------------------------------------------|
+  |                  White   1771   7.8e+08   0.0000023   0.0000022   0.0000024 |
+  |                  Mixed      8   1.2e+07   0.0000006   0.0000003   0.0000013 |
+  | Asian or Asian British    224   7.3e+07   0.0000031   0.0000027   0.0000035 |
+  |                  Black     27   2.5e+07   0.0000011   0.0000008   0.0000016 |
+  |                  Other     16   2.3e+07   0.0000007   0.0000004   0.0000011 |
+  +-----------------------------------------------------------------------------+
+   Notes: Rate = D/Y = failures/person-time.
+          Lower and Upper are bounds of 95% confidence intervals.
+
+
+. 
+. 
+end of do-file
+
+. do "E:\STATATMP\STD59a8_000000.tmp"
+
+. strate ethnicity, per(365.25) output(./analysis/_kbadhoc_ethnicity_2ndwaveSTRATES, replace)
+
+         failure _d:  coviddeath
+   analysis time _t:  (stime_onsdeath-origin)
+             origin:  time enter_date
+  enter on or after:  time enter_date
+                 id:  patient_id
+
+Estimated failure rates
+Number of records  =       13223154
+
+  +-----------------------------------------------------------------------------+
+  |              ethnicity      D         Y        Rate       Lower       Upper |
+  |-----------------------------------------------------------------------------|
+  |                  White   1771   2.1e+06   0.0008307   0.0007929   0.0008703 |
+  |                  Mixed      8   3.4e+04   0.0002363   0.0001182   0.0004725 |
+  | Asian or Asian British    224   2.0e+05   0.0011197   0.0009822   0.0012763 |
+  |                  Black     27   6.7e+04   0.0004025   0.0002760   0.0005869 |
+  |                  Other     16   6.3e+04   0.0002538   0.0001555   0.0004142 |
+  +-----------------------------------------------------------------------------+
+   Notes: Rate = D/Y = failures/person-time (per 365.25).
+          Lower and Upper are bounds of 95% confidence intervals.
+
 
 . 
 . safetab ethnicity if coviddeath==1
@@ -592,36 +279,6 @@ Asian or Asian British  |   2.858067   .2213416    13.56   0.000     2.455566   
                                                              Stratified by stp
 
 . 
-. 
-. log close
-      name:  <unnamed>
-       log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/_kbadhoc_ethnicity_2ndwave.log
-  log type:  text
- closed on:  18 Dec 2020, 23:32:42
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      name:  <unnamed>
-       log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/_kbadhoc_ethnicity_2ndwave.log
-  log type:  text
- opened on:  18 Dec 2020, 23:42:01
-
-. do "E:\STATATMP\STD59a8_000000.tmp"
-
-. tab agegroup ethnicity
-
-   Grouped |                       Ethnicity
-       age |     White      Mixed  Asian or       Black      Other |     Total
------------+-------------------------------------------------------+----------
-    18-<40 | 3,421,561     97,323    494,537    147,586    178,499 | 4,339,506 
-    40-<50 | 1,838,647     36,669    252,690     84,268     72,072 | 2,284,346 
-    50-<60 | 2,084,805     25,606    143,614     70,052     42,485 | 2,366,562 
-    60-<70 | 1,720,122     11,796     96,704     30,687     23,887 | 1,883,196 
-    70-<80 | 1,460,546      5,202     46,763     12,899     11,703 | 1,537,113 
-       80+ |   769,817      2,657     25,069      9,703      5,185 |   812,431 
------------+-------------------------------------------------------+----------
-     Total |11,295,498    179,253  1,059,377    355,195    333,831 |13,223,154 
-
-.
 . tab agegroup ethnicity, col
 
 +-------------------+
@@ -655,20 +312,6 @@ Asian or Asian British  |   2.858067   .2213416    13.56   0.000     2.455566   
      Total |11,295,498    179,253  1,059,377    355,195    333,831 |13,223,154 
            |    100.00     100.00     100.00     100.00     100.00 |    100.00 
 
-. 
-. table ethnicity , c(median age p25 age p75 age)
-
------------------------------------------------------------
-             Ethnicity |   med(age)    p25(age)    p75(age)
------------------------+-----------------------------------
-                 White |         51          36          66
-                 Mixed |         38          28          50
-Asian or Asian British |         41          32          52
-                 Black |         43          32          54
-                 Other |         38          29          49
------------------------------------------------------------
-
-.
 . tab male ethnicity, col
 
 +-------------------+
@@ -721,5 +364,330 @@ Asian or Asian British |         41          32          52
 -----------------+-------------------------------------------------------+----------
            Total |11,295,498    179,253  1,059,377    355,195    333,831 |13,223,154 
                  |    100.00     100.00     100.00     100.00     100.00 |    100.00 
+
+. 
+. table ethnicity , c(median age p25 age p75 age)
+
+-----------------------------------------------------------
+             Ethnicity |   med(age)    p25(age)    p75(age)
+-----------------------+-----------------------------------
+                 White |         51          36          66
+                 Mixed |         38          28          50
+Asian or Asian British |         41          32          52
+                 Black |         43          32          54
+                 Other |         38          29          49
+-----------------------------------------------------------
+
+. 
+. 
+. ***SENS AN - DEATHS IN U/L POSITION ONLY
+. 
+ 
+. use  ./analysis/cr_create_analysis_dataset_SEPT2020_STSET.dta, clear
+
+. 
+. stset stime_onsdeath, fail(onsdeath=1) id(patient_id) enter(enter_date) origin(enter_date)
+
+                id:  patient_id
+     failure event:  onsdeath == 1
+obs. time interval:  (stime_onsdeath[_n-1], stime_onsdeath]
+ enter on or after:  time enter_date
+ exit on or before:  failure
+    t for analysis:  (time-origin)
+            origin:  time enter_date
+
+------------------------------------------------------------------------------
+   17695074  total observations
+          0  exclusions
+------------------------------------------------------------------------------
+   17695074  observations remaining, representing
+   17695074  subjects
+      2,365  failures in single-failure-per-subject data
+ 1.2199e+09  total analysis time at risk and under observation
+                                                at risk from t =         0
+                                     earliest observed entry t =         0
+                                          last observed exit t =        69
+
+. 
+. summ died_date_ons if onsdeath==1, f d
+
+                        died_date_ons
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%    09sep2020      02sep2020
+ 5%    25sep2020      02sep2020
+10%    06oct2020      02sep2020       Obs               2,365
+25%    18oct2020      02sep2020       Sum of Wgt.       2,365
+
+50%    28oct2020                      Mean          24oct2020
+                        Largest       Std. Dev.      13.73235
+75%    04nov2020      09nov2020
+90%    07nov2020      09nov2020       Variance       188.5775
+95%    09nov2020      09nov2020       Skewness      -1.338435
+99%    09nov2020      09nov2020       Kurtosis       4.664896
+
+. 
+. stcox age1 age2 age3 i.male i.ethnicity , strata(stp) 
+
+         failure _d:  onsdeath == 1
+   analysis time _t:  (stime_onsdeath-origin)
+             origin:  time enter_date
+  enter on or after:  time enter_date
+                 id:  patient_id
+
+Iteration 0:   log likelihood = -24114.452
+Iteration 1:   log likelihood = -21908.226
+Iteration 2:   log likelihood = -21289.172
+Iteration 3:   log likelihood = -21268.163
+Iteration 4:   log likelihood = -21267.019
+Iteration 5:   log likelihood = -21266.927
+Iteration 6:   log likelihood = -21266.926
+Iteration 7:   log likelihood = -21266.926
+Refining estimates:
+Iteration 0:   log likelihood = -21266.926
+
+Stratified Cox regr. -- Breslow method for ties
+
+No. of subjects =   13,223,154                  Number of obs    =  13,223,154
+No. of failures =        1,809
+Time at risk    =    911660733
+                                                LR chi2(8)       =     5695.05
+Log likelihood  =   -21266.926                  Prob > chi2      =      0.0000
+
+-----------------------------------------------------------------------------------------
+                     _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+                   age1 |   1.117602   .0588926     2.11   0.035     1.007936    1.239201
+                   age2 |    1.03758   .1165327     0.33   0.743      .832571    1.293069
+                   age3 |   .9092429   .2379664    -0.36   0.716     .5443824    1.518643
+                 1.male |   1.944972   .0937311    13.80   0.000     1.769671    2.137637
+                        |
+              ethnicity |
+                 Mixed  |   1.120757    .459407     0.28   0.781     .5018773    2.502797
+Asian or Asian British  |   3.707542   .2937927    16.54   0.000     3.174207    4.330489
+                 Black  |   1.195801   .2604012     0.82   0.412     .7803662    1.832395
+                 Other  |   1.360193   .3550408     1.18   0.239     .8154888    2.268732
+-----------------------------------------------------------------------------------------
+                                                             Stratified by stp
+
+. stcox age1 age2 age3 i.male i.ethnicity i.imd, strata(stp) 
+
+         failure _d:  onsdeath == 1
+   analysis time _t:  (stime_onsdeath-origin)
+             origin:  time enter_date
+  enter on or after:  time enter_date
+                 id:  patient_id
+
+Iteration 0:   log likelihood = -24114.452
+Iteration 1:   log likelihood = -21834.985
+Iteration 2:   log likelihood = -21183.921
+Iteration 3:   log likelihood = -21163.203
+Iteration 4:   log likelihood = -21162.151
+Iteration 5:   log likelihood = -21162.072
+Iteration 6:   log likelihood = -21162.071
+Iteration 7:   log likelihood = -21162.071
+Refining estimates:
+Iteration 0:   log likelihood = -21162.071
+
+Stratified Cox regr. -- Breslow method for ties
+
+No. of subjects =   13,223,154                  Number of obs    =  13,223,154
+No. of failures =        1,809
+Time at risk    =    911660733
+                                                LR chi2(12)      =     5904.76
+Log likelihood  =   -21162.071                  Prob > chi2      =      0.0000
+
+-----------------------------------------------------------------------------------------
+                     _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+                   age1 |   1.115031   .0583577     2.08   0.037     1.006323    1.235483
+                   age2 |   1.051088   .1174902     0.45   0.656     .8442914    1.308538
+                   age3 |   .8769066   .2286233    -0.50   0.614     .5260557    1.461756
+                 1.male |   1.968799    .094967    14.04   0.000     1.791195    2.164013
+                        |
+              ethnicity |
+                 Mixed  |   .9795464   .4016627    -0.05   0.960     .4385206    2.188064
+Asian or Asian British  |   3.038003   .2444372    13.81   0.000     2.594781    3.556933
+                 Black  |   .9458856   .2064721    -0.25   0.799      .616644    1.450917
+                 Other  |   1.232478   .3219205     0.80   0.424     .7386648    2.056417
+                        |
+                    imd |
+                     2  |   1.244627    .112087     2.43   0.015     1.043236    1.484894
+                     3  |   1.453951   .1291338     4.21   0.000     1.221658    1.730413
+                     4  |   2.251959   .1855315     9.85   0.000     1.916164    2.646599
+       5 most deprived  |   2.569014   .2076419    11.67   0.000     2.192642    3.009991
+-----------------------------------------------------------------------------------------
+                                                             Stratified by stp
+
+. 
+. log close
+no log file open
+r(606);
+
+end of do-file
+
+r(606);
+
+. d ht*
+
+              storage   display    value
+variable name   type    format     label      variable label
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+htdiag_or_hig~p float   %9.0g                 Diagnosed hypertension or high blood pressure
+
+. do "E:\STATATMP\STD59a8_000000.tmp"
+
+. *FULLY ADJUSTED
+. stcox age1 age2 age3                                    ///
+>                         i.male                                                  ///
+>                         i.obese4cat                                             ///
+>                         i.smoke_nomiss                                  ///
+>                         i.ethnicity                                             ///
+>                         i.imd                                                   ///
+>                         i.htdiag_or_highbp                                              ///
+>                         i.chronic_respiratory_disease   ///
+>                         i.asthmacat                                             ///
+>                         i.chronic_cardiac_disease               ///
+>                         i.diabcat                                               ///
+>                         i.cancer_exhaem_cat                             ///
+>                         i.cancer_haem_cat                               ///
+>                         i.chronic_liver_disease                 ///
+>                         i.stroke_dementia                               ///
+>                         i.other_neuro                                   ///
+>                         i.chronic_kidney_disease                ///
+>                         i.organ_transplant                              ///
+>                         i.spleen                                                ///
+>                         i.ra_sle_psoriasis                      ///
+>                         i.other_immunosuppression                       ///
+>                         , strata(stp)
+variable chronic_kidney_disease not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "E:\STATATMP\STD59a8_000000.tmp"
+
+. *FULLY ADJUSTED
+. stcox age1 age2 age3                                    ///
+>                         i.male                                                  ///
+>                         i.obese4cat                                             ///
+>                         i.smoke_nomiss                                  ///
+>                         i.ethnicity                                             ///
+>                         i.imd                                                   ///
+>                         i.htdiag_or_highbp                                              ///
+>                         i.chronic_respiratory_disease   ///
+>                         i.asthmacat                                             ///
+>                         i.chronic_cardiac_disease               ///
+>                         i.diabcat                                               ///
+>                         i.cancer_exhaem_cat                             ///
+>                         i.cancer_haem_cat                               ///
+>                         i.chronic_liver_disease                 ///
+>                         i.stroke_dementia                               ///
+>                         i.other_neuro                                   ///
+>                         i.reduced_kidney_function_cat   ///
+>                         i.organ_transplant                              ///
+>                         i.spleen                                                ///
+>                         i.ra_sle_psoriasis                      ///
+>                         i.other_immunosuppression                       ///
+>                         , strata(stp)
+
+         failure _d:  onsdeath == 1
+   analysis time _t:  (stime_onsdeath-origin)
+             origin:  time enter_date
+  enter on or after:  time enter_date
+                 id:  patient_id
+
+Iteration 0:   log likelihood = -24114.452
+Iteration 1:   log likelihood = -21740.027
+Iteration 2:   log likelihood = -20729.545
+Iteration 3:   log likelihood = -20671.786
+Iteration 4:   log likelihood = -20664.738
+Iteration 5:   log likelihood = -20663.188
+Iteration 6:   log likelihood = -20663.016
+Iteration 7:   log likelihood = -20663.013
+Iteration 8:   log likelihood = -20663.013
+Refining estimates:
+Iteration 0:   log likelihood = -20663.013
+
+Stratified Cox regr. -- Breslow method for ties
+
+No. of subjects =   13,223,154                  Number of obs    =  13,223,154
+No. of failures =        1,809
+Time at risk    =    911660733
+                                                LR chi2(40)      =     6902.88
+Log likelihood  =   -20663.013                  Prob > chi2      =      0.0000
+
+-----------------------------------------------------------------------------------------------
+                           _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------------------+----------------------------------------------------------------
+                         age1 |   1.146476   .0641171     2.44   0.015     1.027452     1.27929
+                         age2 |   .9270606   .1097619    -0.64   0.522     .7350684    1.169199
+                         age3 |   1.200696   .3302354     0.67   0.506       .70036    2.058471
+                       1.male |   1.655726   .0829516    10.06   0.000     1.500871    1.826559
+                              |
+                    obese4cat |
+           Obese I (30-34.9)  |   1.129625   .0705084     1.95   0.051     .9995496    1.276627
+          Obese II (35-39.9)  |   1.388749   .1288429     3.54   0.000      1.15785    1.665693
+             Obese III (40+)  |   2.302835   .2681696     7.16   0.000       1.8329    2.893257
+                              |
+                 smoke_nomiss |
+                      Former  |   1.460238   .0826809     6.69   0.000     1.306855    1.631624
+                     Current  |   .8246992   .0933061    -1.70   0.088     .6606798    1.029438
+                              |
+                    ethnicity |
+                       Mixed  |   .9846473    .403995    -0.04   0.970     .4405931    2.200512
+      Asian or Asian British  |   2.988291   .2508446    13.04   0.000     2.534959    3.522694
+                       Black  |   .9527455   .2089951    -0.22   0.825     .6198071    1.464527
+                       Other  |   1.386595   .3629603     1.25   0.212     .8301108    2.316133
+                              |
+                          imd |
+                           2  |    1.18211   .1065093     1.86   0.063     .9907489    1.410431
+                           3  |   1.322448   .1176749     3.14   0.002     1.110801     1.57442
+                           4  |   1.941363   .1608004     8.01   0.000     1.650452    2.283551
+             5 most deprived  |   2.065314   .1691324     8.86   0.000     1.759056    2.424893
+                              |
+           1.htdiag_or_highbp |   1.021935   .0606345     0.37   0.715     .9097439    1.147963
+1.chronic_respiratory_disease |   1.972718   .1112318    12.05   0.000     1.766322    2.203231
+                              |
+                    asthmacat |
+                 Yes, no OCS  |   1.089645    .076114     1.23   0.219     .9502257     1.24952
+                Yes with OCS  |   1.129917   .1441413     0.96   0.338     .8799546    1.450883
+                              |
+    1.chronic_cardiac_disease |   1.469054   .0753629     7.50   0.000     1.328528    1.624443
+                              |
+                      diabcat |
+         Controlled diabetes  |   1.312543   .0791373     4.51   0.000      1.16625    1.477185
+       Uncontrolled diabetes  |   1.926789   .1442966     8.76   0.000      1.66375    2.231415
+  Diabetes, no hba1c measure  |    1.60387   .1779353     4.26   0.000     1.290434    1.993437
+                              |
+            cancer_exhaem_cat |
+                   Last year  |   2.351015   .3609766     5.57   0.000     1.740048    3.176505
+               2-5 years ago  |   1.083253   .1320229     0.66   0.512     .8530777    1.375534
+                    5+ years  |   1.010553   .0787941     0.13   0.893     .8673413    1.177412
+                              |
+              cancer_haem_cat |
+                   Last year  |   1.916629   .8601077     1.45   0.147     .7953389    4.618743
+               2-5 years ago  |   1.575397   .4390232     1.63   0.103     .9123927    2.720184
+                    5+ years  |   2.309675   .3663941     5.28   0.000      1.69247    3.151961
+                              |
+      1.chronic_liver_disease |   1.339291   .2590379     1.51   0.131     .9167284    1.956634
+            1.stroke_dementia |   1.507639   .0947019     6.54   0.000     1.332998    1.705161
+                1.other_neuro |    2.68524   .2708544     9.79   0.000     2.203557    3.272217
+                              |
+  reduced_kidney_function_cat |
+Stage 3a/3b egfr 30-60        |   1.419742   .0792941     6.28   0.000     1.272533    1.583981
+           Stage 4/5 egfr<30  |   2.532746   .2365807     9.95   0.000     2.109026    3.041595
+                              |
+           1.organ_transplant |   5.377885   1.306581     6.92   0.000     3.340475    8.657944
+                     1.spleen |   1.559276    .554096     1.25   0.211     .7770421     3.12897
+           1.ra_sle_psoriasis |   1.361559   .1051267     4.00   0.000     1.170347    1.584011
+    1.other_immunosuppression |   1.252757   .5621004     0.50   0.616     .5199251    3.018513
+-----------------------------------------------------------------------------------------------
+                                                             Stratified by stp
+
+. 
+end of do-file
 
 . 
