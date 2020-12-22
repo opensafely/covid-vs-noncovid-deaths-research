@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_imputed_GENERAL_MAIN_noncoviddeath_full_agegrp.log
   log type:  text
- opened on:  14 Dec 2020, 21:12:38
+ opened on:  21 Dec 2020, 22:03:27
 
 . 
 . use ./analysis/an_impute_imputeddata_`dataset', replace
@@ -75,8 +75,8 @@ Logistic regression                             Number of obs     = 17,456,515
                                                 Average RVI       =     0.0284
                                                 Largest FMI       =     0.3814
 DF adjustment:   Large sample                   DF:     min       =      68.12
-                                                        avg       =   8.35e+08
-                                                        max       =   1.27e+10
+                                                        avg       =   5.61e+08
+                                                        max       =   4.70e+09
 Model F test:       Equal FMI                   F(  44,487182.8)  =    6911.59
 Within VCE type:          OIM                   Prob > F          =     0.0000
 
@@ -84,11 +84,11 @@ Within VCE type:          OIM                   Prob > F          =     0.0000
                 noncoviddeath |     exp(b)   Std. Err.      t    P>|t|     [95% Conf. Interval]
 ------------------------------+----------------------------------------------------------------
                      agegroup |
-                      40-<50  |   3.899966   .1302337    40.76   0.000     3.652887    4.163758
-                      50-<60  |   8.883272   .2644554    73.37   0.000     8.379781    9.417015
-                      60-<70  |   19.05794   .5492086   102.28   0.000     18.01135    20.16535
-                      70-<80  |   39.83076   1.136229   129.17   0.000      37.6649    42.12116
-                         80+  |   137.8355   3.935639   172.52   0.000     130.3337    145.7692
+                      18-<40  |   .1125711   .0033512   -73.37   0.000     .1061908    .1193349
+                      40-<50  |   .4390236   .0098809   -36.58   0.000     .4200783    .4588233
+                      60-<70  |   2.145374   .0306797    53.38   0.000     2.086078    2.206356
+                      70-<80  |   4.483793   .0603427   111.49   0.000      4.36707    4.603637
+                         80+  |    15.5163    .208966   203.59   0.000     15.11209    15.93132
                               |
                        1.male |   1.026961   .0060831     4.49   0.000     1.015108    1.038953
                               |
@@ -151,10 +151,9 @@ Stage 5 egfr <15 or dialysis  |    6.40231   .1626977    73.06   0.000      6.09
                      1.spleen |   1.555872    .067098    10.25   0.000     1.429767      1.6931
            1.ra_sle_psoriasis |    1.08351   .0112842     7.70   0.000     1.061617    1.105853
     1.other_immunosuppression |   2.124204   .0910762    17.57   0.000     1.952993    2.310425
-                        _cons |   .0001626   4.63e-06  -306.14   0.000     .0001538     .000172
+                        _cons |   .0014445   .0000207  -456.28   0.000     .0014045    .0014857
 -----------------------------------------------------------------------------------------------
 . estimates save ./analysis/output/models/an_imputed_full_`dataset'`sensan'_`outcome'_`agetype', replace
-(note: file ./analysis/output/models/an_imputed_full_MAIN_noncoviddeath_agegrp.ster not found)
 file ./analysis/output/models/an_imputed_full_MAIN_noncoviddeath_agegrp.ster saved
 . }
 
@@ -163,5 +162,5 @@ file ./analysis/output/models/an_imputed_full_MAIN_noncoviddeath_agegrp.ster sav
       name:  <unnamed>
        log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_imputed_GENERAL_MAIN_noncoviddeath_full_agegrp.log
   log type:  text
- closed on:  14 Dec 2020, 23:14:40
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ closed on:  21 Dec 2020, 23:16:14
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
