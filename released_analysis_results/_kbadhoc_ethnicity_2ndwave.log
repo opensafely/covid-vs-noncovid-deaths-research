@@ -982,14 +982,16 @@ file ./analysis/output/models/_kbadhoc_ethnicity_2ndwave_ETH16r_SEXINT.ster save
          (1) |   2.740843   .7209691     3.83   0.000     1.636736    4.589757
 ------------------------------------------------------------------------------
 
-. lincom 12.ethnicity + 1.male#11.ethnicity , eform
 
- ( 1)  12.ethnicity_16reduced + 1.male#11.ethnicity_16reduced = 0
+
+. lincom 12.ethnicity + 1.male#12.ethnicity , eform
+
+ ( 1)  12.ethnicity_16reduced + 1.male#12.ethnicity_16reduced = 0
 
 ------------------------------------------------------------------------------
           _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-         (1) |   1.684614   1.003768     0.88   0.381     .5239818    5.416072
+         (1) |   1.268766   .4062543     0.74   0.457      .677376    2.376474
 ------------------------------------------------------------------------------
 
 . lincom 13.ethnicity + 1.male#13.ethnicity , eform
