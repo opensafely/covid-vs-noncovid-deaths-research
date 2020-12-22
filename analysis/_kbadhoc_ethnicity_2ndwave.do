@@ -58,7 +58,7 @@ lincom 8.ethnicity + 1.male#8.ethnicity , eform
 lincom 9.ethnicity + 1.male#9.ethnicity , eform
 lincom 10.ethnicity + 1.male#10.ethnicity , eform
 lincom 11.ethnicity + 1.male#11.ethnicity , eform
-lincom 12.ethnicity + 1.male#11.ethnicity , eform
+lincom 12.ethnicity + 1.male#12.ethnicity , eform
 lincom 13.ethnicity + 1.male#13.ethnicity , eform
 lincom 15.ethnicity + 1.male#15.ethnicity , eform
 
