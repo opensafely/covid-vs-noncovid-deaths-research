@@ -245,7 +245,7 @@ replace leveldesc = "Current" if variable=="smoke_nomiss" & level==3
 
 replace leveldesc = "White (ref)" if variable=="ethnicity" & level==1
 replace leveldesc = "Mixed" if variable=="ethnicity" & level==2
-replace leveldesc = "Asian/Asian British" if variable=="ethnicity" & level==3
+replace leveldesc = "South Asian" if variable=="ethnicity" & level==3
 replace leveldesc = "Black" if variable=="ethnicity" & level==4
 replace leveldesc = "Other" if variable=="ethnicity" & level==5
 
