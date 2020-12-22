@@ -30,6 +30,40 @@ tab imd ethnicity, col
 
 table ethnicity , c(median age p25 age p75 age)
 
+*Sex interaction
+stcox age1 age2 age3 i.male##i.ethnicity , strata(stp) 
+estimates save ./analysis/output/models/_kbadhoc_ethnicity_2ndwave_SEXINT, replace
+
+lincom 2.ethnicity + 1.male#2.ethnicity , eform
+lincom 3.ethnicity + 1.male#3.ethnicity , eform
+lincom 4.ethnicity + 1.male#4.ethnicity , eform
+lincom 5.ethnicity + 1.male#5.ethnicity , eform
+
+test 1.male#2.ethnicity 1.male#3.ethnicity 1.male#4.ethnicity 1.male#5.ethnicity
+
+
+gen ethnicity_16reduced = ethnicity_16
+
+recode ethnicity_16reduced 2/3=2 4/7=4 13/14=13 15/16=15
+
+label define ethnicity_16reducedlab 1 "White British" 2 "Other white" 4 "Mixed" 8 "Indian" 9 "Pakistani" 10 "Bangladeshi" 11 "Other Asian" 12 "Black Carribbean"  13 "Other Black" 15 "Other"
+label values ethnicity_16reduced ethnicity_16reducedlab
+
+stcox age1 age2 age3 i.male##i.ethnicity_16reduced , strata(stp) 
+estimates save ./analysis/output/models/_kbadhoc_ethnicity_2ndwave_ETH16r_SEXINT, replace
+
+lincom 2.ethnicity + 1.male#2.ethnicity , eform
+lincom 4.ethnicity + 1.male#4.ethnicity , eform
+lincom 8.ethnicity + 1.male#8.ethnicity , eform
+lincom 9.ethnicity + 1.male#9.ethnicity , eform
+lincom 10.ethnicity + 1.male#10.ethnicity , eform
+lincom 11.ethnicity + 1.male#11.ethnicity , eform
+lincom 12.ethnicity + 1.male#11.ethnicity , eform
+lincom 13.ethnicity + 1.male#13.ethnicity , eform
+lincom 15.ethnicity + 1.male#15.ethnicity , eform
+
+test 1.male#2.ethnicity 1.male#4.ethnicity 1.male#8.ethnicity 1.male#9.ethnicity 1.male#10.ethnicity 1.male#11.ethnicity 1.male#12.ethnicity 1.male#13.ethnicity 1.male#15.ethnicity
+
 
 ***SENS AN - DEATHS IN U/L POSITION ONLY
 

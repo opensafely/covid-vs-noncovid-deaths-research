@@ -691,3 +691,345 @@ Stage 3a/3b egfr 30-60        |   1.419742   .0792941     6.28   0.000     1.272
 end of do-file
 
 . 
+**********************************************************
+
+*SEX INTERACTIONS
+
+. use  ./analysis/cr_create_analysis_dataset_SEPT2020_STSET.dta, clear
+
+. 
+. gen coviddeath = died_ons_covid_flag_any==1 & died_date_ons<=d(9/11/2020)
+
+. 
+. tab coviddeath
+
+ coviddeath |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 | 17,692,388       99.98       99.98
+          1 |      2,686        0.02      100.00
+------------+-----------------------------------
+      Total | 17,695,074      100.00
+
+. 
+. stset stime_onsdeath, fail(coviddeath) id(patient_id) enter(enter_date) origin(enter_date)
+
+                id:  patient_id
+     failure event:  coviddeath != 0 & coviddeath < .
+obs. time interval:  (stime_onsdeath[_n-1], stime_onsdeath]
+ enter on or after:  time enter_date
+ exit on or before:  failure
+    t for analysis:  (time-origin)
+            origin:  time enter_date
+
+------------------------------------------------------------------------------
+   17695074  total observations
+          0  exclusions
+------------------------------------------------------------------------------
+   17695074  observations remaining, representing
+   17695074  subjects
+      2,686  failures in single-failure-per-subject data
+ 1.2199e+09  total analysis time at risk and under observation
+                                                at risk from t =         0
+                                     earliest observed entry t =         0
+                                          last observed exit t =        69
+
+. 
+. stcox age1 age2 age3 i.male##i.ethnicity , strata(stp) 
+
+         failure _d:  coviddeath
+   analysis time _t:  (stime_onsdeath-origin)
+             origin:  time enter_date
+  enter on or after:  time enter_date
+                 id:  patient_id
+
+Iteration 0:   log likelihood = -27255.269
+Iteration 1:   log likelihood = -24801.318
+Iteration 2:   log likelihood = -24134.632
+Iteration 3:   log likelihood =  -24105.84
+Iteration 4:   log likelihood = -24103.853
+Iteration 5:   log likelihood = -24103.638
+Iteration 6:   log likelihood = -24103.634
+Iteration 7:   log likelihood = -24103.634
+Refining estimates:
+Iteration 0:   log likelihood = -24103.634
+
+Stratified Cox regr. -- Breslow method for ties
+
+No. of subjects =   13,223,154                  Number of obs    =  13,223,154
+No. of failures =        2,046
+Time at risk    =    911660733
+                                                LR chi2(12)      =     6303.27
+Log likelihood  =   -24103.634                  Prob > chi2      =      0.0000
+
+-------------------------------------------------------------------------------------------
+                       _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+                     age1 |   1.149426   .0615802     2.60   0.009     1.034851    1.276685
+                     age2 |   .9755876   .1094862    -0.22   0.826     .7829596    1.215607
+                     age3 |   1.045819   .2714267     0.17   0.863     .6288392    1.739294
+                   1.male |     1.8215   .0881012    12.40   0.000     1.656757    2.002625
+                          |
+                ethnicity |
+                   Mixed  |   1.587237   .7967404     0.92   0.357     .5934267    4.245382
+  Asian or Asian British  |   2.624615   .3449852     7.34   0.000     2.028532    3.395857
+                   Black  |   1.662149   .4521461     1.87   0.062     .9752632    2.832814
+                   Other  |   1.185211   .4867934     0.41   0.679     .5298922    2.650963
+                          |
+           male#ethnicity |
+                 1#Mixed  |   .6825479   .4837698    -0.54   0.590     .1701479    2.738039
+1#Asian or Asian British  |   1.533082   .2365448     2.77   0.006     1.133001    2.074437
+                 1#Black  |   .6157873   .2390418    -1.25   0.212     .2877423    1.317825
+                 1#Other  |   1.107921   .5746283     0.20   0.843     .4008936    3.061882
+-------------------------------------------------------------------------------------------
+                                                             Stratified by stp
+
+. estimates save ./analysis/output/models/_kbadhoc_ethnicity_2ndwave_SEXINT, replace
+(note: file ./analysis/output/models/_kbadhoc_ethnicity_2ndwave_SEXINT.ster not found)
+file ./analysis/output/models/_kbadhoc_ethnicity_2ndwave_SEXINT.ster saved
+
+. 
+. lincom 2.ethnicity + 1.male#2.ethnicity , eform
+
+ ( 1)  2.ethnicity + 1.male#2.ethnicity = 0
+
+------------------------------------------------------------------------------
+          _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   1.083366    .543482     0.16   0.873      .405285    2.895939
+------------------------------------------------------------------------------
+
+. lincom 3.ethnicity + 1.male#3.ethnicity , eform
+
+ ( 1)  3.ethnicity + 1.male#3.ethnicity = 0
+
+------------------------------------------------------------------------------
+          _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   4.023749   .3624904    15.45   0.000      3.37247    4.800801
+------------------------------------------------------------------------------
+
+. lincom 4.ethnicity + 1.male#4.ethnicity , eform
+
+ ( 1)  4.ethnicity + 1.male#4.ethnicity = 0
+
+------------------------------------------------------------------------------
+          _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |    1.02353   .2877426     0.08   0.934     .5899354    1.775812
+------------------------------------------------------------------------------
+
+. lincom 5.ethnicity + 1.male#5.ethnicity , eform
+
+ ( 1)  5.ethnicity + 1.male#5.ethnicity = 0
+
+------------------------------------------------------------------------------
+          _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |    1.31312   .4188535     0.85   0.393     .7027351    2.453675
+------------------------------------------------------------------------------
+
+. 
+
+
+. test 1.male#2.ethnicity 1.male#3.ethnicity 1.male#4.ethnicity 1.male#5.ethnicity
+
+ ( 1)  1.male#2.ethnicity = 0
+ ( 2)  1.male#3.ethnicity = 0
+ ( 3)  1.male#4.ethnicity = 0
+ ( 4)  1.male#5.ethnicity = 0
+
+           chi2(  4) =    9.87
+         Prob > chi2 =    0.0426
+
+
+
+. gen ethnicity_16reduced = ethnicity_16
+(4,471,920 missing values generated)
+
+. 
+. recode ethnicity_16reduced 2/3=2 4/7=4 13/14=13 15/16=15
+(ethnicity_16reduced: 1834856 changes made)
+
+. 
+. label define ethnicity_16reducedlab 1 "White British" 2 "Other white" 4 "Mixed" 8 "Indian" 9 "Pakistani" 10 "Bangladeshi" 11 "Other Asian" 12 "Black Carribbean"  13 "Other Black" 15 "Other"
+
+. label values ethnicity_16reduced ethnicity_16reducedlab
+
+. 
+. stcox age1 age2 age3 i.male##i.ethnicity_16reduced , strata(stp) 
+
+         failure _d:  coviddeath
+   analysis time _t:  (stime_onsdeath-origin)
+             origin:  time enter_date
+  enter on or after:  time enter_date
+                 id:  patient_id
+
+Iteration 0:   log likelihood = -27255.269
+Iteration 1:   log likelihood = -24792.286
+Iteration 2:   log likelihood = -24123.897
+Iteration 3:   log likelihood =   -24095.1
+Iteration 4:   log likelihood = -24093.045
+Iteration 5:   log likelihood = -24092.822
+Iteration 6:   log likelihood = -24092.817
+Iteration 7:   log likelihood = -24092.817
+Refining estimates:
+Iteration 0:   log likelihood = -24092.817
+
+Stratified Cox regr. -- Breslow method for ties
+
+No. of subjects =   13,223,154                  Number of obs    =  13,223,154
+No. of failures =        2,046
+Time at risk    =    911660733
+                                                LR chi2(22)      =     6324.90
+Log likelihood  =   -24092.817                  Prob > chi2      =      0.0000
+
+------------------------------------------------------------------------------------------
+                      _t | Haz. Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                    age1 |   1.148715   .0614215     2.59   0.010     1.034425    1.275634
+                    age2 |    .979207   .1097167    -0.19   0.851     .7861408    1.219688
+                    age3 |   1.034482   .2681124     0.13   0.896     .6224616    1.719229
+                  1.male |   1.811224   .0902842    11.92   0.000      1.64264    1.997111
+                         |
+     ethnicity_16reduced |
+            Other white  |   1.004258   .1570581     0.03   0.978     .7391359    1.364479
+                  Mixed  |   1.571971   .7893578     0.90   0.368     .5875133     4.20602
+                 Indian  |   1.724226   .3979664     2.36   0.018     1.096805     2.71056
+              Pakistani  |   3.684802    .645766     7.44   0.000     2.613605    5.195032
+            Bangladeshi  |   3.914787   1.967212     2.72   0.007     1.462084    10.48199
+            Other Asian  |   2.090958   .7992099     1.93   0.054     .9885477    4.422758
+       Black Carribbean  |   1.285173    .490989     0.66   0.511     .6078096    2.717413
+            Other Black  |   2.256977   .8617349     2.13   0.033       1.0679     4.77006
+                  Other  |   1.168774   .4803248     0.38   0.704     .5222959    2.615437
+                         |
+male#ethnicity_16reduced |
+          1#Other white  |   1.091197   .2218139     0.43   0.668     .7326127    1.625293
+                1#Mixed  |   .6870894   .4870594    -0.53   0.597     .1712455    2.756813
+               1#Indian  |   1.930429   .5076048     2.50   0.012     1.153005    3.232039
+            1#Pakistani  |   1.341016    .284871     1.38   0.167     .8843289    2.033546
+          1#Bangladeshi  |   1.850881   1.072885     1.06   0.288     .5942507    5.764842
+          1#Other Asian  |   1.310807   .6036072     0.59   0.557     .5315853    3.232246
+     1#Black Carribbean  |   .9872335   .4890022    -0.03   0.979     .3739365    2.606405
+          1#Other Black  |   .2706362   .1872513    -1.89   0.059     .0697342    1.050331
+                1#Other  |   1.114847   .5783775     0.21   0.834     .4032883    3.081873
+------------------------------------------------------------------------------------------
+                                                             Stratified by stp
+
+
+
+. estimates save ./analysis/output/models/_kbadhoc_ethnicity_2ndwave_ETH16r_SEXINT, replace
+(note: file ./analysis/output/models/_kbadhoc_ethnicity_2ndwave_ETH16r_SEXINT.ster not found)
+file ./analysis/output/models/_kbadhoc_ethnicity_2ndwave_ETH16r_SEXINT.ster saved
+
+. 
+. lincom 2.ethnicity + 1.male#2.ethnicity , eform
+
+ ( 1)  2.ethnicity_16reduced + 1.male#2.ethnicity_16reduced = 0
+
+------------------------------------------------------------------------------
+          _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   1.095844   .1452346     0.69   0.490     .8451562    1.420889
+------------------------------------------------------------------------------
+
+. lincom 4.ethnicity + 1.male#4.ethnicity , eform
+
+ ( 1)  4.ethnicity_16reduced + 1.male#4.ethnicity_16reduced = 0
+
+------------------------------------------------------------------------------
+          _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   1.080085   .5419994     0.15   0.878     .4039379    2.888025
+------------------------------------------------------------------------------
+
+. lincom 8.ethnicity + 1.male#8.ethnicity , eform
+
+ ( 1)  8.ethnicity_16reduced + 1.male#8.ethnicity_16reduced = 0
+
+------------------------------------------------------------------------------
+          _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   3.328497     .46387     8.63   0.000     2.532923    4.373956
+------------------------------------------------------------------------------
+
+. lincom 9.ethnicity + 1.male#9.ethnicity , eform
+
+ ( 1)  9.ethnicity_16reduced + 1.male#9.ethnicity_16reduced = 0
+
+------------------------------------------------------------------------------
+          _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   4.941378   .6234291    12.66   0.000     3.858835    6.327613
+------------------------------------------------------------------------------
+
+. lincom 10.ethnicity + 1.male#10.ethnicity , eform
+
+ ( 1)  10.ethnicity_16reduced + 1.male#10.ethnicity_16reduced = 0
+
+------------------------------------------------------------------------------
+          _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   7.245806   2.117826     6.78   0.000     4.085968    12.84927
+------------------------------------------------------------------------------
+
+. lincom 11.ethnicity + 1.male#11.ethnicity , eform
+
+ ( 1)  11.ethnicity_16reduced + 1.male#11.ethnicity_16reduced = 0
+
+------------------------------------------------------------------------------
+          _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   2.740843   .7209691     3.83   0.000     1.636736    4.589757
+------------------------------------------------------------------------------
+
+. lincom 12.ethnicity + 1.male#11.ethnicity , eform
+
+ ( 1)  12.ethnicity_16reduced + 1.male#11.ethnicity_16reduced = 0
+
+------------------------------------------------------------------------------
+          _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   1.684614   1.003768     0.88   0.381     .5239818    5.416072
+------------------------------------------------------------------------------
+
+. lincom 13.ethnicity + 1.male#13.ethnicity , eform
+
+ ( 1)  13.ethnicity_16reduced + 1.male#13.ethnicity_16reduced = 0
+
+------------------------------------------------------------------------------
+          _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   .6108199   .3540076    -0.85   0.395     .1961506    1.902115
+------------------------------------------------------------------------------
+
+. lincom 15.ethnicity + 1.male#15.ethnicity , eform
+
+ ( 1)  15.ethnicity_16reduced + 1.male#15.ethnicity_16reduced = 0
+
+------------------------------------------------------------------------------
+          _t |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         (1) |   1.303004    .415984     0.83   0.407     .6969466    2.436081
+------------------------------------------------------------------------------
+
+
+
+. test 1.male#2.ethnicity 1.male#4.ethnicity 1.male#8.ethnicity 1.male#9.ethnicity 1.male#10.ethnicity 1.male#11.ethnicity 1.male#12.ethnicity 1.male#13.ethnicity 1.male#15.ethnicity
+
+ ( 1)  1.male#2.ethnicity_16reduced = 0
+ ( 2)  1.male#4.ethnicity_16reduced = 0
+ ( 3)  1.male#8.ethnicity_16reduced = 0
+ ( 4)  1.male#9.ethnicity_16reduced = 0
+ ( 5)  1.male#10.ethnicity_16reduced = 0
+ ( 6)  1.male#11.ethnicity_16reduced = 0
+ ( 7)  1.male#12.ethnicity_16reduced = 0
+ ( 8)  1.male#13.ethnicity_16reduced = 0
+ ( 9)  1.male#15.ethnicity_16reduced = 0
+
+           chi2(  9) =   13.36
+         Prob > chi2 =    0.1468
+
+
+. 
+
+
