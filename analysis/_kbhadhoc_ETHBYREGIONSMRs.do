@@ -8,7 +8,9 @@ save ./analysis/output/_kbhadhoc_ETHBYREGIONSMRs, replace
 
 forvalues i = 1/9{
 	use "./analysis/cr_create_analysis_dataset_SEPT2020_STSET.dta" , clear
-	gen coviddeath = onsdeath==1 
+*	gen coviddeath = onsdeath==1 
+	gen coviddeath = died_ons_covid_flag_any==1 & died_date_ons<=d(9/11/2020)
+
 	gen byte pop=1
 	
 	if `i'==1 local reg "East"
@@ -53,7 +55,7 @@ forvalues i = 1/9{
 
 log close
 
-use _allregions, clear
+use ./analysis/output/_kbhadhoc_ETHBYREGIONSMRs, clear
 gen ethnicity = mod(_n,5)
 replace ethnicity=5 if ethnicity==0
 
@@ -79,7 +81,7 @@ scatter reverseeth smr if leftarrow!="<" || rcap lb ub reverseeth , lc(red) hor 
  || scatter reverse leftarrowpos, m(i) mlab(leftarrow) mlabc(red) ///
  || , by(region, legend(off)  title("Region specific SMRs for COVID death") t2("Standardised to age-sex-specific covid mortality of local white population")) xlab(0.25 0.5 1 2 5) legend(off) 
 
-graph export ./analysis/output/_kbhadhoc_ETHBYREGIONSMRs_graph.svg, as(svg)
+graph export ./analysis/output/_kbhadhoc_ETHBYREGIONSMRs_graph.svg, as(svg) replace
  
 *graph bar pop if ethnicity!=1, by(region) over(ethnicity) 
 
@@ -100,5 +102,5 @@ for any White Mixed S_Asian Black Other: drop cellX
 for any White Mixed S_Asian Black Other: replace X = "<=5" if real(X)>0 & real(X)<=5 & cellname=="Observed"
 replace White = "-" if cellname=="Expected" 
 
-outsheet using "./analysis/output/_kbhadhoc_ETHBYREGIONSMRs_table.csv", c
+outsheet using "./analysis/output/_kbhadhoc_ETHBYREGIONSMRs_table.csv", c replace
 
