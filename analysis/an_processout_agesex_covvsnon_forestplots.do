@@ -310,7 +310,7 @@ scatter graphorder hr if lci>=.15 & outcome=="coviddeath", mcol(black)	msize(sma
 	|| scatter graphorder lowerlimit, m(i) mlab(displayhrci) mlabcol(black) mlabsize(tiny) ///
 	|| scatter graphorder varx if outcome=="coviddeath", m(i) mlab(Name) mlabsize(vsmall) mlabcol(black) 	///
 	|| scatter graphorder levelx, m(i) mlab(leveldesc) mlabsize(tiny) mlabcol(gs4) 	///
-		xline(1,lp(dash)) 															///
+		xline(1,lp(shortdash)) 															///
 		xscale(log) xlab(0.25 0.5 1 2 5 10 20) xtitle("Odds Ratio & 95% CI") ylab(none) ytitle("")						/// 
 		 ysize(10)   legend(order(1 3) label(1 "COVID deaths") label(3 "Non-COVID deaths"))  yscale(off) ///
 		 title("`title'", size(medium)) ///
