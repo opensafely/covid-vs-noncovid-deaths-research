@@ -1,6 +1,6 @@
 # Covid vs noncovid deaths research
 
-This study will compare factors associated with covid death and non-covid death. It is a work in progress.
+This study compares factors associated with covid death and non-covid death. 
 
 # About the OpenSAFELY framework
 
