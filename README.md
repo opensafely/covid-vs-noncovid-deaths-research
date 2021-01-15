@@ -10,6 +10,7 @@ Developers and epidemiologists interested in the code should review our [OpenSAF
 
 If you are interested in how we defined our code lists, look in the codelists folder. A new tool called OpenSafely Codelists was developed to allow codelists to be versioned and all of the codelists hosted online at codelists.opensafely.org for open inspection and re-use by anyone.
 
+Raw analytical outputs are in the released_analysis_results folder.
 
 # About the OpenSAFELY framework
 
