@@ -2,6 +2,15 @@
 
 This study compares factors associated with covid death and non-covid death. 
 
+The paper has been submitted to medRxiv and to an academic peer-reviewed journal
+
+If you are interested in how we defined our variables, take a look at the study definition; this is written in python, but non-programmers should be able to understand what is going on there.
+
+Developers and epidemiologists interested in the code should review our [OpenSAFELY documentation](https://docs.opensafely.org/en/latest/)
+
+If you are interested in how we defined our code lists, look in the codelists folder. A new tool called OpenSafely Codelists was developed to allow codelists to be versioned and all of the codelists hosted online at codelists.opensafely.org for open inspection and re-use by anyone.
+
+
 # About the OpenSAFELY framework
 
 The OpenSAFELY framework is a new secure analytics platform for
