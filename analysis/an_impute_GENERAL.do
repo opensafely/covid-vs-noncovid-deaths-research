@@ -1,5 +1,8 @@
 *an_impute
 *KB 16/7/2020
+
+set seed `2'
+
 if "`1'"=="MAIN" | "`1'"=="SEPT2020" {
 local check "assert onsdeath>=1 & onsdeath<. if _d==1"
 local genoutput1 "gen coviddeath = onsdeath==1" 

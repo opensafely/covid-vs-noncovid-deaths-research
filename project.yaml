@@ -56,7 +56,7 @@ actions:
         log: analysis/output/cr_create_analysis_dataset_2019.log
   
   imputedataMAIN:
-    run: stata-mp:latest analysis/an_impute_GENERAL.do MAIN
+    run: stata-mp:latest analysis/an_impute_GENERAL.do MAIN 9572
     needs: [crMAIN]
     outputs:
       highly_sensitive:
@@ -65,7 +65,7 @@ actions:
         log: analysis/output/an_impute_MAIN.log
 
   imputedataSEPT2020:
-    run: stata-mp:latest analysis/an_impute_GENERAL.do SEPT2020
+    run: stata-mp:latest analysis/an_impute_GENERAL.do SEPT2020 394
     needs: [crSEPT2020]
     outputs:
       highly_sensitive:
@@ -74,7 +74,7 @@ actions:
         log: analysis/output/an_impute_SEPT2020.log
   
   imputedata2019:
-    run: stata-mp:latest analysis/an_impute_GENERAL.do 2019
+    run: stata-mp:latest analysis/an_impute_GENERAL.do 2019 9374
     needs: [cr2019]
     outputs:
       highly_sensitive:
