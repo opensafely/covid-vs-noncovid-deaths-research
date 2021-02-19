@@ -12,14 +12,14 @@ import delimited `c(pwd)'/output/input_2019.csv
 *cd analysis
 
 *DATA MANAGEMENT
-do ./analysis/cr_create_analysis_dataset_GENERAL MAIN 9572
-do ./analysis/cr_create_analysis_dataset_GENERAL SEPT2020 394 
-do ./analysis/cr_create_analysis_dataset_GENERAL 2019 9374
+do ./analysis/cr_create_analysis_dataset_GENERAL MAIN 
+do ./analysis/cr_create_analysis_dataset_GENERAL SEPT2020  
+do ./analysis/cr_create_analysis_dataset_GENERAL 2019 
 
 *GEN MI DATA
-do ./analysis/an_impute_GENERAL MAIN
-do ./analysis/an_impute_GENERAL SEPT2020
-do ./analysis/an_impute_GENERAL 2019
+do ./analysis/an_impute_GENERAL MAIN 9572
+do ./analysis/an_impute_GENERAL SEPT2020 394
+do ./analysis/an_impute_GENERAL 2019 9374
 
 *TABLE 1 DESCRIPTIVES
 do ./analysis/an_tablecontent_PublicationDescriptivesTable
