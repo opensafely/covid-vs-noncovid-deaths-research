@@ -177,9 +177,15 @@ actions:
       moderately_sensitive:
         log: analysis/output/an_deathsonlyanalysis.log
         models: analysis/output/models/an_deathsonlyanalysis_*.ster  
-        
-
-
+  
+  cox_models_agesex:
+    run: stata-mp:latest analysis/an_cox_covnoncov_agesex.do
+    needs: [crMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_cox_covnoncov_agesex.do.log
+        models: analysis/output/models/an_cox_covnoncov_agesex*.ster  
+            
   run_model:
     run: stata-mp:latest analysis/model.do
     needs: [generate_cohortMAIN]

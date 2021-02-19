@@ -17,16 +17,6 @@ local outcomes "primarycaredeath"
 cap log close
 log using ./analysis/output/an_covidvsnoncovid_agesex_`1'`2', replace t
 
-	cap prog drop baselogistic 
-	prog define baselogistic
-		syntax , age(string) addvariable(string)
-
-	cap logistic _d `age' 			///
-				i.male 				///
-				i.`addvariable'			
-	end			
-	
-	
 use  ./analysis/cr_create_analysis_dataset_`1'_STSET.dta, clear
 	
 `check'
@@ -78,7 +68,7 @@ foreach outcome of local outcomes{
 		spleen 								///
 		stroke 								///
 		dementia {
-			cap logistic `outcome' age1 age2 age3 male i.`addvariable'
+			cap logistic `outcome' age1 age2 age3 male i.stp i.`addvariable'
 			if _rc==0{
 			estimates
 			estimates save ./analysis/output/models/an_covidvsnoncovid_agesex_`1'`2'_`outcome'_`addvariable', replace
@@ -86,12 +76,12 @@ foreach outcome of local outcomes{
 		else di "MODEL DID NOT FIT (adding `addvariable')"
 	 }
 
-	 cap logistic `outcome' age1 age2 age3 i.male
+	 cap logistic `outcome' age1 age2 age3 i.male i.stp
 			if _rc==0{
 			estimates
 			estimates save ./analysis/output/models/an_covidvsnoncovid_agesex_`1'`2'_`outcome'_MALE, replace
 			}
-	 cap logistic `outcome' ib3.agegroup i.male
+	 cap logistic `outcome' ib3.agegroup i.male i.stp
 			if _rc==0{
 			estimates
 			estimates save ./analysis/output/models/an_covidvsnoncovid_agesex_`1'`2'_`outcome'_AGEGROUP, replace

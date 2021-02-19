@@ -34,10 +34,21 @@ if "`outcome'"=="deathsonlyCvN"{
 }
 
 tab `outcome'
+
+if "`modeltorun'"=="agesex_cox"{
+	gen onsdeath_cnc = onsdeath
+	recode onsdeath_cnc 2/6=2
+	if "`outcome'"=="coviddeath" local outcomenum = 1
+	else if "`outcome'"=="noncoviddeath" local outcomenum = 2
+	mi stset stime_onsdeath, fail(onsdeath_cnc==`outcomenum') id(patient_id) enter(enter_date) origin(enter_date)
+	mi estimate: stcox age1 age2 age3 male i.ethnicity, strata(stp)
+	drop if !(onsdeath>=1&onsdeath<.)
+	gen deathsonlyCvN = (coviddeath==1)
+}
 		
 if "`modeltorun'"=="agesex"{
 *Age-sex model
-mi estimate, eform post: logistic `outcome' age1 age2 age3 i.male i.ethnicity
+mi estimate, eform post: logistic `outcome' age1 age2 age3 i.male i.stp i.ethnicity 
 estimates save ./analysis/output/models/an_imputed_agesex_`dataset'`sensan'_`outcome', replace
 }
 
@@ -65,7 +76,8 @@ mi estimate, eform post: logistic `outcome' ///
 			i.organ_transplant 				///
 			i.spleen 						///
 			i.ra_sle_psoriasis  			///
-			i.other_immunosuppression
+			i.other_immunosuppression		///
+			i.stp
 estimates save ./analysis/output/models/an_imputed_full_`dataset'`sensan'_`outcome'_`agetype', replace
 }
 

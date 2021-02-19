@@ -42,12 +42,12 @@ foreach var of any 							///
 		stroke								///
 		dementia {
 	*Special cases
-	if "`var'"=="agesplsex" local model "age1 age2 age3 i.male"
-	else if "`var'"=="agegroupsex" local model "ib3.agegroup i.male"
-	else if "`var'"=="bmicat" local model "age1 age2 age3 i.male ib2.bmicat"
-	else if "`var'"=="agelinsex" local model "age i.male"
+	if "`var'"=="agesplsex" local model "age1 age2 age3 i.male i.stp"
+	else if "`var'"=="agegroupsex" local model "ib3.agegroup i.male i.stp"
+	else if "`var'"=="bmicat" local model "age1 age2 age3 i.male i.stp ib2.bmicat "
+	else if "`var'"=="agelinsex" local model "age i.male i.stp"
 	*General form of model
-	else local model "age1 age2 age3 i.male i.`var'"
+	else local model "age1 age2 age3 i.male i.stp i.`var'"
 
 	*Fit and save model
 	cap erase ./analysis/output/models/an_deathsonlyanalysis_AGESEX_`var'.ster
