@@ -183,7 +183,7 @@ actions:
     needs: [crMAIN]
     outputs:
       moderately_sensitive:
-        log: analysis/output/an_cox_covnoncov_agesex.do.log
+        log: analysis/output/an_cox_covnoncov_agesex.log
         models: analysis/output/models/an_cox_covnoncov_agesex*.ster  
             
   run_model:
