@@ -90,7 +90,8 @@ cap logistic coviddeath `age' 			///
 			i.organ_transplant 				///
 			i.spleen 						///
 			i.ra_sle_psoriasis  			///
-			i.other_immunosuppression
+			i.other_immunosuppression		///
+			i.stp
 			
 end			
 
