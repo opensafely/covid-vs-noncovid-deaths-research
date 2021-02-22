@@ -34,6 +34,11 @@ if "`2'"=="SA_u071only"{
 	replace noncoviddeath = 1 if onsdeath>=1 & onsdeath<. & died_ons_covidconf_flag_und!=1
 }
 
+if "`2'"=="SA_censorendAug"{
+	replace coviddeath = 0 if coviddeath==1 & stime_onsdeath>d(1/9/2020)
+	replace noncoviddeath = 0 if noncoviddeath==1 & stime_onsdeath>d(1/9/2020)
+}
+
 gen obese4catCC = obese4cat
 replace obese4catCC = . if bmicat==.
 	

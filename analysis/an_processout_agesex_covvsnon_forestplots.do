@@ -290,7 +290,7 @@ sort obsorder
 
 *merge 1:1 variable level using c:\statatemp\tptemp, update replace
 
-gen displayhrci = "<<< HR = " + string(hr, "%3.2f") + " (" + string(lci, "%3.2f") + "-" + string(uci, "%3.2f") + ")" if lci<0.15
+gen displayhrci = "<<< OR = " + string(hr, "%3.2f") + " (" + string(lci, "%3.2f") + "-" + string(uci, "%3.2f") + ")" if lci<0.15
 
 qui summ obsorder if outcome=="noncoviddeath" & variable=="imd" & level ==5
 local endofdemog = r(mean)
@@ -315,10 +315,14 @@ scatter graphorder hr if lci>=.15 & outcome=="coviddeath", mcol(black)	msize(sma
 		 ysize(10)   legend(order(1 3) label(1 "COVID deaths") label(3 "Non-COVID deaths"))  yscale(off) ///
 		 title("`title'", size(medium)) ///
 		|| `if' , name(`graphtype', replace) 
-}
+
+graph export ./analysis/output/an_processout_agesex_covvsnon_forestplots_GRAPH_`graphtype'.svg, as(svg) replace
+		}
 
 
-graph combine demogs comorbs, rows(1) ysize(6) iscale(*.7)
+
+/*graph combine demogs comorbs, rows(1) ysize(6) iscale(*.7)
 grc1leg demogs comorbs, rows(1)  iscale(*.7) name(comb, replace)
 graph combine comb , ysize(6) 
 graph export ./analysis/output/an_processout_agesex_covvsnon_forestplots_GRAPH.svg, as(svg) replace
+*/

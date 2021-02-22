@@ -18,7 +18,7 @@ local endwith "_tab"
 	*put the varname and condition to left so that alignment can be checked vs shell
 	file write tablecontents ("`variable'") _tab ("`i'") _tab
 	
-	foreach run of numlist 1/10 { /*AGESEX: ORIG_C ORIG_NC U71_C U71_NC UL_C UL_NC SEP_C SEP_NC CCA_C CC_NC*/
+	foreach run of numlist 1/14 { /*AGESEX: ORIG_C ORIG_NC U71_C U71_NC UL_C UL_NC CCA_C CCA_NC Cox_C Cox_NC W1_C W1_NC W2_C W2_NC*/
 	
 		/*reset to main obesity/smoking variables after runs 9/10*/
 		if "`variable'"=="obese4catCC" local variable "obese4cat"
@@ -30,25 +30,28 @@ local endwith "_tab"
 		if `run'==1|`run'==2 local datasetSA MAIN
 				else if `run'==3|`run'==4 local datasetSA MAINSA_u071only
 				else if `run'==5|`run'==6 local datasetSA MAINSA_anywhereonDC
-				else if `run'==7|`run'==8 local datasetSA SEPT2020
-				else if `run'==9|`run'==10 local datasetSA MAIN
+				else if `run'==7|`run'==8 local datasetSA MAIN
+				else if `run'==9|`run'==10 local datasetSA MAINSA_Cox
+				else if `run'==11|`run'==12 local datasetSA MAINSA_CensorendAug
+				else if `run'==13|`run'==14 local datasetSA SEPT2020 
 				
-				if (`run'==9|`run'==10) & "`variable'"== "obese4cat" local variable obese4catCC
-				if (`run'==9|`run'==10) & "`variable'"== "smoke_nomiss" local variable smoke
+				
+				if (`run'==7|`run'==8) & "`variable'"== "obese4cat" local variable obese4catCC
+				if (`run'==7|`run'==8) & "`variable'"== "smoke_nomiss" local variable smoke
 
 						
 		local noestimatesflag 0 /*reset*/
 
 		
 *CHANGE THE OUTCOME BELOW TO LAST IF BRINGING IN MORE COLS
-		if `run'==10 local endwith "_n"
+		if `run'==12 local endwith "_n"
 
 		***********************
 		*1) GET THE RIGHT ESTIMATES INTO MEMORY
 
 		cap estimates use ./analysis/output/models/an_covidvsnoncovid_agesex_`datasetSA'_`outcome'_`variable'
 			if _rc!=0 local noestimatesflag 1				
-			if "`variable'"=="ethnicity" & !(`run'==9|`run'==10) {
+			if "`variable'"=="ethnicity" & !(`run'==7|`run'==8) {
 				cap estimates use ./analysis/output/models/an_imputed_agesex_`datasetSA'_`outcome'
 				if _rc!=0 local noestimatesflag 1						
 				}
@@ -160,20 +163,24 @@ file close tablecontents
 postclose HRestimates
 use `HRestimates', clear
 
+frame copy default estimates, replace 
+
 replace variable="obese4cat" if variable=="obese4catCC"
 replace variable="smoke_nomiss" if variable=="smoke"
 
-drop if (run==9|run==10) &!(variable=="ethnicity"|variable=="obese4cat"|variable=="smoke_nomiss")
+drop if (run==7|run==8) &!(variable=="ethnicity"|variable=="obese4cat"|variable=="smoke_nomiss")
 
 *LEAVE OUT THE SEPT2020 ANALYSIS FOR NOW
-drop if run==7|run==8
+*drop if run==7|run==8
 
 *ORIG_C ORIG_NC U71_C U71_NC UL_C UL_NC SEP_C SEP_NC CCA_C CC_NC*/
 gen analysis = "PRIMARY ANALYSIS" if run==1
 replace analysis = "CONFIRMED COVID" if run==3
 replace analysis = "ANY COVID ON DC" if run==5
-replace analysis = "START SEPT 2020" if run==7
-replace analysis = "COMPLETE CASE"  if run==9
+replace analysis = "COMPLETE CASE"  if run==7
+replace analysis = "COX MODEL"  if run==9
+replace analysis = "WAVE 1" if run==11
+replace analysis = "WAVE 2" if run==13
 
 sort variable run level 
 
@@ -265,20 +272,32 @@ replace leveldesc = "eGFR <15 or dialysis" if variable=="reduced_kidney_function
 
 
 cap drop xforanalysis levelx lowerlimit
-gen xforanalysis = 10
+gen xforanalysis = 15
 gen levelx = 0.09
 gen lowerlimit = 0.15
 gen upperlimit = 13
+
+replace levelx = 0.01 if variable=="agegroup"
+replace xforanalysis = 90 if variable=="agegroup"
 
 gen displayhrcilo = "<<<" if lci<lowerlimit
 gen displayhrcihi = ">>>" if uci>upperlimit
 gen displayhrci = string(hr, "%3.2f") + " (" + string(lci, "%3.2f") + "-" + string(uci, "%3.2f") + ")" if hr!=.
 replace displayhrci = "1.00 (REF)" if reference==1
-replace displayhrci = ">>> " +  displayhrci if uci>upperlimit & uci<.
+*replace displayhrci = ">>> " +  displayhrci if uci>upperlimit & uci<.
 
 levelsof variable, local(vars)
 
 foreach var of local vars{
+	
+if "`var'"=="agegroup" {
+    local xlabels "0.05 .1 .2 .5 1 2 5 10 20 50"
+	local range "0.01 400"
+}
+	else {
+	    local xlabels "0.25 0.5 1 2 5 10"
+		local range "45"
+	}
 	
 local graphtitle = upper(substr((subinstr("`var'", "_", " ", 10)),1,1)) + substr((subinstr("`var'", "_", " ", 10)),2,.)
 if "`graphtitle'"=="Agegroup" local graphtitle "Age group" 
@@ -297,16 +316,18 @@ if "`graphtitle'"=="Ra sle psoriasis" local graphtitle "Rheum arthritis/Lupus/Ps
 if "`graphtitle'"=="Reduced kidney function cat2" local graphtitle "Reduced kidney function" 
 if "`graphtitle'"=="Spleen" local graphtitle "Asplenia" 
 
-scatter order hr if outcome=="coviddeath" & lci>lowerlimit & uci<upperlimit, mc(black) msize(small) || rcap lci uci order if outcome=="coviddeath" & lci>lowerlimit & uci<upperlimit, hor lc(black) ///
-|| scatter order hr if outcome=="noncoviddeath" & lci>lowerlimit & uci<upperlimit, mc(gs9) msize(small)  || rcap lci uci order if outcome=="noncoviddeath" & lci>lowerlimit & uci<upperlimit, hor  lc(gs9) ///
+scatter order hr if outcome=="coviddeath" /*& lci>lowerlimit & uci<upperlimit*/, mc(black) msize(small) || rcap lci uci order if outcome=="coviddeath" /*& lci>lowerlimit & uci<upperlimit*/, hor lc(black) ///
+|| scatter order hr if outcome=="noncoviddeath" /*& lci>lowerlimit & uci<upperlimit*/, mc(gs9) msize(small)  || rcap lci uci order if outcome=="noncoviddeath" /*& lci>lowerlimit & uci<upperlimit*/, hor  lc(gs9) ///
 || scatter order xforanalysis, m(i) mlab(analysis) mlabcol(black) mlabsize(tiny) ///
 || scatter order levelx, m(i) mlab(leveldesc) mlabsize(tiny) mlabcol(gs4) 	///
 		xline(1,lp(dash)) 															///
-|| scatter order lowerlimit, m(i) mlab(displayhrcilo) mlabcol(black) mlabsize(tiny) ///
+/*|| scatter order lowerlimit, m(i) mlab(displayhrcilo) mlabcol(black) mlabsize(tiny) */ ///
 || scatter order xforanalysis, m(i) mlab(displayhrci) mlabcol(black) mlabsize(tiny) ///
-|| if variable=="`var'", xtitle("HR and 95% CI") xscale(log range(45)) xlab(0.25 0.5 1 2 5 10 ) legend(order(1 3) label(1 "COVID-19 death") label(3 "Non-COVID death" )) ylab(none) ytitle("") name(`var', replace) title("`graphtitle'")
-}
+|| if variable=="`var'", xtitle("OR or HR* and 95% CI") xscale(log range(`range')) xlab(`xlabels') legend(order(1 3) label(1 "COVID-19 death") label(3 "Non-COVID death" )) ylab(none) ytitle("") name(`var', replace) title("`graphtitle'") ysize(8)
+graph export "./analysis/output/an_processout_sensanresults_`var'.svg", as(svg) replace
 
+}
+/*
 grc1leg agegroup male, name(agesex, replace)
 graph export "./analysis/output/an_processout_sensanresults_AGESEX.svg", as(svg) replace
 
@@ -323,3 +344,4 @@ graph export "./analysis/output/an_processout_sensanresults_COMORBS2.svg", as(sv
 
 grc1leg stroke other_neuro organ_transplant spleen ra_sle_psoriasis other_immunosuppression, name(cm3, replace)
 graph export "./analysis/output/an_processout_sensanresults_COMORBS3.svg", as(svg) replace 
+*/

@@ -28,6 +28,11 @@ if "`5'"=="SA_u071only"{
 	replace noncoviddeath = 1 if onsdeath>=1 & onsdeath<. & died_ons_covidconf_flag_und!=1
 }
 
+if "`5'"=="SA_censorendAug"{
+	replace coviddeath = 0 if coviddeath==1 & stime_onsdeath>d(1/9/2020)
+	replace noncoviddeath = 0 if noncoviddeath==1 & stime_onsdeath>d(1/9/2020)
+}
+
 if "`outcome'"=="deathsonlyCvN"{
 	drop if !(onsdeath>=1&onsdeath<.)
 	gen deathsonlyCvN = (coviddeath==1)
@@ -41,7 +46,8 @@ if "`modeltorun'"=="agesex_cox"{
 	if "`outcome'"=="coviddeath" local outcomenum = 1
 	else if "`outcome'"=="noncoviddeath" local outcomenum = 2
 	mi stset stime_onsdeath, fail(onsdeath_cnc==`outcomenum') id(patient_id) enter(enter_date) origin(enter_date)
-	mi estimate: stcox age1 age2 age3 male i.ethnicity, strata(stp)
+	mi estimate, eform post: stcox age1 age2 age3 male i.ethnicity, strata(stp)
+	estimates save ./analysis/output/models/an_imputed_agesex_`dataset'SA_Cox_`outcome', replace
 	drop if !(onsdeath>=1&onsdeath<.)
 	gen deathsonlyCvN = (coviddeath==1)
 }

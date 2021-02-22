@@ -1,8 +1,8 @@
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_imputed_GENERAL_MAINSA_u071only_noncoviddeath_agesex_agespl.log
+       log:  E:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_imputed_GENERAL_MAINSA_u071only_noncoviddeath_agesex_agespl.log
   log type:  text
- opened on:  15 Dec 2020, 00:53:24
+ opened on:  20 Feb 2021, 21:59:45
 
 . 
 . use ./analysis/an_impute_imputeddata_`dataset', replace
@@ -38,39 +38,83 @@ noncoviddea |
 ------------+-----------------------------------
       Total | 17,456,515      100.00
 
+. 
+. if "`modeltorun'"=="agesex_cox"{
+.         gen onsdeath_cnc = onsdeath
+.         recode onsdeath_cnc 2/6=2
+.         if "`outcome'"=="coviddeath" local outcomenum = 1
+.         else if "`outcome'"=="noncoviddeath" local outcomenum = 2
+.         mi stset stime_onsdeath, fail(onsdeath_cnc==`outcomenum') id(patient_id) enter(enter_date) origin(enter_date)
+.         mi estimate: stcox age1 age2 age3 male i.ethnicity, strata(stp)
+.         drop if !(onsdeath>=1&onsdeath<.)
+.         gen deathsonlyCvN = (coviddeath==1)
+. }
+
 .                 
 . if "`modeltorun'"=="agesex"{
 . *Age-sex model
-. mi estimate, eform post: logistic `outcome' age1 age2 age3 i.male i.ethnicity
+. mi estimate, eform post: logistic `outcome' age1 age2 age3 i.male i.stp i.ethnicity 
 
 Multiple-imputation estimates                   Imputations       =         10
 Logistic regression                             Number of obs     = 17,456,515
-                                                Average RVI       =     0.1611
-                                                Largest FMI       =     0.4180
-DF adjustment:   Large sample                   DF:     min       =      56.85
-                                                        avg       =   1.53e+09
-                                                        max       =   5.56e+09
-Model F test:       Equal FMI                   F(   8, 2757.4)   =   26959.80
+                                                Average RVI       =     0.0368
+                                                Largest FMI       =     0.4162
+DF adjustment:   Large sample                   DF:     min       =      57.33
+                                                        avg       =   1.77e+09
+                                                        max       =   5.04e+09
+Model F test:       Equal FMI                   F(  39,259680.8)  =    6308.59
 Within VCE type:          OIM                   Prob > F          =     0.0000
 
 -----------------------------------------------------------------------------------------
           noncoviddeath |     exp(b)   Std. Err.      t    P>|t|     [95% Conf. Interval]
 ------------------------+----------------------------------------------------------------
-                   age1 |   1.136329   .0046378    31.31   0.000     1.127276    1.145456
-                   age2 |   .8939348   .0084061   -11.92   0.000     .8776099    .9105632
-                   age3 |   1.395021   .0311429    14.91   0.000     1.335298    1.457415
-                 1.male |   1.337091   .0075665    51.33   0.000     1.322343    1.352003
+                   age1 |   1.136903   .0046407    31.43   0.000     1.127844    1.146035
+                   age2 |   .8921415   .0083907   -12.13   0.000     .8758467    .9087394
+                   age3 |   1.403285   .0313339    15.17   0.000     1.343196    1.466062
+                 1.male |   1.338005   .0075733    51.44   0.000     1.323243    1.352931
+                        |
+                    stp |
+                     2  |   .7781258   .2656724    -0.73   0.462     .3984992      1.5194
+                     3  |   .7826078   .2672807    -0.72   0.473     .4007163     1.52845
+                     4  |   .8376497   .2868688    -0.52   0.605     .4281072    1.638975
+                     5  |   .7452185   .2556156    -0.86   0.391     .3804653    1.459662
+                     6  |    .787778   .2690573    -0.70   0.485     .4033526     1.53859
+                     7  |   .8985854   .3094728    -0.31   0.756     .4575152    1.764872
+                     8  |   .7511005   .2565699    -0.84   0.402     .3845337    1.467107
+                     9  |   .7512432   .2566466    -0.84   0.402     .3845788    1.467492
+                    10  |   .7412308   .2531927    -0.88   0.381     .3794866    1.447806
+                    11  |   .7267973   .2482748    -0.93   0.350     .3720847    1.419661
+                    12  |   .9075993   .3105107    -0.28   0.777     .4641714    1.774638
+                    13  |   .7246822   .2477248    -0.94   0.346     .3708288    1.416191
+                    14  |   .7360283   .2515717    -0.90   0.370     .3766665    1.438242
+                    15  |   .6513919   .2225696    -1.25   0.210     .3334273    1.272576
+                    16  |   .6888132   .2352671    -1.09   0.275     .3526712    1.345343
+                    17  |   .6727137   .2298243    -1.16   0.246     .3443719    1.314113
+                    18  |   .6831719   .2334113    -1.12   0.265     .3497115    1.334597
+                    19  |   .6797572   .2322509    -1.13   0.259     .3479573     1.32795
+                    20  |    .681081   .2326146    -1.12   0.261     .3487238    1.330197
+                    21  |     .61279   .2093798    -1.43   0.152     .3136685    1.197161
+                    22  |   .6482886   .2246282    -1.25   0.211     .3287245    1.278512
+                    23  |   .6638509   .2267618    -1.20   0.230     .3398697    1.296668
+                    24  |   .7320761   .2534093    -0.90   0.368     .3714594    1.442783
+                    25  |   .6471651   .2214814    -1.27   0.204     .3309068    1.265682
+                    26  |   .6558357   .2240275    -1.23   0.217     .3357626    1.281025
+                    27  |   .6775401   .2314435    -1.14   0.254     .3468725    1.323428
+                    28  |   .6587258   .2250063    -1.22   0.222     .3372507    1.286638
+                    29  |   .6862545     .23451    -1.10   0.271     .3512439    1.340793
+                    30  |   .6839532   .2337726    -1.11   0.266     .3500168    1.336484
+                    31  |    .612648   .2153715    -1.39   0.163      .307594    1.220237
+                    32  |   .7973425   .2722468    -0.66   0.507     .4083271    1.556975
                         |
               ethnicity |
-                 Mixed  |   .8641149   .0517118    -2.44   0.018     .7665225    .9741327
-Asian or Asian British  |   .7814495   .0145705   -13.23   0.000     .7532931    .8106582
-                 Black  |   .8884168   .0267919    -3.92   0.000      .837173    .9427973
-                 Other  |   .6533004   .0277667   -10.02   0.000     .6006554    .7105595
+                 Mixed  |    .888273   .0531767    -1.98   0.053     .7879354    1.001388
+Asian or Asian British  |   .7888101   .0150856   -12.40   0.000     .7596615    .8190771
+                 Black  |   .9015214   .0276383    -3.38   0.001     .8486617    .9576734
+                 Other  |   .6721493    .028734    -9.29   0.000     .6176734    .7314297
                         |
-                  _cons |   4.32e-06   6.24e-07   -85.54   0.000     3.26e-06    5.74e-06
+                  _cons |   5.93e-06   2.20e-06   -32.47   0.000     2.87e-06    .0000123
 -----------------------------------------------------------------------------------------
 . estimates save ./analysis/output/models/an_imputed_agesex_`dataset'`sensan'_`outcome', replace
-(note: file ./analysis/output/models/an_imputed_agesex_MAINSA_u071only_noncoviddeath.ster not found)
 file ./analysis/output/models/an_imputed_agesex_MAINSA_u071only_noncoviddeath.ster saved
 . }
 
@@ -99,14 +143,15 @@ file ./analysis/output/models/an_imputed_agesex_MAINSA_u071only_noncoviddeath.st
 >                         i.organ_transplant                              ///
 >                         i.spleen                                                ///
 >                         i.ra_sle_psoriasis                      ///
->                         i.other_immunosuppression
+>                         i.other_immunosuppression               ///
+>                         i.stp
 . estimates save ./analysis/output/models/an_imputed_full_`dataset'`sensan'_`outcome'_`agetype', replace
 . }
 
 . 
 . log close
       name:  <unnamed>
-       log:  e:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_imputed_GENERAL_MAINSA_u071only_noncoviddeath_agesex_agespl.log
+       log:  E:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_imputed_GENERAL_MAINSA_u071only_noncoviddeath_agesex_agespl.log
   log type:  text
- closed on:  15 Dec 2020, 01:15:23
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ closed on:  20 Feb 2021, 22:42:40
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

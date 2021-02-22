@@ -25,14 +25,23 @@ syntax, variable(varname) condition(string)
 	local overalldenom=r(N)
 	
 	cou if `variable' `condition'
-	local rowdenom = r(N)
+	local nwithcondition = r(N)
 	local colpct = 100*(r(N)/`overalldenom')
-	file write tablecontent (`rowdenom')  (" (") %3.1f (`colpct') (")") _n
+	file write tablecontent (`nwithcondition')  (" (") %3.1f (`colpct') (")") _tab
 
-	/*cou if `outcome'==1 & `variable' `condition'
-	local pct = 100*(r(N)/`rowdenom')
-	file write tablecontent (r(N)) (" (") %4.2f  (`pct') (")") _n*/
+	cou if coviddeath==1 
+	local ndiedcov=r(N)
+	cou if coviddeath==1 & `variable' `condition'
+	local ndiedcovwithcondition = r(N)
+	local pct = 100*(`ndiedcovwithcondition'/`ndiedcov')
+	file write tablecontent (`ndiedcovwithcondition') (" (") %4.2f  (`pct') (")") _tab
 
+	cou if noncoviddeath==1 
+	local ndiednoncov=r(N)
+	cou if noncoviddeath==1 & `variable' `condition'
+	local ndiednoncovwithcondition = r(N)
+	local pct = 100*(`ndiednoncovwithcondition '/`ndiednoncov')
+	file write tablecontent (`ndiednoncovwithcondition') (" (") %4.2f  (`pct') (")") _n
 	
 end
 
@@ -58,6 +67,14 @@ file open tablecontent using ./analysis/output/an_tablecontent_PublicationDescri
 
 use ./analysis/cr_create_analysis_dataset_MAIN_STSET.dta,clear
 
+gen coviddeath = onsdeath==1
+gen noncoviddeath = onsdeath>1 & onsdeath<.
+
+cap log close
+log using analysis/output/an_tablecontent_PublicationDescriptivesTable_DEATHSPERCENT, replace t
+tab ons
+tab ons if ons>=1
+log close
 
 gen byte cons=1
 tabulatevariable, variable(cons) start(1) end(1) 

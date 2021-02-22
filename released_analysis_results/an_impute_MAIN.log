@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /workspace/analysis/output/an_impute_MAIN.log
   log type:  text
- opened on:  14 Dec 2020, 17:13:06
+ opened on:  20 Feb 2021, 01:56:26
 
 . 
 . frames reset
@@ -536,5 +536,5 @@ file ./analysis/an_impute_imputeddata_MAIN.dta saved
       name:  <unnamed>
        log:  /workspace/analysis/output/an_impute_MAIN.log
   log type:  text
- closed on:  14 Dec 2020, 17:46:37
+ closed on:  20 Feb 2021, 02:47:32
 -------------------------------------------------------------------------------

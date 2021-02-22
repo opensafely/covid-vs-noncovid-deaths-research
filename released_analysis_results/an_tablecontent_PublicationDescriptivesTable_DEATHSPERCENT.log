@@ -1,0 +1,55 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  E:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_tablecontent_PublicationDescriptivesTable_DEATHSPERCENT.log
+  log type:  text
+ opened on:  22 Feb 2021, 17:38:37
+
+. tab ons
+
+Failure/cen |
+     soring |
+  indicator |
+        for |
+   outcome: |
+  ONS death |
+ (1 = covid |
+  death 2 = |
+   other de |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 | 17,305,136       99.13       99.13
+      covid |     17,063        0.10       99.23
+     cancer |     40,366        0.23       99.46
+        cvd |     34,429        0.20       99.66
+    dem_alz |     16,899        0.10       99.76
+respiratory |     15,290        0.09       99.84
+      other |     27,332        0.16      100.00
+------------+-----------------------------------
+      Total | 17,456,515      100.00
+
+. tab ons if ons>=1
+
+Failure/cen |
+     soring |
+  indicator |
+        for |
+   outcome: |
+  ONS death |
+ (1 = covid |
+  death 2 = |
+   other de |      Freq.     Percent        Cum.
+------------+-----------------------------------
+      covid |     17,063       11.27       11.27
+     cancer |     40,366       26.67       37.94
+        cvd |     34,429       22.74       60.68
+    dem_alz |     16,899       11.16       71.84
+respiratory |     15,290       10.10       81.94
+      other |     27,332       18.06      100.00
+------------+-----------------------------------
+      Total |    151,379      100.00
+
+. log close
+      name:  <unnamed>
+       log:  E:\analyses\covid-vs-noncovid-deaths-research\analysis/output/an_tablecontent_PublicationDescriptivesTable_DEATHSPERCENT.log
+  log type:  text
+ closed on:  22 Feb 2021, 17:38:42
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -184,7 +184,7 @@
 	<text x="736.44" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 736.44,1080.62)" text-anchor="end">---------</text>
 	<text x="833.96" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 833.96,1080.62)" text-anchor="end">CANCER</text>
 	<text x="931.60" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 931.60,1080.62)" text-anchor="end">CVD</text>
-	<text x="1029.11" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 1029.11,1080.62)" text-anchor="end">DEM_ALZ</text>
+	<text x="1029.11" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 1029.11,1080.62)" text-anchor="end">DEMENTIA</text>
 	<text x="1126.63" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 1126.63,1080.62)" text-anchor="end">RESPIR</text>
 	<text x="1224.26" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 1224.26,1080.62)" text-anchor="end">OTHER</text>
 	<line x1="1716.54" y1="1048.57" x2="2587.36" y2="1048.57" style="stroke:#000000;stroke-width:4.61"/>
@@ -192,7 +192,7 @@
 	<text x="1973.69" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 1973.69,1080.62)" text-anchor="end">---------</text>
 	<text x="2071.21" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 2071.21,1080.62)" text-anchor="end">CANCER</text>
 	<text x="2168.72" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 2168.72,1080.62)" text-anchor="end">CVD</text>
-	<text x="2266.36" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 2266.36,1080.62)" text-anchor="end">DEM_ALZ</text>
+	<text x="2266.36" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 2266.36,1080.62)" text-anchor="end">DEMENTIA</text>
 	<text x="2363.88" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 2363.88,1080.62)" text-anchor="end">RESPIR</text>
 	<text x="2461.39" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 2461.39,1080.62)" text-anchor="end">OTHER</text>
 	<line x1="2953.79" y1="1048.57" x2="3824.49" y2="1048.57" style="stroke:#000000;stroke-width:4.61"/>
@@ -200,7 +200,7 @@
 	<text x="3210.82" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3210.82,1080.62)" text-anchor="end">---------</text>
 	<text x="3308.46" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3308.46,1080.62)" text-anchor="end">CANCER</text>
 	<text x="3405.98" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3405.98,1080.62)" text-anchor="end">CVD</text>
-	<text x="3503.49" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3503.49,1080.62)" text-anchor="end">DEM_ALZ</text>
+	<text x="3503.49" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3503.49,1080.62)" text-anchor="end">DEMENTIA</text>
 	<text x="3601.13" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3601.13,1080.62)" text-anchor="end">RESPIR</text>
 	<text x="3698.65" y="1080.62" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3698.65,1080.62)" text-anchor="end">OTHER</text>
 	<line x1="479.28" y1="2330.53" x2="1350.11" y2="2330.53" style="stroke:#000000;stroke-width:4.61"/>
@@ -208,7 +208,7 @@
 	<text x="736.44" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 736.44,2362.46)" text-anchor="end">---------</text>
 	<text x="833.96" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 833.96,2362.46)" text-anchor="end">CANCER</text>
 	<text x="931.60" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 931.60,2362.46)" text-anchor="end">CVD</text>
-	<text x="1029.11" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 1029.11,2362.46)" text-anchor="end">DEM_ALZ</text>
+	<text x="1029.11" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 1029.11,2362.46)" text-anchor="end">DEMENTIA</text>
 	<text x="1126.63" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 1126.63,2362.46)" text-anchor="end">RESPIR</text>
 	<text x="1224.26" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 1224.26,2362.46)" text-anchor="end">OTHER</text>
 	<line x1="1716.54" y1="2330.53" x2="2587.36" y2="2330.53" style="stroke:#000000;stroke-width:4.61"/>
@@ -216,7 +216,7 @@
 	<text x="1973.69" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 1973.69,2362.46)" text-anchor="end">---------</text>
 	<text x="2071.21" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 2071.21,2362.46)" text-anchor="end">CANCER</text>
 	<text x="2168.72" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 2168.72,2362.46)" text-anchor="end">CVD</text>
-	<text x="2266.36" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 2266.36,2362.46)" text-anchor="end">DEM_ALZ</text>
+	<text x="2266.36" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 2266.36,2362.46)" text-anchor="end">DEMENTIA</text>
 	<text x="2363.88" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 2363.88,2362.46)" text-anchor="end">RESPIR</text>
 	<text x="2461.39" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 2461.39,2362.46)" text-anchor="end">OTHER</text>
 	<line x1="2953.79" y1="2330.53" x2="3824.49" y2="2330.53" style="stroke:#000000;stroke-width:4.61"/>
@@ -224,7 +224,7 @@
 	<text x="3210.82" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3210.82,2362.46)" text-anchor="end">---------</text>
 	<text x="3308.46" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3308.46,2362.46)" text-anchor="end">CANCER</text>
 	<text x="3405.98" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3405.98,2362.46)" text-anchor="end">CVD</text>
-	<text x="3503.49" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3503.49,2362.46)" text-anchor="end">DEM_ALZ</text>
+	<text x="3503.49" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3503.49,2362.46)" text-anchor="end">DEMENTIA</text>
 	<text x="3601.13" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3601.13,2362.46)" text-anchor="end">RESPIR</text>
 	<text x="3698.65" y="2362.46" style="font-family:'Helvetica';font-size:48.02px;fill:#000000" transform="rotate(-90 3698.65,2362.46)" text-anchor="end">OTHER</text>
 	<rect x="479.28" y="135.39" width="870.83" height="115.59" style="fill:#D9E6EB"/>
