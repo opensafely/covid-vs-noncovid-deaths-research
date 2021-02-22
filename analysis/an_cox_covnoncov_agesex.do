@@ -10,8 +10,8 @@ recode onsdeath_cnc 2/6=2
 
 forvalues outcome = 1/2{
     
-if `outcome'==1 local outcomename "cov"
-else if `outcome'==2 local outcomename "noncov"
+if `outcome'==1 local outcomename "coviddeath"
+else if `outcome'==2 local outcomename "noncoviddeath"
 
 stset stime_onsdeath, fail(onsdeath_cnc==`outcome') id(patient_id) enter(enter_date) origin(enter_date)
 
@@ -38,7 +38,7 @@ stset stime_onsdeath, fail(onsdeath_cnc==`outcome') id(patient_id) enter(enter_d
 			cap stcox age1 age2 age3 male i.`addvariable', strata(stp)
 			if _rc==0{
 			estimates
-			estimates save ./analysis/output/models/an_cox_covnoncov_agesex_`outcomename'_`addvariable', replace
+			estimates save ./analysis/output/models/an_covidvsnoncovid_agesex_MAINSA_Cox_`outcomename'_`addvariable', replace
 			}
 		else di "MODEL DID NOT FIT (adding `addvariable')"
 	 }
@@ -46,12 +46,12 @@ stset stime_onsdeath, fail(onsdeath_cnc==`outcome') id(patient_id) enter(enter_d
 	 cap stcox age1 age2 age3 i.male, strata(stp)
 			if _rc==0{
 			estimates
-			estimates save ./analysis/output/models/an_cox_covnoncov_agesex_`outcomename'__MALE, replace
+			estimates save ./analysis/output/models/an_covidvsnoncovid_agesex_MAINSA_Cox_`outcomename'_MALE, replace
 			}
 	 cap stcox ib3.agegroup i.male, strata(stp)
 			if _rc==0{
 			estimates
-			estimates save ./analysis/output/models/an_cox_covnoncov_agesex_`outcomename'__AGEGROUP, replace
+			estimates save ./analysis/output/models/an_covidvsnoncovid_agesex_MAINSA_Cox_`outcomename'_AGEGROUP, replace
 			}
 	 
 }

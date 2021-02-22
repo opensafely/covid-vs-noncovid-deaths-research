@@ -35,12 +35,14 @@ do ./analysis/an_covidvsnoncovid_agesex_GENERAL 2019
 do ./analysis/an_covidvsnoncovid_agesex_GENERAL MAIN SA_anywhereonDC
 do ./analysis/an_covidvsnoncovid_agesex_GENERAL MAIN SA_u071only
 
+do ./analysis/an_covidvsnoncovid_agesex_GENERAL MAIN SA_censorendAug
+
 do ./analysis/an_covidvsnoncovid_full_GENERAL MAIN
 do ./analysis/an_covidvsnoncovid_full_GENERAL SEPT2020
 do ./analysis/an_covidvsnoncovid_full_GENERAL 2019
 
 *SENS ANALYSIS USING COX REGRESSION
-do ./analysis/an_cox_covnoncov_agesex
+do ./analysis/an_covidvsnoncovid_agesex_SA_Cox
 
 *ETHNICITY EFFECTS ON DIFFERENT CAUSE-SPECIFIC MORTALITY OUTCOMES (FIG 4)
 do ./analysis/an_ethnicitybycod_logisticversion
@@ -69,6 +71,8 @@ do ./analysis/an_imputed_GENERAL MAIN coviddeath agesex agespl SA_anywhereonDC
 do ./analysis/an_imputed_GENERAL MAIN noncoviddeath agesex agespl SA_anywhereonDC
 do ./analysis/an_imputed_GENERAL MAIN coviddeath agesex agespl SA_u071only
 do ./analysis/an_imputed_GENERAL MAIN noncoviddeath agesex agespl SA_u071only
+do ./analysis/an_imputed_GENERAL MAIN coviddeath agesex agespl SA_censorendAug
+do ./analysis/an_imputed_GENERAL MAIN noncoviddeath agesex agespl SA_censorendAug
 
 do ./analysis/an_imputed_GENERAL MAIN deathsonlyCvN agesex agespl
 

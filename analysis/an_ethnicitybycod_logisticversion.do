@@ -37,7 +37,7 @@ label values outcome outcomes
 gen outcometext = "COVID-19" if outcome==1
 replace outcometext = "Cancer" if outcome==2
 replace outcometext = "CVD" if outcome==3
-replace outcometext = "Dementia/Alzheim" if outcome==4
+replace outcometext = "Dementia" if outcome==4
 replace outcometext = "Respiratory" if outcome==5
 replace outcometext = "Other" if outcome==6
 
