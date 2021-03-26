@@ -124,7 +124,7 @@ preserve
 	|| scatter starpoint n if p<=(10^(-6)) & agegroup==1, m(i) mlab(star) mlabcol(gs12) || scatter starpoint n if p<=(10^(-6)) & agegroup==2, m(i) mlab(star) mlabcol(gs10) ///
 	|| , yscale(log) ylab(.00001 .0001 .001 .01 .1 1) ///
 		text(0.1 1 "COVID-19", placement(e)) text(0.1 8 "Cancer", placement(e)) text(0.1 15 "CVD", placement(e)) text(0.1 20 "Dementia", placement(e)) text(0.1 26 "Respiratory", placement(e)) text(0.1 33 "Other", placement(e)) xsize(8) xlab(none) xtitle("") legend(label(1 "Age (yrs) 18-<40") label(3 "40-<50") label(5 "50-<60") label(7 "60-<70") label(9 "70-<80") label(11 "80+") order(1 3 5 7 9 11) rows(1)) ytitle(Estimated probability of cause-specific death) ///
-		caption("* = estimated probability < 10^-6 not shown")
+		caption("* = estimated probability < 0.000001 not shown")
 	graph export "./analysis/output/FIGURE 2 an_covid_vs_othercauses_abs_AGE_GRAPH_ALT.pdf", as(pdf) replace
 restore
 	
