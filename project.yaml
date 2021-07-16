@@ -84,7 +84,7 @@ actions:
     
   ethnicity_deprivation_cov_agesex:
     run: stata-mp:latest analysis/an_imputed_GENERAL_ETHxDEPR.do MAIN coviddeath agesex 
-    needs: [imputeddataMAIN]
+    needs: [imputedataMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed_GENERAL_ETHxDEPR_MAIN_coviddeath_agesex_agespl.log        
@@ -92,7 +92,7 @@ actions:
 
   ethnicity_deprivation_cov_full:
     run: stata-mp:latest analysis/an_imputed_GENERAL_ETHxDEPR.do MAIN coviddeath full
-    needs: [imputeddataMAIN]
+    needs: [imputedataMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed_GENERAL_ETHxDEPR_MAIN_coviddeath_full_agespl.log        
@@ -100,7 +100,7 @@ actions:
 
   ethnicity_deprivation_noncov_agesex:
     run: stata-mp:latest analysis/an_imputed_GENERAL_ETHxDEPR.do MAIN noncoviddeath agesex 
-    needs: [imputeddataMAIN]
+    needs: [imputedataMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed_GENERAL_ETHxDEPR_MAIN_noncoviddeath_agesex_agespl.log        
@@ -108,7 +108,7 @@ actions:
 
   ethnicity_deprivation_noncov_full:
     run: stata-mp:latest analysis/an_imputed_GENERAL_ETHxDEPR.do MAIN noncoviddeath full
-    needs: [imputeddataMAIN]
+    needs: [imputedataMAIN]
     outputs:
       moderately_sensitive:
         log: analysis/output/an_imputed_GENERAL_ETHxDEPR_MAIN_noncoviddeath_full_agespl.log        
