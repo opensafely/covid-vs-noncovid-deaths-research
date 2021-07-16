@@ -79,6 +79,11 @@ do ./analysis/an_imputed_GENERAL MAIN deathsonlyCvN agesex agespl
 do ./analysis/an_imputed_GENERAL MAIN coviddeath agesex_cox
 do ./analysis/an_imputed_GENERAL MAIN noncoviddeath agesex_cox
 
+*post-paper - for RA report
+do analysis/an_imputed_GENERAL_ETHxDEPR.do MAIN coviddeath agesex 
+do analysis/an_imputed_GENERAL_ETHxDEPR.do MAIN noncoviddeath agesex 
+do analysis/an_imputed_GENERAL_ETHxDEPR.do MAIN coviddeath full
+do analysis/an_imputed_GENERAL_ETHxDEPR.do MAIN noncoviddeath full
 
 *DISPLAY ITEMS
 *FOREST PLOT (PROCESSING OF ABOVE RR ESTIMATES) (FIG 3)

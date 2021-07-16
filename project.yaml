@@ -82,6 +82,38 @@ actions:
       moderately_sensitive:
         log: analysis/output/an_impute_2019.log
     
+  ethnicity_deprivation_cov_agesex:
+    run: stata-mp:latest analysis/an_imputed_GENERAL_ETHxDEPR.do MAIN coviddeath agesex 
+    needs: [imputeddataMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed_GENERAL_ETHxDEPR_MAIN_coviddeath_agesex_agespl.log        
+        models: analysis/output/models/an_imputed_ETHxDEPR_agesex_MAIN_coviddeath.ster        
+
+  ethnicity_deprivation_cov_full:
+    run: stata-mp:latest analysis/an_imputed_GENERAL_ETHxDEPR.do MAIN coviddeath full
+    needs: [imputeddataMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed_GENERAL_ETHxDEPR_MAIN_coviddeath_full_agespl.log        
+        models: analysis/output/models/an_imputed_ETHxDEPR_full_MAIN_coviddeath_agespl.ster        
+
+  ethnicity_deprivation_noncov_agesex:
+    run: stata-mp:latest analysis/an_imputed_GENERAL_ETHxDEPR.do MAIN noncoviddeath agesex 
+    needs: [imputeddataMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed_GENERAL_ETHxDEPR_MAIN_noncoviddeath_agesex_agespl.log        
+        models: analysis/output/models/an_imputed_ETHxDEPR_agesex_MAIN_noncoviddeath.ster        
+
+  ethnicity_deprivation_noncov_full:
+    run: stata-mp:latest analysis/an_imputed_GENERAL_ETHxDEPR.do MAIN noncoviddeath full
+    needs: [imputeddataMAIN]
+    outputs:
+      moderately_sensitive:
+        log: analysis/output/an_imputed_GENERAL_ETHxDEPR_MAIN_noncoviddeath_full_agespl.log        
+        models: analysis/output/models/an_imputed_ETHxDEPR_full_MAIN_noncoviddeath_agespl.ster        
+  
   descriptive_table1:
     run: stata-mp:latest analysis/an_tablecontent_PublicationDescriptivesTable.do
     needs: [crMAIN]
