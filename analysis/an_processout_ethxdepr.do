@@ -45,12 +45,12 @@ foreach outcome of any coviddeath noncoviddeath{
 use `results', clear
 keep if outcome=="`outcome'"
 
-/*TEMP*/
+/*TEMP
 expand 2, gen(expanded)
 replace imd = 3 if expanded==1 & imd==5
 replace imd = 2 if expanded==1 & imd==4
 drop expanded 
-******
+******/
 
 expand 2 if imd==2, gen(expanded)
 replace imd=1 if expanded==1
