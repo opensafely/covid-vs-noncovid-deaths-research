@@ -114,6 +114,18 @@ actions:
         log: analysis/output/an_imputed_GENERAL_ETHxDEPR_MAIN_noncoviddeath_full_agespl.log        
         models: analysis/output/models/an_imputed_ETHxDEPR_full_MAIN_noncoviddeath_agespl.ster        
   
+  ethnicity_deprivation_figure:
+    run: stata-mp:latest analysis/an_processout_ethxdepr.do    
+    needs:
+      - imputedataMAIN
+      - ethnicity_deprivation_cov_agesex
+      - ethnicity_deprivation_cov_full
+      - ethnicity_deprivation_noncov_agesex
+      - ethnicity_deprivation_noncov_full
+    outputs:
+      moderately_sensitive:
+        graph: analysis/output/an_processout_ethxdepr.svg      
+    
   descriptive_table1:
     run: stata-mp:latest analysis/an_tablecontent_PublicationDescriptivesTable.do
     needs: [crMAIN]
