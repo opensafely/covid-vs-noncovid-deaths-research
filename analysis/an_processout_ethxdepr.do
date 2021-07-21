@@ -93,7 +93,7 @@ scatter yval or if model=="agesex", m(Oh) mc(black) || scatter yval or if model=
 || scatter yval deplabpos, m(i) mlab(deplab) mlabsize(tiny) ///
 || scatter yval orandcipos, m(i) mlab(orandci) mlabsize(tiny) ///
 || if outcome=="`outcome'", xlab(0.5 1 2 4) xscale(log) xscale(r(0.125 48)) yscale(off) legend(off) ysize(10) ///
-xtitle("Odds Ratio vs least deprived and 95% CI") title(`titlepref'COVID-19 death) xline(1, lp(dash)) note(" " "open circles = age-sex adjusted " "solid circles = fully adjusted*" "(*see Bhaskaran et al Lancet Regional Health Europe 2021)" "p-interaction (fully adj model) = 0.`pint`outcome'full'", size(tiny)) name(`outcome', replace)
+xtitle("Odds Ratio vs least deprived" "(95% CI)") title(`titlepref'COVID-19 death) xline(1, lp(dash)) note(" " "open circles = age-sex adjusted " "solid circles = fully adjusted*" "(*see Bhaskaran et al Lancet Regional Health Europe 2021)" "p-interaction (fully adj model) = 0.`pint`outcome'full'", size(tiny)) name(`outcome', replace)
 }
 
 graph combine coviddeath noncoviddeath, rows(1) ysize(8)
