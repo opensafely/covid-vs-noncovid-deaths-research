@@ -6,6 +6,10 @@ __pycache__
 output/*
 metadata/*
 venv/
+*.dta
+*.csv
+analysis/output/*
+analysis/*.log
 
 !*.do
 !*.ado
