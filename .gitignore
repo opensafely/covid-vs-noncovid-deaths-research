@@ -1,21 +1,16 @@
 *~
 model.log
+*/input.csv
 __pycache__
 .python-version
+output/*
+metadata/*
+venv/
 
 !*.do
 !*.ado
 !*.hlp
 !*.py
 !*.sthlp
-venv/
 .cache
-*.exe
-*.log
-*.ster
-*.txt
-*.dta
-*.svg
-*.gph
-*.csv
 
